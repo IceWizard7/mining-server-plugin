@@ -7,18 +7,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerJoinEvent;
 import icewizard7.miningServerPlugin.MiningServerPlugin;
 
+import icewizard7.miningServerPlugin.utils.TAB;
+
 public class TabJoinEvent implements Listener {
-    private final MiningServerPlugin plugin;
-
-    public TabJoinEvent(MiningServerPlugin plugin) {
-        this.plugin = plugin;
-    }
-
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         for (Player player : Bukkit.getOnlinePlayers()) {
             // Newly joined player + all players -> player count
-            plugin.updateTab(player);
+            TAB.updateTab(player);
         }
     }
 }
