@@ -1,0 +1,35 @@
+name: MiningServerPlugin
+version: '1.0-SNAPSHOT'
+main: icewizard7.miningServerPlugin.MiningServerPlugin
+api-version: '1.21'
+authors: [ IceWizard7 ]
+
+commands:
+  info:
+    description: Get information about this plugin
+  god:
+    description: Makes you invulnerable
+  fly:
+    description: Makes you fly
+  vanish:
+    description: Makes you invisible
+  autocompress:
+    description: Auto-compresses your items
+
+permissions:
+  miningServerPlugin.info:
+    description: Allows using /info
+    default: true
+  miningServerPlugin.god:
+    description: Allows using /god
+    default: op
+  miningServerPlugin.fly:
+    description: Allows using /fly
+    default: op
+  miningServerPlugin.vanish:
+    description: Allows using /vanish
+    default: op
+  miningServerPlugin.autocompress:
+    description: Allows using /autocompress
+    default: op
+    aliases: ac
