@@ -14,6 +14,7 @@ public class AutoCompressCommand implements CommandExecutor {
             commandSender.sendMessage(Component.text(
                     "Only players can execute this command.", NamedTextColor.RED
             ));
+            return true;
         }
 
         Player player = (Player) commandSender;
@@ -22,6 +23,7 @@ public class AutoCompressCommand implements CommandExecutor {
             player.sendMessage(Component.text(
                     "You do not have permission to use this command.", NamedTextColor.RED
             ));
+            return true;
         }
 
         return true;

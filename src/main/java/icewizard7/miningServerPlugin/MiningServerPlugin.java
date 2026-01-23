@@ -1,14 +1,8 @@
 package icewizard7.miningServerPlugin;
 
-import icewizard7.miningServerPlugin.commands.FlyCommand;
-import icewizard7.miningServerPlugin.commands.GodCommand;
-import icewizard7.miningServerPlugin.commands.InfoCommand;
-import icewizard7.miningServerPlugin.commands.VanishCommand;
-import icewizard7.miningServerPlugin.events.TabJoinEvent;
-import icewizard7.miningServerPlugin.events.VanishJoinEvent;
-import icewizard7.miningServerPlugin.events.WelcomeMessageEvent;
-
-import icewizard7.miningServerPlugin.utils.TAB;
+import icewizard7.miningServerPlugin.commands.*;
+import icewizard7.miningServerPlugin.events.*;
+import icewizard7.miningServerPlugin.utils.*;
 
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -18,6 +12,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public final class MiningServerPlugin extends JavaPlugin {
+    // Set of vanished Players
     private final Set<Player> vanishedPlayers = new HashSet<>();
 
     @Override
@@ -25,6 +20,7 @@ public final class MiningServerPlugin extends JavaPlugin {
         // Load commands
         getCommand("info").setExecutor(new InfoCommand());
         getCommand("god").setExecutor(new GodCommand());
+        getCommand("invsee").setExecutor(new InvseeCommand());
         getCommand("fly").setExecutor(new FlyCommand());
         getCommand("autocompress").setExecutor(new FlyCommand());
         getCommand("vanish").setExecutor(new VanishCommand(this, vanishedPlayers));

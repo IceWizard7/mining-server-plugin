@@ -2,13 +2,14 @@ package icewizard7.miningServerPlugin.commands;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import org.bukkit.GameMode;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 
-public class GodCommand implements CommandExecutor {
+public class InvseeCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
         if (!(commandSender instanceof Player)) {
@@ -20,38 +21,42 @@ public class GodCommand implements CommandExecutor {
 
         Player player = (Player) commandSender;
 
-        if (!(player.hasPermission("miningServerPlugin.god"))) {
+        if (!(player.hasPermission("miningServerPlugin.invsee"))) {
             player.sendMessage(Component.text(
                     "You do not have permission to use this command.", NamedTextColor.RED
             ));
             return true;
         }
 
-        if (player.getGameMode() == GameMode.CREATIVE) {
+        if (strings.length == 0) {
             player.sendMessage(Component.text(
-                    "Already in creative mode.", NamedTextColor.RED
+                    "Insert a player.", NamedTextColor.RED
             ));
             return true;
         }
 
-        if (player.getGameMode() == GameMode.SPECTATOR) {
+        Player target = Bukkit.getPlayerExact(strings[0]);
+
+        if (target == player) {
             player.sendMessage(Component.text(
-                    "Already in spectator mode.", NamedTextColor.RED
+                    "You can't open your own inventory.", NamedTextColor.RED
             ));
             return true;
         }
 
-        if (player.isInvulnerable()){
-            player.setInvulnerable(false);
+        if (target == null) {
             player.sendMessage(Component.text(
-                    "God mode disabled.", NamedTextColor.RED
+                    "Player was not found.", NamedTextColor.RED
             ));
-        } else {
-            player.setInvulnerable(true);
-            player.sendMessage(Component.text(
-                    "God mode enabled.", NamedTextColor.GREEN
-            ));
+            return true;
         }
+
+        Inventory targetInventory = target.getInventory();
+
+        player.openInventory(targetInventory);
+        player.sendMessage(Component.text(
+                "You are opening" + target.getName() + "'s inventory.", NamedTextColor.GREEN
+        ));
 
         return true;
     }

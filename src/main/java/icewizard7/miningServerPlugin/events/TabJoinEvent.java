@@ -5,7 +5,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerJoinEvent;
-import icewizard7.miningServerPlugin.MiningServerPlugin;
 
 import icewizard7.miningServerPlugin.utils.TAB;
 

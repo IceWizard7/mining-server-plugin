@@ -13,13 +13,14 @@ public class InfoCommand implements CommandExecutor{
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
         if (commandSender instanceof ConsoleCommandSender) {
             commandSender.sendMessage(Component.text(
-                    "[Console]", NamedTextColor.WHITE
+                    "[Console] Plugin by IceWizard7", NamedTextColor.WHITE
             ));
+            return true;
         }
 
         if (commandSender.hasPermission("miningServerPlugin.info")) {
             commandSender.sendMessage(Component.text(
-                    "This plugin is developed by IceWizard7", NamedTextColor.WHITE
+                    "Plugin by IceWizard7", NamedTextColor.WHITE
             ));
             return true;
         }

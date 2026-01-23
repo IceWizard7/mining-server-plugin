@@ -15,6 +15,7 @@ public class FlyCommand implements CommandExecutor {
             commandSender.sendMessage(Component.text(
                     "Only players can execute this command.", NamedTextColor.RED
             ));
+            return true;
         }
 
         Player player = (Player) commandSender;
@@ -23,6 +24,7 @@ public class FlyCommand implements CommandExecutor {
             player.sendMessage(Component.text(
                     "You do not have permission to use this command.", NamedTextColor.RED
             ));
+            return true;
         }
 
         if (player.getGameMode() == GameMode.CREATIVE) {

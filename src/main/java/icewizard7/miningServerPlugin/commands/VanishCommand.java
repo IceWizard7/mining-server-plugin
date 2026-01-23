@@ -27,6 +27,7 @@ public class VanishCommand implements CommandExecutor {
             commandSender.sendMessage(Component.text(
                     "Only players can execute this command.", NamedTextColor.RED
             ));
+            return true;
         }
 
         Player player = (Player) commandSender;
@@ -35,6 +36,7 @@ public class VanishCommand implements CommandExecutor {
             player.sendMessage(Component.text(
                     "You do not have permission to use this command.", NamedTextColor.RED
             ));
+            return true;
         }
 
         if (vanishedPlayers.contains(player)) {

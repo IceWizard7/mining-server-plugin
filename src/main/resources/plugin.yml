@@ -7,14 +7,22 @@ authors: [ IceWizard7 ]
 commands:
   info:
     description: Get information about this plugin
+    usage: /info
   god:
     description: Makes you invulnerable
+    usage: /god
   fly:
     description: Makes you fly
+    usage: /fly
   vanish:
     description: Makes you invisible
+    usage: /vanish
+  invsee:
+    description: See the inventory of other players
+    usage: /invsee playerName
   autocompress:
     description: Auto-compresses your items
+    usage: /autocompress
 
 permissions:
   miningServerPlugin.info:
@@ -28,6 +36,9 @@ permissions:
     default: op
   miningServerPlugin.vanish:
     description: Allows using /vanish
+    default: op
+  miningServerPlugin.invsee:
+    description: Allows using /invsee
     default: op
   miningServerPlugin.autocompress:
     description: Allows using /autocompress
