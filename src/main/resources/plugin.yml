@@ -95,6 +95,9 @@ permissions:
       miningServerPlugin.warp.quartz:
         description: Allows warping to Quartz
         default: false
+      miningServerPlugin.warp.admin:
+        description: Allows warping to Admin
+        default: false
   miningServerPlugin.spawn:
     description: Allows using /spawn
     default: op
