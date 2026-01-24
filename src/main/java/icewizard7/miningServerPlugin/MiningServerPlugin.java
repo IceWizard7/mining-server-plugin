@@ -8,6 +8,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.Bukkit;
 
+import net.luckperms.api.LuckPerms;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,20 +19,24 @@ public final class MiningServerPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        // Load LuckPerms API
+        LuckPerms luckPerms = getServer().getServicesManager().load(LuckPerms.class);
+
         // Load commands
         getCommand("info").setExecutor(new InfoCommand());
         getCommand("god").setExecutor(new GodCommand());
         getCommand("invsee").setExecutor(new InvseeCommand());
         getCommand("fly").setExecutor(new FlyCommand());
-        getCommand("autocompress").setExecutor(new FlyCommand());
+        getCommand("autocompress").setExecutor(new AutoCompressCommand(this));
         getCommand("vanish").setExecutor(new VanishCommand(this, vanishedPlayers));
 
         // Set events
+        getServer().getPluginManager().registerEvents(new ChatEvent(luckPerms), this);
         getServer().getPluginManager().registerEvents(new WelcomeMessageEvent(), this);
         getServer().getPluginManager().registerEvents(new TabJoinEvent(), this);
-        getServer().getPluginManager().registerEvents(new VanishJoinEvent(this, vanishedPlayers), this);
+        getServer().getPluginManager().registerEvents(new VanishEvent(this, vanishedPlayers), this);
 
-        // You could call this on login or periodically
+        // TAB Update
         Bukkit.getScheduler().runTaskTimer(this, () -> {
             for (Player player : Bukkit.getOnlinePlayers()) {
                 TAB.updateTab(player);
