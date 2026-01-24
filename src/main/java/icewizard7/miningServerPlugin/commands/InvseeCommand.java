@@ -55,7 +55,7 @@ public class InvseeCommand implements CommandExecutor {
 
         player.openInventory(targetInventory);
         player.sendMessage(Component.text(
-                "You are opening" + target.getName() + "'s inventory.", NamedTextColor.GREEN
+                "You are opening " + target.getName() + "'s inventory.", NamedTextColor.GREEN
         ));
 
         return true;
