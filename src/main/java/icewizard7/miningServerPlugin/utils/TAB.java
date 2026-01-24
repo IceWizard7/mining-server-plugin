@@ -2,11 +2,35 @@ package icewizard7.miningServerPlugin.utils;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.luckperms.api.LuckPerms;
+import net.luckperms.api.LuckPermsProvider;
+import net.luckperms.api.model.user.User;
+import net.luckperms.api.query.QueryOptions;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 public class TAB {
     public static void updateTab(Player player) {
+        LuckPerms luckPerms = LuckPermsProvider.get();
+        User user = luckPerms.getUserManager().getUser(player.getUniqueId());
+        Component playerListName = Component.text(player.getName()); // Default
+
+        if (user != null) {
+            QueryOptions queryOptions = luckPerms.getContextManager().getQueryOptions(player);
+            String prefix = user.getCachedData().getMetaData(queryOptions).getPrefix();
+            String suffix = user.getCachedData().getMetaData(queryOptions).getSuffix();
+
+            var serializer = LegacyComponentSerializer.legacyAmpersand();
+
+            Component prefixComp = (prefix != null) ? serializer.deserialize(prefix) : Component.empty();
+            Component suffixComp = (suffix != null) ? serializer.deserialize(suffix) : Component.empty();
+
+            // Combine Prefix + Name + Suffix
+            playerListName = prefixComp.append(player.name()).append(suffixComp);
+        }
+
+        player.playerListName(playerListName);
 
         // Header
         Component header = Component.text(
