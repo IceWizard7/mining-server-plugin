@@ -1,0 +1,67 @@
+package icewizard7.miningServerPlugin.commands;
+
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.Bukkit;
+
+public class SpawnCommand implements CommandExecutor {
+    private final Plugin plugin;
+
+    public SpawnCommand(Plugin plugin) {
+        this.plugin = plugin;
+    }
+
+    @Override
+    public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
+        if (!(commandSender instanceof Player)) {
+            commandSender.sendMessage(Component.text(
+                    "Only players can execute this command.", NamedTextColor.RED
+            ));
+            return true;
+        }
+
+        Player player = (Player) commandSender;
+
+        if (!(player.hasPermission("miningServerPlugin.spawn"))) {
+            player.sendMessage(Component.text(
+                    "You do not have permission to warp there.", NamedTextColor.RED
+            ));
+            return true;
+        }
+
+        FileConfiguration config = plugin.getConfig();
+
+        // Load warp from config
+        if (!config.isConfigurationSection("spawn")) {
+            player.sendMessage(Component.text("That warp does not exist.", NamedTextColor.RED));
+            return true;
+        }
+
+        String worldName = config.getString("spawn.world");
+        double x = config.getDouble("spawn.x");
+        double y = config.getDouble("spawn.y");
+        double z = config.getDouble("spawn.z");
+        float yaw = (float) config.getDouble("spawn.yaw");
+        float pitch = (float) config.getDouble("spawn.pitch");
+
+        World world = Bukkit.getWorld(worldName);
+        if (world == null) {
+            player.sendMessage(Component.text("The world for this warp does not exist.", NamedTextColor.RED));
+            return true;
+        }
+
+        Location warpLocation = new Location(world, x, y, z, yaw, pitch);
+        player.teleport(warpLocation);
+        player.sendMessage(Component.text("Warped to spawn.", NamedTextColor.GREEN));
+
+        return true;
+    }
+}

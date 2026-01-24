@@ -24,12 +24,20 @@ commands:
   invsee:
     description: See the inventory of other players
     permission: miningServerPlugin.invsee
-    usage: /invsee playerName
+    usage: /invsee <player>
   autocompress:
     description: Auto-compresses your items
     permission: miningServerPlugin.autocompress
     usage: /autocompress
     aliases: [ac]
+  warp:
+    description: Teleport anywhere
+    permission: miningServerPlugin.warp
+    usage: /warp <location>
+  spawn:
+    description: Teleport to spawn
+    permission: miningServerPlugin.spawn
+    usage: /spawn
 
 permissions:
   miningServerPlugin.info:
@@ -49,4 +57,44 @@ permissions:
     default: op
   miningServerPlugin.autocompress:
     description: Allows using /autocompress
+    default: op
+  miningServerPlugin.warp:
+    description: Allows using /warp
+    default: op
+    children:
+      miningServerPlugin.warp.oak:
+        description: Allows warping to Oak
+        default: false
+      miningServerPlugin.warp.stone:
+        description: Allows warping to Stone
+        default: false
+      miningServerPlugin.warp.copper:
+        description: Allows warping to Copper
+        default: false
+      miningServerPlugin.warp.coal:
+        description: Allows warping to Coal
+        default: false
+      miningServerPlugin.warp.iron:
+        description: Allows warping to Iron
+        default: false
+      miningServerPlugin.warp.gold:
+        description: Allows warping to Gold
+        default: false
+      miningServerPlugin.warp.diamond:
+        description: Allows warping to Diamond
+        default: false
+      miningServerPlugin.warp.emerald:
+        description: Allows warping to Emerald
+        default: false
+      miningServerPlugin.warp.netherite:
+        description: Allows warping to Netherite
+        default: false
+      miningServerPlugin.warp.blackstone:
+        description: Allows warping to Blackstone
+        default: false
+      miningServerPlugin.warp.quartz:
+        description: Allows warping to Quartz
+        default: false
+  miningServerPlugin.spawn:
+    description: Allows using /spawn
     default: op

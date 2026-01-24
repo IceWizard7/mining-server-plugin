@@ -19,6 +19,9 @@ public final class MiningServerPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        // Save config.yml to plugins folder
+        saveDefaultConfig();
+
         // Load LuckPerms API
         LuckPerms luckPerms = getServer().getServicesManager().load(LuckPerms.class);
 
@@ -28,6 +31,8 @@ public final class MiningServerPlugin extends JavaPlugin {
         getCommand("invsee").setExecutor(new InvseeCommand());
         getCommand("fly").setExecutor(new FlyCommand());
         getCommand("autocompress").setExecutor(new AutoCompressCommand(this));
+        getCommand("warp").setExecutor(new WarpCommand(this));
+        getCommand("spawn").setExecutor(new SpawnCommand(this));
         getCommand("vanish").setExecutor(new VanishCommand(this, vanishedPlayers));
 
         // Set events

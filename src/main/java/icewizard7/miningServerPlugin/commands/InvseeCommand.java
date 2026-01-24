@@ -30,7 +30,7 @@ public class InvseeCommand implements CommandExecutor {
 
         if (strings.length == 0) {
             player.sendMessage(Component.text(
-                    "Insert a player.", NamedTextColor.RED
+                    "Usage: /invsee <player>", NamedTextColor.RED
             ));
             return true;
         }
