@@ -4,7 +4,6 @@ import icewizard7.miningServerPlugin.commands.*;
 import icewizard7.miningServerPlugin.events.*;
 import icewizard7.miningServerPlugin.utils.*;
 
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
