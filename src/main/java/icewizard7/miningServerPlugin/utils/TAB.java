@@ -10,8 +10,16 @@ import net.luckperms.api.query.QueryOptions;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.util.Set;
+
 public class TAB {
-    public static void updateTab(Player player) {
+    private final Set<Player> vanishedPlayers;
+
+    public TAB(Set<Player> vanishedPlayers) {
+        this.vanishedPlayers = vanishedPlayers;
+    }
+
+    public void updateTab(Player player) {
         LuckPerms luckPerms = LuckPermsProvider.get();
         User user = luckPerms.getUserManager().getUser(player.getUniqueId());
         Component playerListName = Component.text(player.getName()); // Default
@@ -73,7 +81,7 @@ public class TAB {
         }
 
         // Text
-        Component playersOnlineLine = Component.newline().append(Component.text("Players online: " + Bukkit.getOnlinePlayers().size(), NamedTextColor.GRAY)).append(Component.newline());
+        Component playersOnlineLine = Component.newline().append(Component.text("Players online: " + (Bukkit.getOnlinePlayers().size() - vanishedPlayers.size()), NamedTextColor.GRAY)).append(Component.newline());
         Component ipLine = Component.text("futuremines.minekeep.gg", NamedTextColor.GRAY).append(Component.newline());
         Component ramLine = Component.text("RAM: " + usedMemory + "/" + maxMemory + " MB (", NamedTextColor.GRAY).append(Component.text((int) usagePercent + "%", ramColor)).append(Component.text(")", NamedTextColor.GRAY)).append(Component.newline());
         Component tpsLine = Component.text("TPS: ", NamedTextColor.GRAY).append(Component.text(String.format("%.2f", tps), tpsColor));

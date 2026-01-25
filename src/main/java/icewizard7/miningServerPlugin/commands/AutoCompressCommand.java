@@ -27,13 +27,11 @@ public class AutoCompressCommand implements CommandExecutor {
 
     private final NamespacedKey compressKey;
     private final NamespacedKey superCompressKey;
-    private final Plugin plugin;
 
     // Texture -> Display name
     private final Map<String, String> textureMap = new HashMap<>();
 
     public AutoCompressCommand(Plugin plugin) {
-        this.plugin = plugin;
         this.compressKey = new NamespacedKey(plugin, "compressed");
         this.superCompressKey = new NamespacedKey(plugin, "super_compressed");
         textureMap.put("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzVlYmQ0OTljNmY4YmJjYTUyNTNhMzdiZjliYzM1NTdhMjAxMzZkYjRmMmU3OTllMTFiZjJlYThmMDljMGRlOSJ9fX0=", "Oak Log");
@@ -61,6 +59,10 @@ public class AutoCompressCommand implements CommandExecutor {
 
         Player player = (Player) commandSender;
 
+        return autoCompress(player);
+    }
+
+    public boolean autoCompress(Player player) {
         if (!(player.hasPermission("miningServerPlugin.autocompress"))) {
             player.sendMessage(Component.text(
                     "You do not have permission to use this command.", NamedTextColor.RED

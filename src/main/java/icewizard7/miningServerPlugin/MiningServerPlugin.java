@@ -4,7 +4,9 @@ import icewizard7.miningServerPlugin.commands.*;
 import icewizard7.miningServerPlugin.events.*;
 import icewizard7.miningServerPlugin.utils.*;
 
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.Bukkit;
 
@@ -17,6 +19,9 @@ public final class MiningServerPlugin extends JavaPlugin {
     // Set of vanished Players
     private final Set<Player> vanishedPlayers = new HashSet<>();
 
+    // TAB
+    private TAB tab;
+
     @Override
     public void onEnable() {
         // Save config.yml to plugins folder
@@ -25,35 +30,52 @@ public final class MiningServerPlugin extends JavaPlugin {
         // Load LuckPerms API
         LuckPerms luckPerms = getServer().getServicesManager().load(LuckPerms.class);
 
-        // Load commands
-        getCommand("info").setExecutor(new InfoCommand());
-        getCommand("god").setExecutor(new GodCommand());
-        getCommand("invsee").setExecutor(new InvseeCommand());
-        getCommand("fly").setExecutor(new FlyCommand());
-        getCommand("autocompress").setExecutor(new AutoCompressCommand(this));
-        getCommand("warp").setExecutor(new WarpCommand(this));
-        getCommand("spawn").setExecutor(new SpawnCommand(this));
-        getCommand("vanish").setExecutor(new VanishCommand(this, vanishedPlayers));
+        // Initialize TAB
+        this.tab = new TAB(vanishedPlayers);
 
-        // Set events
-        getServer().getPluginManager().registerEvents(new ChatEvent(luckPerms), this);
-        getServer().getPluginManager().registerEvents(new WelcomeMessageEvent(), this);
-        getServer().getPluginManager().registerEvents(new TabJoinEvent(), this);
-        getServer().getPluginManager().registerEvents(new VanishEvent(this, vanishedPlayers), this);
+        // Commands + events
+        InfoCommand infoCommand = new InfoCommand();
+        GodCommand godCommand = new GodCommand();
+        InvseeCommand invseeCommand = new InvseeCommand();
+        FlyCommand flyCommand = new FlyCommand();
+        AutoCompressCommand autoCompressCommand = new AutoCompressCommand(this);
+        WarpCommand warpCommand = new WarpCommand(this);
+        SpawnCommand spawnCommand = new SpawnCommand(this);
+        VanishCommand vanishCommand = new VanishCommand(this, vanishedPlayers);
+        Listener chatEvent = new ChatEvent(luckPerms);
+        Listener welcomeEvent = new WelcomeMessageEvent();
+        Listener tabJoinEvent = new TabJoinEvent(tab);
+        Listener vanishEvent = new VanishEvent(this, vanishedPlayers);
+        Listener telepathyEvent = new TelepathyEvent(this, autoCompressCommand);
+
+        getCommand("info").setExecutor(infoCommand);
+        getCommand("god").setExecutor(godCommand);
+        getCommand("invsee").setExecutor(invseeCommand);
+        getCommand("fly").setExecutor(flyCommand);
+        getCommand("autocompress").setExecutor(autoCompressCommand);
+        getCommand("warp").setExecutor(warpCommand);
+        getCommand("spawn").setExecutor(spawnCommand);
+        getCommand("vanish").setExecutor(vanishCommand);
+
+        getServer().getPluginManager().registerEvents(chatEvent, this);
+        getServer().getPluginManager().registerEvents(welcomeEvent, this);
+        getServer().getPluginManager().registerEvents(tabJoinEvent, this);
+        getServer().getPluginManager().registerEvents(vanishEvent, this);
+        getServer().getPluginManager().registerEvents(telepathyEvent, this);
 
         // TAB Update
         Bukkit.getScheduler().runTaskTimer(this, () -> {
             for (Player player : Bukkit.getOnlinePlayers()) {
-                TAB.updateTab(player);
+                tab.updateTab(player);
             }
         }, 0L, 20L * 1); // every 1 second
 
         // Print to console
-        System.out.println("[MiningServerPlugin] Plugin has been enabled!");
+        getLogger().info("[MiningServerPlugin] Plugin has been enabled!");
     }
 
     @Override
     public void onDisable() {
-        System.out.println("[MiningServerPlugin] Plugin has been disabled!");
+        getLogger().info("[MiningServerPlugin] Plugin has been disabled!");
     }
 }

@@ -9,11 +9,17 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import icewizard7.miningServerPlugin.utils.TAB;
 
 public class TabJoinEvent implements Listener {
+    private final TAB tab;
+
+    public TabJoinEvent(TAB tab) {
+        this.tab = tab;
+    }
+
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         for (Player player : Bukkit.getOnlinePlayers()) {
             // Newly joined player + all players -> player count
-            TAB.updateTab(player);
+            tab.updateTab(player);
         }
     }
 }
