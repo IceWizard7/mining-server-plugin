@@ -7,6 +7,8 @@ import org.bukkit.command.ConsoleCommandSender;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.event.HoverEvent;
 
 public class InfoCommand implements CommandExecutor{
     @Override
