@@ -47,6 +47,7 @@ public final class MiningServerPlugin extends JavaPlugin {
         Listener tabJoinEvent = new TabJoinEvent(tab);
         Listener vanishEvent = new VanishEvent(this, vanishedPlayers);
         Listener telepathyEvent = new TelepathyEvent(this, autoCompressCommand);
+        Listener spawnPointEvent = new SpawnPointEvent(this);
 
         getCommand("info").setExecutor(infoCommand);
         getCommand("god").setExecutor(godCommand);
@@ -63,6 +64,7 @@ public final class MiningServerPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(tabJoinEvent, this);
         getServer().getPluginManager().registerEvents(vanishEvent, this);
         getServer().getPluginManager().registerEvents(telepathyEvent, this);
+        getServer().getPluginManager().registerEvents(spawnPointEvent, this);
 
         // TAB Update
         Bukkit.getScheduler().runTaskTimer(this, () -> {
