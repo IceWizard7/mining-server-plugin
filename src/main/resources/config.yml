@@ -1,79 +1,79 @@
 warps:
   oak:
     world: world
-    x: 100
-    y: 65
-    z: 100
-    yaw: 0
+    x: 28
+    y: 40
+    z: -11
+    yaw: -180
     pitch: 0
   stone:
     world: world
-    x: 200
-    y: 65
-    z: 100
+    x: 28
+    y: 40
+    z: 7
     yaw: 0
     pitch: 0
   copper:
     world: world
-    x: 300
-    y: 65
-    z: 100
-    yaw: 0
+    x: 61
+    y: 40
+    z: -14
+    yaw: -180
     pitch: 0
   coal:
     world: world
-    x: 400
-    y: 65
-    z: 100
+    x: 54
+    y: 40
+    z: 7
     yaw: 0
     pitch: 0
   iron:
     world: world
-    x: 500
-    y: 65
-    z: 100
+    x: 88
+    y: 40
+    z: 12
     yaw: 0
     pitch: 0
   gold:
     world: world
-    x: 600
-    y: 65
-    z: 100
-    yaw: 0
+    x: 96
+    y: 40
+    z: -4
+    yaw: -90
     pitch: 0
   diamond:
     world: world
-    x: 700
-    y: 65
-    z: 100
-    yaw: 0
+    x: 97
+    y: 40
+    z: -61
+    yaw: -90
     pitch: 0
   emerald:
     world: world
-    x: 800
-    y: 65
-    z: 100
-    yaw: 0
+    x: 77
+    y: 40
+    z: -43
+    yaw: 90
     pitch: 0
   netherite:
     world: world_nether
-    x: 100
-    y: 65
-    z: 100
+    x: 0
+    y: 100
+    z: 0
     yaw: 0
     pitch: 0
   blackstone:
     world: world_nether
-    x: 200
-    y: 65
-    z: 100
+    x: 0
+    y: 100
+    z: 0
     yaw: 0
     pitch: 0
   quartz:
     world: world_nether
-    x: 300
-    y: 65
-    z: 100
+    x: 0
+    y: 100
+    z: 0
     yaw: 0
     pitch: 0
   admin:
