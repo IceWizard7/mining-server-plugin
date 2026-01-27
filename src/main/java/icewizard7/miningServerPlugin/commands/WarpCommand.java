@@ -73,4 +73,32 @@ public class WarpCommand implements CommandExecutor {
 
         return true;
     }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String s, String[] strings) {
+        if (strings.length == 1) {
+            FileConfiguration config = plugin.getConfig();
+
+            if (!config.isConfigurationSection("warps")) {
+                return new ArrayList<>();
+            }
+
+            List<String> warps = new ArrayList<>(config.getConfigurationSection("warps").getKeys(false));
+
+            // Only suggest warps the player has permission for
+            if (sender instanceof Player player) {
+                warps = warps.stream()
+                        .filter(warp -> player.hasPermission("miningServerPlugin.warp." + warp))
+                        .collect(Collectors.toList());
+            }
+
+            String current = strings[0].toLowerCase();
+
+            return warps.stream()
+                    .filter(warp -> warp.toLowerCase().startsWith(current))
+                    .collect(Collectors.toList());
+        }
+
+        return new ArrayList<>();
+    }
 }
