@@ -35,8 +35,7 @@ public class SpawnPointEvent implements Listener {
 
         World world = Bukkit.getWorld(worldName);
 
-        return new Location(world, x, y, z, yaw, pitch);
-        // return new Location(world, x + 0.5, y, z + 0.5, yaw, pitch);
+        return new Location(world, x + 0.5, y, z + 0.5, yaw, pitch);
     }
 
     @EventHandler
