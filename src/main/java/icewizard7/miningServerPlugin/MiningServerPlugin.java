@@ -32,7 +32,7 @@ public final class MiningServerPlugin extends JavaPlugin {
         LuckPerms luckPerms = getServer().getServicesManager().load(LuckPerms.class);
 
         // Initialize TAB
-        this.tab = new TAB(vanishedPlayers);
+        this.tab = new TAB(vanishedPlayers, luckPerms);
 
         // Commands + events
         InfoCommand infoCommand = new InfoCommand();

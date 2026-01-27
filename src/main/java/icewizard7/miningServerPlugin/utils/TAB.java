@@ -15,13 +15,14 @@ import java.util.UUID;
 
 public class TAB {
     private final Set<UUID> vanishedPlayers;
+    private final LuckPerms luckPerms;
 
-    public TAB(Set<UUID> vanishedPlayers) {
+    public TAB(Set<UUID> vanishedPlayers, LuckPerms luckPerms) {
         this.vanishedPlayers = vanishedPlayers;
+        this.luckPerms = luckPerms;
     }
 
     public void updateTab(Player player) {
-        LuckPerms luckPerms = LuckPermsProvider.get();
         User user = luckPerms.getUserManager().getUser(player.getUniqueId());
         Component playerListName = Component.text(player.getName()); // Default
 
