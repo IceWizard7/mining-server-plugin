@@ -17,7 +17,7 @@ import java.util.Set;
 
 public final class MiningServerPlugin extends JavaPlugin {
     // Set of vanished Players
-    private final Set<Player> vanishedPlayers = new HashSet<>();
+    private final Set<UUID> vanishedPlayers = new HashSet<>();
 
     // TAB
     private TAB tab;

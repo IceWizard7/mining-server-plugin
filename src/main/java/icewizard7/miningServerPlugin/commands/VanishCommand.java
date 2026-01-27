@@ -10,13 +10,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import java.util.Set;
+import java.util.UUID;
 
 public class VanishCommand implements CommandExecutor {
 
     private final Plugin plugin;
-    private final Set<Player> vanishedPlayers;
+    private final Set<UUID> vanishedPlayers;
 
-    public VanishCommand(Plugin plugin, Set<Player> vanishedPlayers) {
+    public VanishCommand(Plugin plugin, Set<UUID> vanishedPlayers) {
         this.plugin = plugin;
         this.vanishedPlayers = vanishedPlayers;
     }
@@ -39,12 +40,12 @@ public class VanishCommand implements CommandExecutor {
             return true;
         }
 
-        if (vanishedPlayers.contains(player)) {
+        if (vanishedPlayers.contains(player.getUniqueId())) {
             for (Player p : Bukkit.getOnlinePlayers()) {
                 p.showPlayer(plugin, player);
             }
             fakeJoinMessage(player);
-            vanishedPlayers.remove(player);
+            vanishedPlayers.remove(player.getUniqueId());
             player.sendMessage(Component.text(
                     "Vanish mode disabled.", NamedTextColor.RED
             ));
@@ -54,7 +55,7 @@ public class VanishCommand implements CommandExecutor {
                 p.hidePlayer(plugin, player);
             }
             fakeQuitMessage(player);
-            vanishedPlayers.add(player);
+            vanishedPlayers.add(player.getUniqueId());
             player.sendMessage(Component.text(
                     "Vanish mode enabled.", NamedTextColor.GREEN
             ));

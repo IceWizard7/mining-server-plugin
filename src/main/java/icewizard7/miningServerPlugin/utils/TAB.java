@@ -11,11 +11,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.Set;
+import java.util.UUID;
 
 public class TAB {
-    private final Set<Player> vanishedPlayers;
+    private final Set<UUID> vanishedPlayers;
 
-    public TAB(Set<Player> vanishedPlayers) {
+    public TAB(Set<UUID> vanishedPlayers) {
         this.vanishedPlayers = vanishedPlayers;
     }
 
