@@ -19,9 +19,17 @@ public class InfoCommand implements CommandExecutor{
         }
 
         if (commandSender.hasPermission("miningServerPlugin.info")) {
-            Component lineOne = Component.text("Plugin by: ", NamedTextColor.WHITE).append(Component.text("IceWizard7", NamedTextColor.BLUE)).append(Component.newline());
-            Component lineTwo = Component.text("[Open-Source] ", NamedTextColor.GOLD).append(Component.text("Available on Github:", NamedTextColor.WHITE)).append(Component.newline());
-            Component lineThree = Component.text("https://github.com/IceWizard7/mining-server-plugin ", NamedTextColor.WHITE).append(Component.newline());
+            Component lineOne = Component.text("Plugin by: ", NamedTextColor.WHITE)
+                    .append(Component.text("IceWizard7", NamedTextColor.BLUE))
+                    .append(Component.newline());
+            Component lineTwo = Component.text("[Open-Source] ", NamedTextColor.GOLD)
+                    .append(Component.text("Available on Github:", NamedTextColor.WHITE))
+                    .append(Component.newline());
+
+            Component lineThree = Component.text("https://github.com/IceWizard7/mining-server-plugin", NamedTextColor.WHITE)
+                    .clickEvent(ClickEvent.openUrl("https://github.com/IceWizard7/mining-server-plugin"))
+                    .hoverEvent(HoverEvent.showText(Component.text("Click to open GitHub repository!", NamedTextColor.YELLOW)))
+                    .append(Component.newline());
 
             Component result = lineOne.append(lineTwo).append(lineThree);
 
