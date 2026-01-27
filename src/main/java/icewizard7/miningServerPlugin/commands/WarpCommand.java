@@ -12,7 +12,11 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.Bukkit;
 
-public class WarpCommand implements CommandExecutor {
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class WarpCommand implements TabExecutor {
     private final Plugin plugin;
 
     public WarpCommand(Plugin plugin) {
