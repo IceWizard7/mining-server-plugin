@@ -38,6 +38,10 @@ commands:
     description: Teleport to spawn
     permission: miningServerPlugin.spawn
     usage: /spawn
+  voucher:
+    description: Create vouchers
+    permission: miningServerPlugin.voucher.create
+    usage: /voucher create <role>
 
 permissions:
   miningServerPlugin.info:
@@ -113,4 +117,7 @@ permissions:
     default: false
   miningServerPlugin.spawn:
     description: Allows using /spawn
+    default: op
+  miningServerPlugin.voucher.create:
+    description: Allows using /voucher create
     default: op

@@ -71,7 +71,7 @@ public class WarpCommand implements TabExecutor {
             return true;
         }
 
-        Location warpLocation = new Location(world, x, y, z, yaw, pitch);
+        Location warpLocation = new Location(world, x + 0.5, y, z + 0.5, yaw, pitch);
         player.teleport(warpLocation);
         player.sendMessage(Component.text("Warped to " + warpName + ".", NamedTextColor.GREEN));
 

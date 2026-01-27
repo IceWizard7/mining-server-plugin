@@ -11,6 +11,7 @@ import org.bukkit.Bukkit;
 
 import net.luckperms.api.LuckPerms;
 
+import java.util.List;
 import java.util.UUID;
 import java.util.HashSet;
 import java.util.Set;
@@ -42,12 +43,14 @@ public final class MiningServerPlugin extends JavaPlugin {
         WarpCommand warpCommand = new WarpCommand(this);
         SpawnCommand spawnCommand = new SpawnCommand(this);
         VanishCommand vanishCommand = new VanishCommand(this, vanishedPlayers);
+        VoucherCommand voucherCommand = new VoucherCommand(luckPerms, this);
         Listener chatEvent = new ChatEvent(luckPerms);
         Listener welcomeEvent = new WelcomeMessageEvent();
         Listener tabJoinEvent = new TabJoinEvent(tab);
         Listener vanishEvent = new VanishEvent(this, vanishedPlayers);
         Listener telepathyEvent = new TelepathyEvent(this, autoCompressCommand);
         Listener spawnPointEvent = new SpawnPointEvent(this);
+        Listener voucherUseEvent = new VoucherUseEvent(luckPerms, voucherCommand.getVoucherKey());
 
         getCommand("info").setExecutor(infoCommand);
         getCommand("god").setExecutor(godCommand);
@@ -58,6 +61,7 @@ public final class MiningServerPlugin extends JavaPlugin {
         getCommand("warp").setTabCompleter(warpCommand);
         getCommand("spawn").setExecutor(spawnCommand);
         getCommand("vanish").setExecutor(vanishCommand);
+        getCommand("voucher").setExecutor(voucherCommand);
 
         getServer().getPluginManager().registerEvents(chatEvent, this);
         getServer().getPluginManager().registerEvents(welcomeEvent, this);
@@ -65,6 +69,7 @@ public final class MiningServerPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(vanishEvent, this);
         getServer().getPluginManager().registerEvents(telepathyEvent, this);
         getServer().getPluginManager().registerEvents(spawnPointEvent, this);
+        getServer().getPluginManager().registerEvents(voucherUseEvent, this);
 
         // TAB Update
         Bukkit.getScheduler().runTaskTimer(this, () -> {
