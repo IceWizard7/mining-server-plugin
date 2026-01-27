@@ -19,9 +19,13 @@ public class InfoCommand implements CommandExecutor{
         }
 
         if (commandSender.hasPermission("miningServerPlugin.info")) {
-            commandSender.sendMessage(Component.text(
-                    "Plugin by IceWizard7", NamedTextColor.WHITE
-            ));
+            Component lineOne = Component.text("Plugin by: ", NamedTextColor.WHITE).append(Component.text("IceWizard7", NamedTextColor.BLUE)).append(Component.newline());
+            Component lineTwo = Component.text("[Open-Source] ", NamedTextColor.GOLD).append(Component.text("Available on Github:", NamedTextColor.WHITE)).append(Component.newline());
+            Component lineThree = Component.text("https://github.com/IceWizard7/mining-server-plugin ", NamedTextColor.WHITE).append(Component.newline());
+
+            Component result = lineOne.append(lineTwo).append(lineThree);
+
+            commandSender.sendMessage(result);
             return true;
         }
 
