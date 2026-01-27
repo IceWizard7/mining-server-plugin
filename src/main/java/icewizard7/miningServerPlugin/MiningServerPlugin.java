@@ -11,6 +11,7 @@ import org.bukkit.Bukkit;
 
 import net.luckperms.api.LuckPerms;
 
+import java.util.UUID;
 import java.util.HashSet;
 import java.util.Set;
 
