@@ -86,8 +86,8 @@ warps:
 
 spawn:
   world: world
-  x: 0.5
+  x: 0
   y: 41
-  z: 0.5
+  z: 0
   yaw: -90
   pitch: 0
