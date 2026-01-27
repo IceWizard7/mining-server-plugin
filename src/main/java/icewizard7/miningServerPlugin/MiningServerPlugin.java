@@ -53,6 +53,7 @@ public final class MiningServerPlugin extends JavaPlugin {
         getCommand("fly").setExecutor(flyCommand);
         getCommand("autocompress").setExecutor(autoCompressCommand);
         getCommand("warp").setExecutor(warpCommand);
+        getCommand("warp").setTabCompleter(warpCommand);
         getCommand("spawn").setExecutor(spawnCommand);
         getCommand("vanish").setExecutor(vanishCommand);
 
