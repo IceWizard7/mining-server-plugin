@@ -45,11 +45,11 @@ public class VoucherCommand implements CommandExecutor {
             return true;
         }
 
-        String roleName = args[1];
+        String rankName = args[1];
 
         // Check if rank exists in LuckPerms
-        if (luckPerms.getGroupManager().getGroup(roleName) == null) {
-            player.sendMessage("The rank '" + roleName + "' does not exist!");
+        if (luckPerms.getGroupManager().getGroup(rankName) == null) {
+            player.sendMessage("The rank '" + rankName + "' does not exist!");
             return true;
         }
 
@@ -60,19 +60,19 @@ public class VoucherCommand implements CommandExecutor {
                 Component.text("Voucher: ", NamedTextColor.GREEN)
                         .append(Component.text("[", NamedTextColor.GRAY))
                         .decoration(TextDecoration.ITALIC, false)
-                        .append(Component.text(roleName, NamedTextColor.GOLD)
+                        .append(Component.text(rankName, NamedTextColor.GOLD)
                                 .decoration(TextDecoration.ITALIC, false))
                         .append(Component.text("]", NamedTextColor.GRAY))
         );
         meta.lore(List.of(
-                Component.text("Right-click to receive the rank: ", NamedTextColor.GRAY).append(Component.text(roleName, NamedTextColor.GOLD))
+                Component.text("Right-click to receive the rank: ", NamedTextColor.GRAY).append(Component.text(rankName, NamedTextColor.GOLD))
                         .decoration(TextDecoration.ITALIC, false)
         ));
-        meta.getPersistentDataContainer().set(voucherKey, PersistentDataType.STRING, roleName);
+        meta.getPersistentDataContainer().set(voucherKey, PersistentDataType.STRING, rankName);
         voucher.setItemMeta(meta);
 
         player.getInventory().addItem(voucher);
-        player.sendMessage("Voucher for rank '" + roleName + "' has been added to your inventory!");
+        player.sendMessage("Voucher for rank '" + rankName + "' has been added to your inventory!");
 
         return true;
     }

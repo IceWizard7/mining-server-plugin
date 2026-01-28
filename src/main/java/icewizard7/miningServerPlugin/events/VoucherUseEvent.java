@@ -43,27 +43,27 @@ public class VoucherUseEvent implements Listener {
         // Check for voucher key
         if (!item.getItemMeta().getPersistentDataContainer().has(voucherKey, PersistentDataType.STRING)) return;
 
-        String roleName = item.getItemMeta().getPersistentDataContainer().get(voucherKey, PersistentDataType.STRING);
+        String rankName = item.getItemMeta().getPersistentDataContainer().get(voucherKey, PersistentDataType.STRING);
 
-        // Check if role exists
-        if (luckPerms.getGroupManager().getGroup(roleName) == null) {
+        // Check if rank exists
+        if (luckPerms.getGroupManager().getGroup(rankName) == null) {
             player.sendMessage(Component.text("This voucher contains an invalid rank.", NamedTextColor.RED));
             return;
         }
 
-        // Add role to LuckPerms
+        // Add rank to LuckPerms
         User user = luckPerms.getUserManager().getUser(player.getUniqueId());
         if (user == null) {
             player.sendMessage(Component.text("Could not load your LuckPerms data.", NamedTextColor.RED));
             return;
         }
 
-        InheritanceNode node = InheritanceNode.builder(roleName).build();
+        InheritanceNode node = InheritanceNode.builder(rankName).build();
         user.data().add(node);
         luckPerms.getUserManager().saveUser(user);
 
         player.sendMessage(Component.text("You have received the rank: ", NamedTextColor.GRAY)
-                .append(Component.text(roleName, NamedTextColor.GOLD)));
+                .append(Component.text(rankName, NamedTextColor.GOLD)));
 
         ItemStack itemFragment = item.clone();
         itemFragment.setAmount(1);
@@ -73,16 +73,16 @@ public class VoucherUseEvent implements Listener {
                 Component.text("Voucher Fragment: ", NamedTextColor.GREEN)
                         .append(Component.text("[", NamedTextColor.GRAY))
                         .decoration(TextDecoration.ITALIC, false)
-                        .append(Component.text(roleName, NamedTextColor.GOLD)
+                        .append(Component.text(rankName, NamedTextColor.GOLD)
                                 .decoration(TextDecoration.ITALIC, false))
                         .append(Component.text("]", NamedTextColor.GRAY))
         );
         metaFragment.lore(List.of(
-                Component.text("Fragment of rank: ", NamedTextColor.GRAY).append(Component.text(roleName, NamedTextColor.GOLD))
+                Component.text("Fragment of rank: ", NamedTextColor.GRAY).append(Component.text(rankName, NamedTextColor.GOLD))
                         .decoration(TextDecoration.ITALIC, false)
         ));
         metaFragment.getPersistentDataContainer().remove(voucherKey);
-        metaFragment.getPersistentDataContainer().set(fragmentKey, PersistentDataType.STRING, roleName);
+        metaFragment.getPersistentDataContainer().set(fragmentKey, PersistentDataType.STRING, rankName);
         itemFragment.setItemMeta(metaFragment);
 
         // Remove one item from stack
