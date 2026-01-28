@@ -63,7 +63,7 @@ public class VoucherCommand implements CommandExecutor {
                         .append(Component.text("]", NamedTextColor.GRAY))
         );
         meta.lore(List.of(
-                Component.text("Right-click to receive the role: ", NamedTextColor.GRAY).append(Component.text(roleName, NamedTextColor.GOLD))
+                Component.text("Right-click to receive the rank: ", NamedTextColor.GRAY).append(Component.text(roleName, NamedTextColor.GOLD))
                         .decoration(TextDecoration.ITALIC, false)
         ));
         meta.getPersistentDataContainer().set(voucherKey, PersistentDataType.STRING, roleName);
