@@ -41,15 +41,15 @@ public class VoucherCommand implements CommandExecutor {
         }
 
         if (args.length != 2) {
-            player.sendMessage(Component.text("Usage: /voucher create <role>", NamedTextColor.RED));
+            player.sendMessage(Component.text("Usage: /voucher create <rank>", NamedTextColor.RED));
             return true;
         }
 
         String roleName = args[1];
 
-        // Check if role exists in LuckPerms
+        // Check if rank exists in LuckPerms
         if (luckPerms.getGroupManager().getGroup(roleName) == null) {
-            player.sendMessage("The role '" + roleName + "' does not exist!");
+            player.sendMessage("The rank '" + roleName + "' does not exist!");
             return true;
         }
 
@@ -72,7 +72,7 @@ public class VoucherCommand implements CommandExecutor {
         voucher.setItemMeta(meta);
 
         player.getInventory().addItem(voucher);
-        player.sendMessage("Voucher for role '" + roleName + "' has been added to your inventory!");
+        player.sendMessage("Voucher for rank '" + roleName + "' has been added to your inventory!");
 
         return true;
     }

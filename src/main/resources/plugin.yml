@@ -41,7 +41,7 @@ commands:
   voucher:
     description: Create vouchers
     permission: miningServerPlugin.voucher.create
-    usage: /voucher create <role>
+    usage: /voucher create <rank>
 
 permissions:
   miningServerPlugin.info:

@@ -47,7 +47,7 @@ public class VoucherUseEvent implements Listener {
 
         // Check if role exists
         if (luckPerms.getGroupManager().getGroup(roleName) == null) {
-            player.sendMessage(Component.text("This voucher contains an invalid role.", NamedTextColor.RED));
+            player.sendMessage(Component.text("This voucher contains an invalid rank.", NamedTextColor.RED));
             return;
         }
 
@@ -62,7 +62,7 @@ public class VoucherUseEvent implements Listener {
         user.data().add(node);
         luckPerms.getUserManager().saveUser(user);
 
-        player.sendMessage(Component.text("You have received the role: ", NamedTextColor.GRAY)
+        player.sendMessage(Component.text("You have received the rank: ", NamedTextColor.GRAY)
                 .append(Component.text(roleName, NamedTextColor.GOLD)));
 
         ItemStack itemFragment = item.clone();
