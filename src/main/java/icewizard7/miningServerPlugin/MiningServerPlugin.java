@@ -22,6 +22,7 @@ public final class MiningServerPlugin extends JavaPlugin {
 
     // TAB
     private TAB tab;
+    private NameTagManager nameTagManager;
 
     @Override
     public void onEnable() {
@@ -33,6 +34,7 @@ public final class MiningServerPlugin extends JavaPlugin {
 
         // Initialize TAB
         this.tab = new TAB(vanishedPlayers, luckPerms);
+        this.nameTagManager = new NameTagManager(luckPerms);
 
         // Commands + events
         InfoCommand infoCommand = new InfoCommand();
@@ -51,6 +53,7 @@ public final class MiningServerPlugin extends JavaPlugin {
         Listener telepathyEvent = new TelepathyEvent(this, autoCompressCommand);
         Listener spawnPointEvent = new SpawnPointEvent(this);
         Listener voucherUseEvent = new VoucherUseEvent(luckPerms, voucherCommand.getVoucherKey());
+        Listener nameTagJoinEvent = new NameTagJoinEvent(nameTagManager);
 
         getCommand("info").setExecutor(infoCommand);
         getCommand("god").setExecutor(godCommand);
@@ -70,6 +73,15 @@ public final class MiningServerPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(telepathyEvent, this);
         getServer().getPluginManager().registerEvents(spawnPointEvent, this);
         getServer().getPluginManager().registerEvents(voucherUseEvent, this);
+        getServer().getPluginManager().registerEvents(nameTagJoinEvent, this);
+
+        // Rank changes
+        luckPerms.getEventBus().subscribe(this, net.luckperms.api.event.user.UserDataRecalculateEvent.class, event -> {
+            Player player = Bukkit.getPlayer(event.getUser().getUniqueId());
+            if (player != null) {
+                nameTagManager.updateNameTag(player);
+            }
+        });
 
         // TAB Update
         Bukkit.getScheduler().runTaskTimer(this, () -> {
