@@ -20,10 +20,12 @@ import java.util.List;
 public class VoucherCommand implements CommandExecutor {
     private final LuckPerms luckPerms;
     private final NamespacedKey voucherKey;
+    private final NamespacedKey fragmentKey;
 
     public VoucherCommand(LuckPerms luckPerms, Plugin plugin) {
         this.luckPerms = luckPerms;
         this.voucherKey = new NamespacedKey(plugin, "voucher");
+        this.fragmentKey = new NamespacedKey(plugin, "fragment");
     }
 
     @Override
@@ -77,5 +79,9 @@ public class VoucherCommand implements CommandExecutor {
 
     public NamespacedKey getVoucherKey() {
         return voucherKey;
+    }
+
+    public NamespacedKey getFragmentKey() {
+        return fragmentKey;
     }
 }

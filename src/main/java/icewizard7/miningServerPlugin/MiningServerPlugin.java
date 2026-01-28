@@ -57,7 +57,7 @@ public final class MiningServerPlugin extends JavaPlugin {
         Listener vanishEvent = new VanishEvent(this, vanishedPlayers);
         Listener telepathyEvent = new TelepathyEvent(this, autoCompressCommand);
         Listener spawnPointEvent = new SpawnPointEvent(this);
-        Listener voucherUseEvent = new VoucherUseEvent(luckPerms, voucherCommand.getVoucherKey());
+        Listener voucherUseEvent = new VoucherUseEvent(luckPerms, voucherCommand.getVoucherKey(), voucherCommand.getFragmentKey());
         Listener nameTagJoinEvent = new NameTagEvent(nameTagManager);
 
         getCommand("info").setExecutor(infoCommand);
