@@ -27,6 +27,12 @@ public class TAB {
         Component playerListName = Component.text(player.getName()); // Default
 
         if (user != null) {
+            int weight = user.getPrimaryGroup() != null
+                    ? luckPerms.getGroupManager().getGroup(user.getPrimaryGroup()).getWeight().orElse(0)
+                    : 0;
+
+            player.setPlayerListOrder(weight);
+
             QueryOptions queryOptions = luckPerms.getContextManager().getQueryOptions(player);
             String prefix = user.getCachedData().getMetaData(queryOptions).getPrefix();
             String suffix = user.getCachedData().getMetaData(queryOptions).getSuffix();
