@@ -82,6 +82,8 @@ public class VoucherUseEvent implements Listener {
         );
         metaFragment.lore(List.of(
                 Component.text("Fragment of rank: ", NamedTextColor.GRAY).append(Component.text(rankName, NamedTextColor.GOLD))
+                        .decoration(TextDecoration.ITALIC, false),
+                Component.text("Obtained by redeeming rank ", NamedTextColor.DARK_GRAY).append(Component.text(rankName, NamedTextColor.GOLD))
                         .decoration(TextDecoration.ITALIC, false)
         ));
         metaFragment.getPersistentDataContainer().remove(voucherKey);
