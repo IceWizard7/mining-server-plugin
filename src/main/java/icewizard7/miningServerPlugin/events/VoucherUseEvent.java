@@ -58,6 +58,9 @@ public class VoucherUseEvent implements Listener {
             return;
         }
 
+        if (event.useItemInHand() == org.bukkit.event.Event.Result.DENY) return;
+        event.setCancelled(true);
+
         InheritanceNode node = InheritanceNode.builder(rankName).build();
         user.data().add(node);
         luckPerms.getUserManager().saveUser(user);
@@ -85,13 +88,13 @@ public class VoucherUseEvent implements Listener {
         metaFragment.getPersistentDataContainer().set(fragmentKey, PersistentDataType.STRING, rankName);
         itemFragment.setItemMeta(metaFragment);
 
+        player.getInventory().addItem(itemFragment);
         // Remove one item from stack
         int amount = item.getAmount();
         if (amount > 1) {
             item.setAmount(amount - 1);
         } else {
-            player.getInventory().remove(item);
-            player.getInventory().addItem(itemFragment);
+            player.getInventory().setItemInMainHand(null);
         }
     }
 }

@@ -125,6 +125,7 @@ public class AutoCompressCommand implements CommandExecutor {
             if (item == null || item.getType() != Material.PLAYER_HEAD) continue;
 
             if (isCompressed(item)) continue;
+            if (isSuperCompressed(item)) continue;
 
             String itemTex = getTexture(item);
             if (texture.equals(itemTex)) {
@@ -142,6 +143,7 @@ public class AutoCompressCommand implements CommandExecutor {
             ItemStack item = inv.getItem(i);
             if (item == null || item.getType() != Material.PLAYER_HEAD) continue;
             if (isCompressed(item)) continue;
+            if (isSuperCompressed(item)) continue;
 
             String itemTex = getTexture(item);
             if (!texture.equals(itemTex)) continue;
