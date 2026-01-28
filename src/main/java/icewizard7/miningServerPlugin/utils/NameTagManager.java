@@ -1,5 +1,6 @@
 package icewizard7.miningServerPlugin.utils;
 
+import net.kyori.adventure.text.Component;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.model.user.User;
 import net.luckperms.api.query.QueryOptions;
@@ -29,32 +30,34 @@ public class NameTagManager {
         String prefix = user.getCachedData().getMetaData(queryOptions).getPrefix();
         String suffix = user.getCachedData().getMetaData(queryOptions).getSuffix();
 
-        String prefixLegacy = prefix != null
-                ? serializer.serialize(serializer.deserialize(prefix))
-                : "";
+        String prefixLegacy = prefix != null ? serializer.serialize(serializer.deserialize(prefix)) : "";
+        String suffixLegacy = suffix != null ? serializer.serialize(serializer.deserialize(suffix)) : "";
 
-        String suffixLegacy = suffix != null
-                ? serializer.serialize(serializer.deserialize(suffix))
-                : "";
+        Component prefixComp = (prefix != null) ? serializer.deserialize(prefix) : Component.empty();
+        Component suffixComp = (suffix != null) ? serializer.deserialize(suffix) : Component.empty();
 
-        // Use main scoreboard
         Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
 
-        // Unique team per rank format
-        String teamName = "rank_" + player.getUniqueId().toString().substring(0, 8);
+        // Team name based on format, not player
+        // String teamName = ("rank_" + prefixLegacy + suffixLegacy).replaceAll("[^a-zA-Z0-9]", "").substring(0, Math.min(15, ("rank_" + prefixLegacy + suffixLegacy).length()));
+        String raw = prefixLegacy + suffixLegacy;
+        String teamName = "rank_" + Integer.toHexString(raw.hashCode());
 
         Team team = board.getTeam(teamName);
         if (team == null) {
             team = board.registerNewTeam(teamName);
+            team.prefix(prefixComp);
+            team.suffix(suffixComp);
+            team.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.ALWAYS);
         }
 
-        team.prefix(net.kyori.adventure.text.Component.text(prefixLegacy));
-        team.suffix(net.kyori.adventure.text.Component.text(suffixLegacy));
-
-        if (!team.hasEntry(player.getName())) {
-            team.addEntry(player.getName());
+        // Remove player from other rank teams
+        for (Team t : board.getTeams()) {
+            if (t.hasEntry(player.getName()) && !t.getName().equals(teamName)) {
+                t.removeEntry(player.getName());
+            }
         }
 
-        player.setScoreboard(board);
+        team.addEntry(player.getName());
     }
 }
