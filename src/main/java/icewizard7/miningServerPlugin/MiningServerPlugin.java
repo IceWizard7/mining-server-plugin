@@ -17,12 +17,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 public final class MiningServerPlugin extends JavaPlugin {
-    // Set of vanished Players
     private final Set<UUID> vanishedPlayers = new HashSet<>();
-
-    // TAB
     private TAB tab;
     private NameTagManager nameTagManager;
+    private DiscordBridge discordBridge;
 
     @Override
     public void onEnable() {
@@ -37,9 +35,11 @@ public final class MiningServerPlugin extends JavaPlugin {
             return;
         }
 
-        // Initialize TAB
+        // Initialize TAB, NameTagManager & DiscordBridge
         this.tab = new TAB(vanishedPlayers, luckPerms);
         this.nameTagManager = new NameTagManager(luckPerms);
+        this.discordBridge = new DiscordBridge(this);
+        discordBridge.enable();
 
         // Commands & events
         InfoCommand infoCommand = new InfoCommand();
@@ -53,6 +53,7 @@ public final class MiningServerPlugin extends JavaPlugin {
         SpawnCommand spawnCommand = new SpawnCommand(this);
         VanishCommand vanishCommand = new VanishCommand(this, vanishedPlayers);
         VoucherCommand voucherCommand = new VoucherCommand(luckPerms, this);
+
         Listener chatEvent = new ChatEvent(luckPerms);
         Listener welcomeEvent = new WelcomeMessageEvent();
         Listener tabJoinEvent = new TabJoinEvent(tab);
@@ -61,6 +62,7 @@ public final class MiningServerPlugin extends JavaPlugin {
         Listener spawnPointEvent = new SpawnPointEvent(this);
         Listener voucherUseEvent = new VoucherUseEvent(luckPerms, voucherCommand.getVoucherKey(), voucherCommand.getFragmentKey());
         Listener nameTagJoinEvent = new NameTagEvent(nameTagManager);
+        Listener discordChatEvent = new DiscordChatEvent(discordBridge, luckPerms);
 
         getCommand("info").setExecutor(infoCommand);
         getCommand("rules").setExecutor(rulesCommand);
@@ -83,6 +85,7 @@ public final class MiningServerPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(spawnPointEvent, this);
         getServer().getPluginManager().registerEvents(voucherUseEvent, this);
         getServer().getPluginManager().registerEvents(nameTagJoinEvent, this);
+        getServer().getPluginManager().registerEvents(discordChatEvent, this);
 
         // Rank changes
         luckPerms.getEventBus().subscribe(this,
@@ -122,11 +125,16 @@ public final class MiningServerPlugin extends JavaPlugin {
         }, 0L, 20L * 3); // every 3 seconds
 
         // Print to console
-        getLogger().info("[MiningServerPlugin] Plugin has been enabled.");
+        getLogger().info("MiningServerPlugin has been enabled.");
     }
 
     @Override
     public void onDisable() {
-        getLogger().info("[MiningServerPlugin] Plugin has been disabled.");
+        // Check if not null in case enable failed
+        getLogger().info("MiningServerPlugin is disabling...");
+        if (this.discordBridge != null) {
+            this.discordBridge.disable();
+        }
+        getLogger().info("MiningServerPlugin has been disabled.");
     }
 }
