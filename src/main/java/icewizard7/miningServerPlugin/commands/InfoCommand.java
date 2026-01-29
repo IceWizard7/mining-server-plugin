@@ -3,7 +3,6 @@ package icewizard7.miningServerPlugin.commands;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.ConsoleCommandSender;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -13,27 +12,17 @@ import net.kyori.adventure.text.event.HoverEvent;
 public class InfoCommand implements CommandExecutor{
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
-        if (commandSender instanceof ConsoleCommandSender) {
-            commandSender.sendMessage(Component.text(
-                    "[Console] Plugin by IceWizard7", NamedTextColor.WHITE
-            ));
-            return true;
-        }
-
         if (commandSender.hasPermission("miningServerPlugin.info")) {
-            Component lineOne = Component.text("Plugin by: ", NamedTextColor.WHITE)
+            Component result = Component.text("Plugin by: ", NamedTextColor.WHITE)
                     .append(Component.text("IceWizard7", NamedTextColor.BLUE))
-                    .append(Component.newline());
-            Component lineTwo = Component.text("[Open-Source] ", NamedTextColor.GOLD)
+                    .append(Component.newline())
+                    .append(Component.text("[Open-Source] ", NamedTextColor.GOLD))
                     .append(Component.text("Available on Github:", NamedTextColor.WHITE))
-                    .append(Component.newline());
-
-            Component lineThree = Component.text("https://github.com/IceWizard7/mining-server-plugin", NamedTextColor.WHITE)
+                    .append(Component.newline())
+                    .append(Component.text("https://github.com/IceWizard7/mining-server-plugin", NamedTextColor.WHITE))
                     .clickEvent(ClickEvent.openUrl("https://github.com/IceWizard7/mining-server-plugin"))
                     .hoverEvent(HoverEvent.showText(Component.text("Click to open GitHub repository!", NamedTextColor.YELLOW)))
                     .append(Component.newline());
-
-            Component result = lineOne.append(lineTwo).append(lineThree);
 
             commandSender.sendMessage(result);
             return true;
