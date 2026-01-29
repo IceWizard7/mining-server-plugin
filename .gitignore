@@ -19,3 +19,4 @@ TestMinecraftServer
 
 # Environment
 .env
+src/main/resources/config.yml
