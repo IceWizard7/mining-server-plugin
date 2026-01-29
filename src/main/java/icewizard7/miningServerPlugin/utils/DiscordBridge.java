@@ -137,7 +137,7 @@ public final class DiscordBridge {
                 // Handle Chat Channel -> In-game Chat
                 if (channelId.equals(config.getString("discord.chat_channel"))) {
                     Component gameMessage = Component.text("[Discord] ", NamedTextColor.BLUE)
-                            .append(Component.text(event.getAuthor().getName() + ": ", NamedTextColor.GRAY))
+                            .append(Component.text(event.getAuthor().getGlobalName() + ": ", NamedTextColor.GRAY))
                             .append(Component.text(message, NamedTextColor.WHITE));
 
                     // Broadcast to all players on the main thread
