@@ -16,3 +16,6 @@ out
 
 # MC Server
 TestMinecraftServer
+
+# Environment
+.env
