@@ -41,8 +41,10 @@ public final class MiningServerPlugin extends JavaPlugin {
         this.tab = new TAB(vanishedPlayers, luckPerms);
         this.nameTagManager = new NameTagManager(luckPerms);
 
-        // Commands + events
+        // Commands & events
         InfoCommand infoCommand = new InfoCommand();
+        RulesCommand rulesCommand = new RulesCommand();
+        DiscordCommand discordCommand = new DiscordCommand();
         GodCommand godCommand = new GodCommand();
         InvseeCommand invseeCommand = new InvseeCommand();
         FlyCommand flyCommand = new FlyCommand();
@@ -61,6 +63,8 @@ public final class MiningServerPlugin extends JavaPlugin {
         Listener nameTagJoinEvent = new NameTagEvent(nameTagManager);
 
         getCommand("info").setExecutor(infoCommand);
+        getCommand("rules").setExecutor(rulesCommand);
+        getCommand("discord").setExecutor(discordCommand);
         getCommand("god").setExecutor(godCommand);
         getCommand("invsee").setExecutor(invseeCommand);
         getCommand("fly").setExecutor(flyCommand);
