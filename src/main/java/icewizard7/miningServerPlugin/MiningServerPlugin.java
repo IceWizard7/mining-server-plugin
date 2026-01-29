@@ -55,7 +55,7 @@ public final class MiningServerPlugin extends JavaPlugin {
         VoucherCommand voucherCommand = new VoucherCommand(luckPerms, this);
 
         Listener chatEvent = new ChatEvent(luckPerms);
-        Listener welcomeEvent = new WelcomeMessageEvent();
+        Listener welcomeEvent = new WelcomeMessageEvent(discordBridge);
         Listener tabJoinEvent = new TabJoinEvent(tab);
         Listener vanishEvent = new VanishEvent(this, vanishedPlayers);
         Listener telepathyEvent = new TelepathyEvent(this, autoCompressCommand);

@@ -1,5 +1,6 @@
 package icewizard7.miningServerPlugin.events;
 
+import icewizard7.miningServerPlugin.utils.DiscordBridge;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 
@@ -9,6 +10,12 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 public class WelcomeMessageEvent implements Listener {
+
+    private DiscordBridge discordBridge;
+
+    public WelcomeMessageEvent(DiscordBridge discordBridge) {
+        this.discordBridge = discordBridge;
+    }
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
@@ -21,6 +28,7 @@ public class WelcomeMessageEvent implements Listener {
 
         // Set the join message
         event.joinMessage(joinMessage);
+        discordBridge.getChatChannel().sendMessage("[+] " + playerName).queue();
     }
 
     @EventHandler
@@ -34,5 +42,6 @@ public class WelcomeMessageEvent implements Listener {
 
         // Set the join message
         event.quitMessage(quitMessage);
+        discordBridge.getChatChannel().sendMessage("[-] " + playerName).queue();
     }
 }

@@ -3,6 +3,12 @@ package icewizard7.miningServerPlugin.utils;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.requests.GatewayIntent;
+
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Appender;
 import org.apache.logging.log4j.core.LogEvent;
@@ -12,6 +18,7 @@ import org.apache.logging.log4j.core.LoggerContext;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -49,6 +56,14 @@ public final class DiscordBridge {
                 }
 
                 jda = JDABuilder.createDefault(token).build().awaitReady();
+                // Inside the async task in enable()
+                jda = JDABuilder.createDefault(token)
+                        .enableIntents(GatewayIntent.MESSAGE_CONTENT) // Allows reading message text
+                        .build()
+                        .awaitReady();
+
+                // After JDA is ready, start the listener
+                startDiscordToGameListener();
                 chatChannel = jda.getTextChannelById(chatId);
                 consoleChannel = jda.getTextChannelById(consoleId);
 
@@ -107,6 +122,40 @@ public final class DiscordBridge {
                 consoleChannel.sendMessage("```" + sb.toString() + "```").queue();
             }
         }, 40L, 40L).getTaskId();
+    }
+
+    private void startDiscordToGameListener() {
+        jda.addEventListener(new ListenerAdapter() {
+            @Override
+            public void onMessageReceived(@NotNull MessageReceivedEvent event) {
+                // Ignore bots (including ourselves)
+                if (event.getAuthor().isBot()) return;
+
+                String message = event.getMessage().getContentRaw();
+                String channelId = event.getChannel().getId();
+
+                // Handle Chat Channel -> In-game Chat
+                if (channelId.equals(config.getString("discord.chat_channel"))) {
+                    Component gameMessage = Component.text("[Discord] ", NamedTextColor.BLUE)
+                            .append(Component.text(event.getAuthor().getName() + ": ", NamedTextColor.GRAY))
+                            .append(Component.text(message, NamedTextColor.WHITE));
+
+                    // Broadcast to all players on the main thread
+                    Bukkit.getScheduler().runTask(plugin, () -> {
+                        Bukkit.broadcast(gameMessage);
+                    });
+                }
+
+                // Handle Console Channel -> Execute Command
+                else if (channelId.equals(config.getString("discord.console_channel"))) {
+                    // Execute command on the main thread
+                    Bukkit.getScheduler().runTask(plugin, () -> {
+                        logger.info("[Discord Console] Executing: " + message);
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), message);
+                    });
+                }
+            }
+        });
     }
 
     public boolean isReady() {
