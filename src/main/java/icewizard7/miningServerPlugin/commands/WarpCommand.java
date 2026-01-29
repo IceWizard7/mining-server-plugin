@@ -25,14 +25,12 @@ public class WarpCommand implements TabExecutor {
 
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
-        if (!(commandSender instanceof Player)) {
+        if (!(commandSender instanceof Player player)) {
             commandSender.sendMessage(Component.text(
                     "Only players can execute this command.", NamedTextColor.RED
             ));
             return true;
         }
-
-        Player player = (Player) commandSender;
 
         if (strings.length == 0) {
             player.sendMessage(Component.text(

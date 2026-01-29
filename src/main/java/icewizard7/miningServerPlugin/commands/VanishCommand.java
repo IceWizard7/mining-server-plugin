@@ -24,14 +24,10 @@ public class VanishCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
-        if (!(commandSender instanceof Player)) {
-            commandSender.sendMessage(Component.text(
-                    "Only players can execute this command.", NamedTextColor.RED
-            ));
+        if (!(commandSender instanceof Player player)) {
+            commandSender.sendMessage(Component.text("Only players can use this command.", NamedTextColor.RED));
             return true;
         }
-
-        Player player = (Player) commandSender;
 
         if (!(player.hasPermission("miningServerPlugin.vanish"))) {
             player.sendMessage(Component.text(

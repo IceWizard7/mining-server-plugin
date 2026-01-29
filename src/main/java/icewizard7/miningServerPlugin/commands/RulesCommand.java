@@ -6,11 +6,17 @@ import org.bukkit.command.CommandExecutor;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import org.bukkit.entity.Player;
 
 public class RulesCommand implements CommandExecutor{
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
-        if (commandSender.hasPermission("miningServerPlugin.rules")) {
+        if (!(commandSender instanceof Player player)) {
+            commandSender.sendMessage(Component.text("Only players can use this command.", NamedTextColor.RED));
+            return true;
+        }
+
+        if (player.hasPermission("miningServerPlugin.rules")) {
             Component result = Component.text("Minor Offences:", NamedTextColor.GOLD)
                             .append(Component.newline())
                             .append(Component.text("1: ", NamedTextColor.RED))
@@ -52,11 +58,11 @@ public class RulesCommand implements CommandExecutor{
                             .append(Component.newline())
                             .append(Component.text("If you break any rule, your punishment will be decided by determining its severity (by staff members).", NamedTextColor.WHITE));
 
-            commandSender.sendMessage(result);
+            player.sendMessage(result);
             return true;
         }
 
-        commandSender.sendMessage(Component.text(
+        player.sendMessage(Component.text(
                 "You do not have permission to use this command.", NamedTextColor.RED
         ));
         return true;
