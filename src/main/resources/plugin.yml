@@ -9,6 +9,14 @@ commands:
     description: Get information about this plugin
     permission: miningServerPlugin.info
     usage: /info
+  rules:
+    description: Get rules of this server
+    permission: miningServerPlugin.rules
+    usage: /rules
+  discord:
+    description: Get the discord server invite link
+    permission: miningServerPlugin.discord
+    usage: /discord
   god:
     description: Makes you invulnerable
     permission: miningServerPlugin.god
@@ -46,6 +54,12 @@ commands:
 permissions:
   miningServerPlugin.info:
     description: Allows using /info
+    default: true
+  miningServerPlugin.rules:
+    description: Allows using /rules
+    default: true
+  miningServerPlugin.discord:
+    description: Allows using /discord
     default: true
   miningServerPlugin.god:
     description: Allows using /god
