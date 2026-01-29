@@ -20,3 +20,4 @@ TestMinecraftServer
 # Environment
 .env
 src/main/resources/config.yml
+full_update.sh
