@@ -12,16 +12,11 @@ import net.kyori.adventure.text.event.HoverEvent;
 public class DiscordCommand implements CommandExecutor{
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
-        if (commandSender.hasPermission("miningServerPlugin.info")) {
-            Component result = Component.text("Plugin by: ", NamedTextColor.WHITE)
-                    .append(Component.text("IceWizard7", NamedTextColor.BLUE))
-                    .append(Component.newline())
-                    .append(Component.text("[Open-Source] ", NamedTextColor.GOLD))
-                    .append(Component.text("Available on Github:", NamedTextColor.WHITE))
-                    .append(Component.newline())
-                    .append(Component.text("https://github.com/IceWizard7/mining-server-plugin", NamedTextColor.WHITE))
-                    .clickEvent(ClickEvent.openUrl("https://github.com/IceWizard7/mining-server-plugin"))
-                    .hoverEvent(HoverEvent.showText(Component.text("Click to open GitHub repository!", NamedTextColor.YELLOW)))
+        if (commandSender.hasPermission("miningServerPlugin.discord")) {
+            Component result = Component.text("Discord Invite Link: ", NamedTextColor.GOLD)
+                    .append(Component.text("discord.gg/8ce6N8QXpm", NamedTextColor.WHITE))
+                    .clickEvent(ClickEvent.openUrl("discord.gg/8ce6N8QXpm"))
+                    .hoverEvent(HoverEvent.showText(Component.text("Click to open Discord invitation!", NamedTextColor.YELLOW)))
                     .append(Component.newline());
 
             commandSender.sendMessage(result);
