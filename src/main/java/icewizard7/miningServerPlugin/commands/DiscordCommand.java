@@ -16,8 +16,7 @@ public class DiscordCommand implements CommandExecutor{
             Component result = Component.text("Discord Invite Link: ", NamedTextColor.GOLD)
                     .append(Component.text("discord.gg/8ce6N8QXpm", NamedTextColor.WHITE))
                     .clickEvent(ClickEvent.openUrl("discord.gg/8ce6N8QXpm"))
-                    .hoverEvent(HoverEvent.showText(Component.text("Click to open Discord invitation!", NamedTextColor.YELLOW)))
-                    .append(Component.newline());
+                    .hoverEvent(HoverEvent.showText(Component.text("Click to open Discord invitation!", NamedTextColor.YELLOW)));
 
             commandSender.sendMessage(result);
             return true;

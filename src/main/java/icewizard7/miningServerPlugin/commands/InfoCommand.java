@@ -21,8 +21,7 @@ public class InfoCommand implements CommandExecutor{
                     .append(Component.newline())
                     .append(Component.text("https://github.com/IceWizard7/mining-server-plugin", NamedTextColor.WHITE))
                     .clickEvent(ClickEvent.openUrl("https://github.com/IceWizard7/mining-server-plugin"))
-                    .hoverEvent(HoverEvent.showText(Component.text("Click to open GitHub repository!", NamedTextColor.YELLOW)))
-                    .append(Component.newline());
+                    .hoverEvent(HoverEvent.showText(Component.text("Click to open GitHub repository!", NamedTextColor.YELLOW)));
 
             commandSender.sendMessage(result);
             return true;
