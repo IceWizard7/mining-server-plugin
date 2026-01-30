@@ -89,8 +89,8 @@ public class TAB {
 
         // Text
         Component playersOnlineLine = Component.newline().append(Component.text("Players online: " + (Bukkit.getOnlinePlayers().size() - vanishedPlayers.size()), NamedTextColor.GRAY)).append(Component.newline());
-        Component ipLine = Component.text("futuremines.minekeep.gg", NamedTextColor.GRAY).append(Component.newline());
-        Component discordLinkLine = Component.text("/discord for discord server", NamedTextColor.GRAY).append(Component.newline());
+        Component ipLine = Component.text("IP: futuremines.minekeep.gg", NamedTextColor.GRAY).append(Component.newline());
+        Component discordLinkLine = Component.text("Discord: /discord", NamedTextColor.GRAY).append(Component.newline());
         Component ramLine = Component.text("RAM: " + usedMemory + "/" + maxMemory + " MB (", NamedTextColor.GRAY).append(Component.text((int) usagePercent + "%", ramColor)).append(Component.text(")", NamedTextColor.GRAY)).append(Component.newline());
         Component tpsLine = Component.text("TPS: ", NamedTextColor.GRAY).append(Component.text(String.format("%.2f", tps), tpsColor));
 
