@@ -88,6 +88,7 @@ permissions:
       miningServerPlugin.warp.gold: true
       miningServerPlugin.warp.diamond: true
       miningServerPlugin.warp.emerald: true
+      miningServerPlugin.warp.nether: true
       miningServerPlugin.warp.netherite: true
       miningServerPlugin.warp.blackstone: true
       miningServerPlugin.warp.quartz: true
@@ -116,6 +117,9 @@ permissions:
     default: false
   miningServerPlugin.warp.emerald:
     description: Allows warping to Emerald
+    default: false
+  miningServerPlugin.warp.nether:
+    description: Allows warping to Nether
     default: false
   miningServerPlugin.warp.netherite:
     description: Allows warping to Netherite
