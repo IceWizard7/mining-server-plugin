@@ -1,5 +1,9 @@
 package icewizard7.miningServerPlugin.events;
 
+import icewizard7.miningServerPlugin.utils.DiscordBridge;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.model.user.User;
 import net.luckperms.api.model.group.Group;
@@ -12,8 +16,11 @@ import io.papermc.paper.event.player.AsyncChatEvent;
 public class ChatEvent implements Listener {
 
     private final LuckPerms luckPerms;
+    private final DiscordBridge discordBridge;
+    private long discordLastSent = 0;
 
-    public ChatEvent(LuckPerms luckPerms) {
+    public ChatEvent(DiscordBridge discordBridge, LuckPerms luckPerms) {
+        this.discordBridge = discordBridge;
         this.luckPerms = luckPerms;
     }
 
@@ -21,6 +28,8 @@ public class ChatEvent implements Listener {
     public void onPlayerChat(AsyncChatEvent event) {
         Player player = event.getPlayer();
         User user = luckPerms.getUserManager().getUser(player.getUniqueId());
+
+        sendDiscordMessage(player, event.message());
 
         if (user != null) {
             // Get the group object
@@ -51,5 +60,52 @@ public class ChatEvent implements Listener {
                 });
             }
         }
+    }
+
+    public void sendDiscordMessage(Player player, Component message) {
+        if (!discordBridge.isReady()) return;
+
+        String chatMessage = PlainTextComponentSerializer.plainText()
+                .serialize(message);
+
+        User user = luckPerms.getUserManager().getUser(player.getUniqueId());
+        if (user == null) return;
+
+        QueryOptions queryOptions = luckPerms.getContextManager().getQueryOptions(player);
+
+        String prefix = cleanMeta(user.getCachedData().getMetaData(queryOptions).getPrefix());
+        String suffix = cleanMeta(user.getCachedData().getMetaData(queryOptions).getSuffix());
+
+        if (!prefix.isEmpty()) {
+            prefix = "[" + prefix + "] ";
+        }
+
+        if (!suffix.isEmpty()) {
+            suffix = " [" + suffix + "]";
+        }
+
+        String finalMessage = "**" + prefix + player.getName() + suffix + "**: " + chatMessage;
+
+        if (System.currentTimeMillis() - discordLastSent > 500) {
+            discordBridge.getChatChannel()
+                    .sendMessage(finalMessage)
+                    .queue();
+            discordLastSent = System.currentTimeMillis();
+        }
+    }
+
+    private String cleanMeta(String input) {
+        if (input == null) return "";
+
+        // Remove hex colors like &#12ABEF
+        input = input.replaceAll("&#[0-9a-fA-F]{6}", "");
+
+        // Remove normal color/format codes (&a, &l, &r etc.)
+        input = input.replaceAll("&[0-9a-fk-or]", "");
+
+        // Remove section sign codes (§a etc.) just in case
+        input = input.replaceAll("§[0-9a-fk-or]", "");
+
+        return input.trim();
     }
 }

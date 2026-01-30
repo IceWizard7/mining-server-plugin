@@ -51,7 +51,6 @@ public final class MiningServerPlugin extends JavaPlugin {
         this.discordBridge = new DiscordBridge(this, discordLinkManager);
         discordBridge.enable();
 
-
         // Commands & events
         InfoCommand infoCommand = new InfoCommand();
         RulesCommand rulesCommand = new RulesCommand();
@@ -67,7 +66,7 @@ public final class MiningServerPlugin extends JavaPlugin {
         LinkCommand linkCommand = new LinkCommand(discordLinkManager, discordBridge);
         UnlinkCommand unlinkCommand = new UnlinkCommand(discordLinkManager);
 
-        Listener chatEvent = new ChatEvent(luckPerms);
+        Listener chatEvent = new ChatEvent(discordBridge, luckPerms);
         Listener welcomeEvent = new WelcomeMessageEvent(discordBridge);
         Listener tabJoinEvent = new TabJoinEvent(tab);
         Listener vanishEvent = new VanishEvent(this, vanishedPlayers);
@@ -75,7 +74,6 @@ public final class MiningServerPlugin extends JavaPlugin {
         Listener spawnPointEvent = new SpawnPointEvent(this);
         Listener voucherUseEvent = new VoucherUseEvent(luckPerms, voucherCommand.getVoucherKey(), voucherCommand.getFragmentKey());
         Listener nameTagJoinEvent = new NameTagEvent(nameTagManager);
-        Listener discordChatEvent = new DiscordChatEvent(discordBridge, luckPerms);
         Listener portalEvent = new PortalEvent(portalManager);
 
         getCommand("info").setExecutor(infoCommand);
@@ -101,7 +99,6 @@ public final class MiningServerPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(spawnPointEvent, this);
         getServer().getPluginManager().registerEvents(voucherUseEvent, this);
         getServer().getPluginManager().registerEvents(nameTagJoinEvent, this);
-        getServer().getPluginManager().registerEvents(discordChatEvent, this);
         getServer().getPluginManager().registerEvents(portalEvent, this);
 
         // Rank changes
