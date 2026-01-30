@@ -22,7 +22,18 @@ public class DiscordLinkManager {
         this.plugin = plugin;
         this.file = new File(plugin.getDataFolder(), "linked-accounts.yml");
 
-        if (!file.exists()) plugin.saveResource("linked-accounts.yml", false);
+        if (!plugin.getDataFolder().exists()) {
+            plugin.getDataFolder().mkdirs();
+        }
+
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
         data = YamlConfiguration.loadConfiguration(file);
     }
 
