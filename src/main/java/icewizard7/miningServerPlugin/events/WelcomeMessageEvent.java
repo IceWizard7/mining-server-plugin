@@ -11,7 +11,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 public class WelcomeMessageEvent implements Listener {
 
-    private DiscordBridge discordBridge;
+    private final DiscordBridge discordBridge;
 
     public WelcomeMessageEvent(DiscordBridge discordBridge) {
         this.discordBridge = discordBridge;
@@ -28,7 +28,8 @@ public class WelcomeMessageEvent implements Listener {
 
         // Set the join message
         event.joinMessage(joinMessage);
-        discordBridge.getChatChannel().sendMessage("[+] " + playerName).queue();
+        // discordBridge.getChatChannel().sendMessage("[+] " + playerName).queue();
+        discordBridge.sendJoinEmbed(event.getPlayer());
     }
 
     @EventHandler
@@ -42,6 +43,7 @@ public class WelcomeMessageEvent implements Listener {
 
         // Set the join message
         event.quitMessage(quitMessage);
-        discordBridge.getChatChannel().sendMessage("[-] " + playerName).queue();
+        // discordBridge.getChatChannel().sendMessage("[-] " + playerName).queue();
+        discordBridge.sendQuitEmbed(event.getPlayer());
     }
 }

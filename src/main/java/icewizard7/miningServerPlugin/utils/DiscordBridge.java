@@ -1,5 +1,6 @@
 package icewizard7.miningServerPlugin.utils;
 
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
@@ -17,9 +18,11 @@ import org.apache.logging.log4j.core.config.Configuration;
 import org.apache.logging.log4j.core.LoggerContext;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
+import java.awt.*;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Logger;
@@ -176,6 +179,44 @@ public final class DiscordBridge {
         getChatChannel().sendMessage("🔴 Minecraft Server stopped.").queue();
 
         if (jda != null) jda.shutdown();
+    }
+
+    public String getAvatarUrl(Player player) {
+        return "https://mc-heads.net/avatar/" + player.getUniqueId();
+    }
+
+    public void sendJoinEmbed(Player player) {
+        String avatarUrl = getAvatarUrl(player);
+
+        TextChannel channel = this.getChatChannel();
+
+        EmbedBuilder embed = new EmbedBuilder();
+
+        embed.setColor(Color.GREEN);
+        embed.setTitle("[+] " + player.getName());
+        embed.setThumbnail(avatarUrl);
+        embed.setDescription("Player joined the server.");
+
+        embed.setFooter("Minecraft Server", null);
+
+        channel.sendMessageEmbeds(embed.build()).queue();
+    }
+
+    public void sendQuitEmbed(Player player) {
+        String avatarUrl = getAvatarUrl(player);
+
+        TextChannel channel = this.getChatChannel();
+
+        EmbedBuilder embed = new EmbedBuilder();
+
+        embed.setColor(Color.RED);
+        embed.setTitle("[-] " + player.getName());
+        embed.setThumbnail(avatarUrl);
+        embed.setDescription("Player left the server.");
+
+        embed.setFooter("Minecraft Server", null);
+
+        channel.sendMessageEmbeds(embed.build()).queue();
     }
 
     public TextChannel getChatChannel() { return chatChannel; }
