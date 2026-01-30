@@ -21,6 +21,10 @@ commands:
     description: Link your Minecraft account to your Discord account
     permission: miningServerPlugin.link
     usage: /link
+  unlink:
+    description: Unlink your Minecraft account from your Discord account
+    permission: miningServerPlugin.link
+    usage: /unlink
   god:
     description: Makes you invulnerable
     permission: miningServerPlugin.god
@@ -63,7 +67,7 @@ permissions:
     description: Allows using /rules
     default: true
   miningServerPlugin.link:
-    description: Allows using /link
+    description: Allows using /link and /unlink
     default: true
   miningServerPlugin.discord:
     description: Allows using /discord

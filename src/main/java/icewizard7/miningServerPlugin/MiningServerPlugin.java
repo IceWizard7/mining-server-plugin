@@ -48,7 +48,6 @@ public final class MiningServerPlugin extends JavaPlugin {
 
         // Discord
         this.discordLinkManager = new DiscordLinkManager(this);
-
         this.discordBridge = new DiscordBridge(this, discordLinkManager);
         discordBridge.enable();
 
@@ -65,7 +64,7 @@ public final class MiningServerPlugin extends JavaPlugin {
         SpawnCommand spawnCommand = new SpawnCommand(this);
         VanishCommand vanishCommand = new VanishCommand(this, vanishedPlayers);
         VoucherCommand voucherCommand = new VoucherCommand(luckPerms, this);
-        LinkCommand linkCommand = new LinkCommand(discordLinkManager);
+        LinkCommand linkCommand = new LinkCommand(discordLinkManager, discordBridge);
 
         Listener chatEvent = new ChatEvent(luckPerms);
         Listener welcomeEvent = new WelcomeMessageEvent(discordBridge);

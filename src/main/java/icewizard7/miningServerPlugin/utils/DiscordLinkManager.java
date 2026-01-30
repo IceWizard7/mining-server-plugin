@@ -52,11 +52,20 @@ public class DiscordLinkManager {
         save();
     }
 
-    public String getDiscordId(UUID uuid) {
-        return data.getString("links." + uuid.toString());
-    }
-
     private void save() {
         try { data.save(file); } catch (IOException e) { e.printStackTrace(); }
+    }
+
+    public boolean isLinked(UUID uuid) {
+        return data.contains("links." + uuid.toString());
+    }
+
+    public void unlink(UUID uuid) {
+        data.set("links." + uuid.toString(), null);
+        save();
+    }
+
+    public String getDiscordId(UUID uuid) {
+        return data.getString("links." + uuid.toString());
     }
 }

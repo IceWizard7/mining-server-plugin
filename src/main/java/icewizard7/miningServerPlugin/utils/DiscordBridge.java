@@ -62,10 +62,12 @@ public final class DiscordBridge {
                     return;
                 }
 
-                jda = JDABuilder.createDefault(token).build().awaitReady();
                 // Inside the async task in enable()
                 jda = JDABuilder.createDefault(token)
-                        .enableIntents(GatewayIntent.MESSAGE_CONTENT) // Allows reading message text
+                        .enableIntents(
+                                GatewayIntent.MESSAGE_CONTENT,
+                                GatewayIntent.DIRECT_MESSAGES
+                        )
                         .build()
                         .awaitReady();
 
@@ -173,7 +175,7 @@ public final class DiscordBridge {
                         UUID uuid = discordLinkManager.consumeCode(code);
 
                         if (uuid == null) {
-                            event.getChannel().sendMessage("❌ Invalid or expired code.").queue();
+                            event.getChannel().sendMessage("Invalid or expired code.").queue();
                             return;
                         }
 
@@ -182,11 +184,11 @@ public final class DiscordBridge {
                         Player player = Bukkit.getPlayer(uuid);
                         if (player != null) {
                             Bukkit.getScheduler().runTask(plugin, () ->
-                                    player.sendMessage(Component.text("✅ Discord account linked to " + player.getName() + ".", NamedTextColor.GREEN))
+                                    player.sendMessage(Component.text("Your account has been successfully linked to " + player.getName() + ".", NamedTextColor.GREEN))
                             );
                         }
 
-                        event.getChannel().sendMessage("✅ Your account has been linked to " + author + ".").queue();
+                        event.getChannel().sendMessage("Your account has been successfully linked to " + author + ".").queue();
                     }
                 }
             }
@@ -208,7 +210,9 @@ public final class DiscordBridge {
             Bukkit.getScheduler().cancelTask(consoleTaskId);
         }
 
-        getChatChannel().sendMessage("🔴 Minecraft Server stopped.").queue();
+        if (chatChannel != null) {
+            getChatChannel().sendMessage("🔴 Minecraft Server stopped.").queue();
+        }
 
         if (jda != null) jda.shutdown();
     }
@@ -249,6 +253,10 @@ public final class DiscordBridge {
         embed.setFooter("Minecraft Server", null);
 
         channel.sendMessageEmbeds(embed.build()).queue();
+    }
+
+    public String getBotName() {
+        return jda != null ? jda.getSelfUser().getName() : "DiscordBot";
     }
 
     public TextChannel getChatChannel() { return chatChannel; }

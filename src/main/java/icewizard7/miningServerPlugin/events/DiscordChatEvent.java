@@ -39,7 +39,15 @@ public class DiscordChatEvent implements Listener {
         String prefix = cleanMeta(user.getCachedData().getMetaData(queryOptions).getPrefix());
         String suffix = cleanMeta(user.getCachedData().getMetaData(queryOptions).getSuffix());
 
-        String finalMessage = "**[" + prefix + "] " + player.getName() + " [" + suffix + "]**: " + chatMessage;
+        if (!prefix.isEmpty()) {
+            prefix = "[" + prefix + "] ";
+        }
+
+        if (!suffix.isEmpty()) {
+            suffix = " [" + suffix + "]";
+        }
+
+        String finalMessage = "**" + prefix + player.getName() + suffix + "**: " + chatMessage;
 
         if (System.currentTimeMillis() - lastSent > 500) {
             discordBridge.getChatChannel()
