@@ -21,6 +21,7 @@ public final class MiningServerPlugin extends JavaPlugin {
     private TAB tab;
     private NameTagManager nameTagManager;
     private DiscordBridge discordBridge;
+    private PortalManager portalManager;
 
     @Override
     public void onEnable() {
@@ -40,6 +41,7 @@ public final class MiningServerPlugin extends JavaPlugin {
         this.nameTagManager = new NameTagManager(luckPerms);
         this.discordBridge = new DiscordBridge(this);
         discordBridge.enable();
+        this.portalManager = new PortalManager(this);
 
         // Commands & events
         InfoCommand infoCommand = new InfoCommand();
@@ -63,6 +65,7 @@ public final class MiningServerPlugin extends JavaPlugin {
         Listener voucherUseEvent = new VoucherUseEvent(luckPerms, voucherCommand.getVoucherKey(), voucherCommand.getFragmentKey());
         Listener nameTagJoinEvent = new NameTagEvent(nameTagManager);
         Listener discordChatEvent = new DiscordChatEvent(discordBridge, luckPerms);
+        Listener portalEvent = new PortalEvent(portalManager);
 
         getCommand("info").setExecutor(infoCommand);
         getCommand("rules").setExecutor(rulesCommand);
@@ -86,6 +89,7 @@ public final class MiningServerPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(voucherUseEvent, this);
         getServer().getPluginManager().registerEvents(nameTagJoinEvent, this);
         getServer().getPluginManager().registerEvents(discordChatEvent, this);
+        getServer().getPluginManager().registerEvents(portalEvent, this);
 
         // Rank changes
         luckPerms.getEventBus().subscribe(this,

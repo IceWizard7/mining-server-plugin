@@ -89,9 +89,10 @@ permissions:
       miningServerPlugin.warp.diamond: true
       miningServerPlugin.warp.emerald: true
       miningServerPlugin.warp.nether: true
-      miningServerPlugin.warp.netherite: true
-      miningServerPlugin.warp.blackstone: true
       miningServerPlugin.warp.quartz: true
+      miningServerPlugin.warp.blackstone: true
+      miningServerPlugin.warp.crying_obsidian: true
+      miningServerPlugin.warp.netherite: true
       miningServerPlugin.warp.admin: true
 
   miningServerPlugin.warp.oak:
@@ -120,6 +121,9 @@ permissions:
     default: false
   miningServerPlugin.warp.nether:
     description: Allows warping to Nether
+    default: false
+  miningServerPlugin.warp.crying_obsidian:
+    description: Allows warping to Crying Obsidian
     default: false
   miningServerPlugin.warp.netherite:
     description: Allows warping to Netherite

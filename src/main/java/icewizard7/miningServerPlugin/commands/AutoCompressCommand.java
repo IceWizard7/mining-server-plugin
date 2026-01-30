@@ -46,6 +46,7 @@ public class AutoCompressCommand implements CommandExecutor {
         textureMap.put("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDNiNTAwMWE2NzAwN2E5M2FkZTY2NTkxNzVlOTA1NGE5Mjk3NmIwODdmYzYyOWYwNDJiY2Q1N2U3NzU3NjQ2YSJ9fX0=", "Quartz Block");
         textureMap.put("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDgyYmI1MThlMzg4NGQ2MDEyYmJkYmFiNjQ0ZGI3OTBhMjM4NDJkYTVjNmFmNjQ1ZjZlMjhmNmNlODMzNjc3NiJ9fX0=", "Blackstone");
         textureMap.put("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMjk4MGZlNzYyZjQ4ODYxMzk3ZjBjOGRjMmY4ZDEzZjdjMTY2MTcwMDM4ZTk3MzAyMDY4OTE5MmE4OTMwOGYzZCJ9fX0=", "Netherite Block");
+        textureMap.put("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNjQyNmFiODg4Mjk4YWRmMWVmZmQ4MTFjODA3NGRlZjA5NzgwZTdkOWQxMmJhNGM3N2I3M2ZkYTk5ODJkZDBmZSJ9fX0=", "Crying Obsidian");
     }
 
     @Override
