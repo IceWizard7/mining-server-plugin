@@ -17,9 +17,8 @@ public class LinkCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String string, String[] args) {
-
         if (!(commandSender instanceof Player player)) {
-            commandSender.sendMessage("Players only.");
+            commandSender.sendMessage(Component.text("Only players can use this command.", NamedTextColor.RED));
             return true;
         }
 
