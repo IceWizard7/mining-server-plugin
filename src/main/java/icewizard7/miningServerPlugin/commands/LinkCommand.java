@@ -36,6 +36,12 @@ public class LinkCommand implements CommandExecutor {
             return true;
         }
 
+        if (discordLinkManager.isLinked(player.getUniqueId())) {
+            String discordId = discordLinkManager.getDiscordId(player.getUniqueId());
+            discordBridge.sendLinkedInfo(player, discordId);
+            return true;
+        }
+
         String code = discordLinkManager.createCode(player.getUniqueId());
         String botName = discordBridge.getBotName();
 

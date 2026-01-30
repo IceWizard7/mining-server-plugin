@@ -255,6 +255,31 @@ public final class DiscordBridge {
         channel.sendMessageEmbeds(embed.build()).queue();
     }
 
+    public void sendLinkedInfo(Player player, String discordId) {
+        if (jda == null) {
+            player.sendMessage(Component.text("Discord connection not ready.", NamedTextColor.RED));
+            return;
+        }
+
+        jda.retrieveUserById(discordId).queue(user -> {
+            String name = user.getName();          // username
+            String tag = user.getGlobalName();     // display name (if set)
+
+            Bukkit.getScheduler().runTask(plugin, () -> {
+                player.sendMessage(Component.text("Your Minecraft account is already linked.", NamedTextColor.RED));
+                player.sendMessage(Component.text("Linked Discord account: ", NamedTextColor.GRAY)
+                        .append(Component.text(tag != null ? tag : name, NamedTextColor.AQUA)));
+                player.sendMessage(Component.text("Use /unlink to remove the connection.", NamedTextColor.YELLOW));
+            });
+
+        }, error -> {
+            Bukkit.getScheduler().runTask(plugin, () -> {
+                player.sendMessage(Component.text("Your account is linked, but Discord user could not be fetched.", NamedTextColor.RED));
+                player.sendMessage(Component.text("Use /unlink to reset the link.", NamedTextColor.YELLOW));
+            });
+        });
+    }
+
     public String getBotName() {
         return jda != null ? jda.getSelfUser().getName() : "DiscordBot";
     }
