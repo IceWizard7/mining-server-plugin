@@ -65,6 +65,7 @@ public final class MiningServerPlugin extends JavaPlugin {
         VanishCommand vanishCommand = new VanishCommand(this, vanishedPlayers);
         VoucherCommand voucherCommand = new VoucherCommand(luckPerms, this);
         LinkCommand linkCommand = new LinkCommand(discordLinkManager, discordBridge);
+        UnlinkCommand unlinkCommand = new UnlinkCommand(discordLinkManager);
 
         Listener chatEvent = new ChatEvent(luckPerms);
         Listener welcomeEvent = new WelcomeMessageEvent(discordBridge);
@@ -90,6 +91,7 @@ public final class MiningServerPlugin extends JavaPlugin {
         getCommand("vanish").setExecutor(vanishCommand);
         getCommand("voucher").setExecutor(voucherCommand);
         getCommand("link").setExecutor(linkCommand);
+        getCommand("unlink").setExecutor(unlinkCommand);
 
         getServer().getPluginManager().registerEvents(chatEvent, this);
         getServer().getPluginManager().registerEvents(welcomeEvent, this);
