@@ -3,6 +3,7 @@ package icewizard7.miningServerPlugin.utils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.entities.channel.ChannelType;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -24,12 +25,14 @@ import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.util.Queue;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Logger;
 
 public final class DiscordBridge {
 
     private JDA jda;
+    private final DiscordLinkManager discordLinkManager;
     private volatile TextChannel chatChannel;
     private volatile TextChannel consoleChannel;
     private final Plugin plugin;
@@ -40,10 +43,11 @@ public final class DiscordBridge {
     private Appender log4jAppender;
     private int consoleTaskId = -1;
 
-    public DiscordBridge(Plugin plugin) {
+    public DiscordBridge(Plugin plugin, DiscordLinkManager discordLinkManager) {
         this.plugin = plugin;
         this.logger = plugin.getLogger();
         this.config = plugin.getConfig();
+        this.discordLinkManager = discordLinkManager;
     }
 
     public void enable() {
@@ -134,19 +138,21 @@ public final class DiscordBridge {
                 // Ignore bots (including ourselves)
                 if (event.getAuthor().isBot()) return;
 
+                String author = event.getAuthor().getGlobalName();
                 String message = event.getMessage().getContentRaw();
                 String channelId = event.getChannel().getId();
 
                 // Handle Chat Channel -> In-game Chat
                 if (channelId.equals(config.getString("discord.chat_channel"))) {
                     Component gameMessage = Component.text("[Discord] ", NamedTextColor.BLUE)
-                            .append(Component.text(event.getAuthor().getGlobalName() + ": ", NamedTextColor.GRAY))
+                            .append(Component.text(author + ": ", NamedTextColor.GRAY))
                             .append(Component.text(message, NamedTextColor.WHITE));
 
                     // Broadcast to all players on the main thread
                     Bukkit.getScheduler().runTask(plugin, () -> {
                         Bukkit.broadcast(gameMessage);
                     });
+                    return;
                 }
 
                 // Handle Console Channel -> Execute Command
@@ -156,6 +162,32 @@ public final class DiscordBridge {
                         logger.info("[Discord Console] Executing: " + message);
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), message);
                     });
+                    return;
+                }
+
+                // Link System
+                if (event.isFromType(ChannelType.PRIVATE)) {
+                    if (message.startsWith("!link ")) {
+                        String code = message.substring(6).trim();
+
+                        UUID uuid = discordLinkManager.consumeCode(code);
+
+                        if (uuid == null) {
+                            event.getChannel().sendMessage("❌ Invalid or expired code.").queue();
+                            return;
+                        }
+
+                        discordLinkManager.link(uuid, event.getAuthor().getId());
+
+                        Player player = Bukkit.getPlayer(uuid);
+                        if (player != null) {
+                            Bukkit.getScheduler().runTask(plugin, () ->
+                                    player.sendMessage(Component.text("✅ Discord account linked to " + player.getName() + ".", NamedTextColor.GREEN))
+                            );
+                        }
+
+                        event.getChannel().sendMessage("✅ Your account has been linked to " + author + ".").queue();
+                    }
                 }
             }
         });

@@ -20,8 +20,9 @@ public final class MiningServerPlugin extends JavaPlugin {
     private final Set<UUID> vanishedPlayers = new HashSet<>();
     private TAB tab;
     private NameTagManager nameTagManager;
-    private DiscordBridge discordBridge;
     private PortalManager portalManager;
+    private DiscordLinkManager discordLinkManager;
+    private DiscordBridge discordBridge;
 
     @Override
     public void onEnable() {
@@ -36,12 +37,21 @@ public final class MiningServerPlugin extends JavaPlugin {
             return;
         }
 
-        // Initialize TAB, NameTagManager & DiscordBridge
+        // TAB
         this.tab = new TAB(vanishedPlayers, luckPerms);
+
+        // Name Tags
         this.nameTagManager = new NameTagManager(luckPerms);
-        this.discordBridge = new DiscordBridge(this);
-        discordBridge.enable();
+
+        // Portals
         this.portalManager = new PortalManager(this);
+
+        // Discord
+        this.discordLinkManager = new DiscordLinkManager(this);
+
+        this.discordBridge = new DiscordBridge(this, discordLinkManager);
+        discordBridge.enable();
+
 
         // Commands & events
         InfoCommand infoCommand = new InfoCommand();
@@ -55,6 +65,7 @@ public final class MiningServerPlugin extends JavaPlugin {
         SpawnCommand spawnCommand = new SpawnCommand(this);
         VanishCommand vanishCommand = new VanishCommand(this, vanishedPlayers);
         VoucherCommand voucherCommand = new VoucherCommand(luckPerms, this);
+        LinkCommand linkCommand = new LinkCommand(discordLinkManager);
 
         Listener chatEvent = new ChatEvent(luckPerms);
         Listener welcomeEvent = new WelcomeMessageEvent(discordBridge);
@@ -79,6 +90,7 @@ public final class MiningServerPlugin extends JavaPlugin {
         getCommand("spawn").setExecutor(spawnCommand);
         getCommand("vanish").setExecutor(vanishCommand);
         getCommand("voucher").setExecutor(voucherCommand);
+        getCommand("link").setExecutor(linkCommand);
 
         getServer().getPluginManager().registerEvents(chatEvent, this);
         getServer().getPluginManager().registerEvents(welcomeEvent, this);

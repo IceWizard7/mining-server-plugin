@@ -17,6 +17,10 @@ commands:
     description: Get the discord server invite link
     permission: miningServerPlugin.discord
     usage: /discord
+  link:
+    description: Link your Minecraft account to your Discord account
+    permission: miningServerPlugin.link
+    usage: /link
   god:
     description: Makes you invulnerable
     permission: miningServerPlugin.god
@@ -57,6 +61,9 @@ permissions:
     default: true
   miningServerPlugin.rules:
     description: Allows using /rules
+    default: true
+  miningServerPlugin.link:
+    description: Allows using /link
     default: true
   miningServerPlugin.discord:
     description: Allows using /discord
