@@ -104,7 +104,7 @@ permissions:
       miningServerPlugin.warp.blackstone: true
       miningServerPlugin.warp.crying_obsidian: true
       miningServerPlugin.warp.netherite: true
-      miningServerPlugin.warp.admin: true
+      miningServerPlugin.warp.admin: false
       miningServerPlugin.warp.pvp: true
 
   miningServerPlugin.warp.oak:
