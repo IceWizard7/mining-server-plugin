@@ -28,6 +28,7 @@ Discord Invite Link: `discord.gg/8ce6N8QXpm`
 - Show command (`/show <field>`; Broadcast your hand, offhand, chestplate, etc.)
 - Custom join & quit messages
 - Custom telepathy effect on all blocks
+- WorldGuard integration: Prevent Elytras in PVP, except when being in the PVP region (`/warp pvp`)
 
 ### Dependencies
 - LuckPerms (Minecraft Plugin)
