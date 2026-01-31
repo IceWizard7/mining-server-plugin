@@ -69,7 +69,7 @@ public class NameTagManager {
 
     public void startNameTagTask() {
         // User recalculate
-        this.userRecalculateTask = luckPerms.getEventBus().subscribe(this,
+        this.userRecalculateTask = luckPerms.getEventBus().subscribe(plugin,
                 net.luckperms.api.event.user.UserDataRecalculateEvent.class,
                 event -> Bukkit.getScheduler().runTask(plugin, () -> {
                     Player player = Bukkit.getPlayer(event.getUser().getUniqueId());
@@ -80,7 +80,7 @@ public class NameTagManager {
         );
 
         // Group recalculate
-        this.groupRecalculateTask = luckPerms.getEventBus().subscribe(this,
+        this.groupRecalculateTask = luckPerms.getEventBus().subscribe(plugin,
                 net.luckperms.api.event.group.GroupDataRecalculateEvent.class,
                 event -> Bukkit.getScheduler().runTask(plugin, () -> {
 

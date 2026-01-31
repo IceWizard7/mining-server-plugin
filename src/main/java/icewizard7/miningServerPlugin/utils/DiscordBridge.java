@@ -245,6 +245,10 @@ public final class DiscordBridge {
 
         TextChannel channel = this.getChatChannel();
 
+        if (channel == null) {
+            return;
+        }
+
         EmbedBuilder embed = new EmbedBuilder();
 
         embed.setColor(Color.GREEN);
@@ -261,6 +265,10 @@ public final class DiscordBridge {
         String avatarUrl = getAvatarUrl(player);
 
         TextChannel channel = this.getChatChannel();
+
+        if (channel == null) {
+            return;
+        }
 
         EmbedBuilder embed = new EmbedBuilder();
 
