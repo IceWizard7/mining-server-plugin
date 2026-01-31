@@ -50,7 +50,7 @@ public final class MiningServerPlugin extends JavaPlugin {
             return false;
         }
 
-        this.worldGuard =getServer().getServicesManager().load(WorldGuard.class);
+        this.worldGuard = WorldGuard.getInstance();
 
         if (worldGuard == null) {
             getLogger().severe("WorldGuard not found. Disabling MiningServerPlugin.");
