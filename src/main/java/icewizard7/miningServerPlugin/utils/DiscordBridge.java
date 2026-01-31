@@ -19,11 +19,14 @@ import org.apache.logging.log4j.core.config.Configuration;
 import org.apache.logging.log4j.core.LoggerContext;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.Queue;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -37,7 +40,8 @@ public final class DiscordBridge {
     private volatile TextChannel consoleChannel;
     private final Plugin plugin;
     private final Logger logger;
-    private final FileConfiguration config;
+    private final File file;
+    private FileConfiguration data;
 
     private final Queue<String> consoleQueue = new ConcurrentLinkedQueue<>();
     private Appender log4jAppender;
@@ -46,19 +50,34 @@ public final class DiscordBridge {
     public DiscordBridge(Plugin plugin, DiscordLinkManager discordLinkManager) {
         this.plugin = plugin;
         this.logger = plugin.getLogger();
-        this.config = plugin.getConfig();
         this.discordLinkManager = discordLinkManager;
+
+        this.file = new File(plugin.getDataFolder(), "discord-credentials.yml");
+
+        if (!plugin.getDataFolder().exists()) {
+            plugin.getDataFolder().mkdirs();
+        }
+
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        data = YamlConfiguration.loadConfiguration(file);
     }
 
     public void enable() {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             try {
-                String token = config.getString("discord.token");
-                String chatId = config.getString("discord.chat_channel");
-                String consoleId = config.getString("discord.console_channel");
+                String token = data.getString("discord.token");
+                String chatId = data.getString("discord.chat_channel");
+                String consoleId = data.getString("discord.console_channel");
 
                 if (token == null || token.isEmpty()) {
-                    logger.severe("Discord token missing in config.yml.");
+                    logger.severe("Discord token missing in discord-credentials.yml.");
                     return;
                 }
 
@@ -145,7 +164,7 @@ public final class DiscordBridge {
                 String channelId = event.getChannel().getId();
 
                 // Handle Chat Channel -> In-game Chat
-                if (channelId.equals(config.getString("discord.chat_channel"))) {
+                if (channelId.equals(data.getString("discord.chat_channel"))) {
                     Component gameMessage = Component.text("[Discord] ", NamedTextColor.BLUE)
                             .append(Component.text(author + ": ", NamedTextColor.GRAY))
                             .append(Component.text(message, NamedTextColor.WHITE));
@@ -158,7 +177,7 @@ public final class DiscordBridge {
                 }
 
                 // Handle Console Channel -> Execute Command
-                else if (channelId.equals(config.getString("discord.console_channel"))) {
+                else if (channelId.equals(data.getString("discord.console_channel"))) {
                     // Execute command on the main thread
                     Bukkit.getScheduler().runTask(plugin, () -> {
                         logger.info("[Discord Console] Executing: " + message);
