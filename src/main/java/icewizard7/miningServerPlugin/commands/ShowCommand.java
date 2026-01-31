@@ -56,6 +56,7 @@ public class ShowCommand implements TabExecutor {
             player.sendMessage(Component.text("Slot \"" + field + "\" is empty.", NamedTextColor.RED));
             return true;
         }
+        int amount = fieldItem.getAmount();
 
         // Get the display name
         // If it has a custom name, use it
@@ -72,9 +73,11 @@ public class ShowCommand implements TabExecutor {
         // 'asHoverEvent()' serializes the NBT (Enchants, Lore, etc.) automatically.
         Component itemComponent = displayComponent.hoverEvent(fieldItem.asHoverEvent());
 
+        Component amountComponent = Component.text(" [x" + amount + "]", NamedTextColor.DARK_GRAY);
+
         // Build the final message
         Component message = Component.text(player.getName() + "'s " + field + ": ", NamedTextColor.WHITE)
-                .append(itemComponent);
+                .append(itemComponent).append(amountComponent);
 
         plugin.getServer().broadcast(message);
 
