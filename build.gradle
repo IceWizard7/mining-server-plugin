@@ -28,7 +28,7 @@ dependencies {
     // Discord JDA
     implementation("net.dv8tion:JDA:5.0.0-beta.20")
 
-    compileOnly("org.apache.logging.log4j:log4j-core:2.19.0")
+    compileOnly('org.apache.logging.log4j:log4j-core:2.25.3')
     compileOnly("org.apache.logging.log4j:log4j-api:2.19.0")
 }
 
