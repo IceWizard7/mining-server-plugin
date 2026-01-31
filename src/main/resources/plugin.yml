@@ -148,7 +148,7 @@ permissions:
     default: false
   miningServerPlugin.warp.admin:
     description: Allows warping to Admin
-    default: false
+    default: op
   miningServerPlugin.warp.pvp:
     description: Allows warping to PVP
     default: false
