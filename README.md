@@ -6,7 +6,7 @@ Minecraft Server IP: `futuremines.minekeep.gg`
 
 Discord Invite Link: `discord.gg/8ce6N8QXpm`
 
-### Features:
+### Features
 - Vanish command (`/vanish`)
 - Combat manager (Disabling `/spawn`, `fly`, etc. when in combat)
 - Custom tag page (Integrating with LuckPerms API)
@@ -29,6 +29,10 @@ Discord Invite Link: `discord.gg/8ce6N8QXpm`
 - Custom join & quit messages
 - Custom telepathy effect on all blocks
 
-### Dependencies:
+### Dependencies
 - LuckPerms (Minecraft Plugin)
 - JDA (Java Discord API)
+
+### License
+
+See [License](LICENSE)
