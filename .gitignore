@@ -19,7 +19,6 @@ TestMinecraftServer
 
 # Environment
 .env
-src/main/resources/config.yml
 src/main/resources/linked-accounts.yml
 src/main/resources/discord-credentials.yml
 full_update.sh

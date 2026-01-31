@@ -1,0 +1,151 @@
+warps:
+  oak:
+    world: world
+    x: 28
+    y: 40
+    z: -11
+    yaw: -180
+    pitch: 0
+  stone:
+    world: world
+    x: 28
+    y: 40
+    z: 7
+    yaw: 0
+    pitch: 0
+  copper:
+    world: world
+    x: 61
+    y: 40
+    z: -14
+    yaw: -180
+    pitch: 0
+  coal:
+    world: world
+    x: 54
+    y: 40
+    z: 7
+    yaw: 0
+    pitch: 0
+  iron:
+    world: world
+    x: 88
+    y: 40
+    z: 12
+    yaw: 0
+    pitch: 0
+  gold:
+    world: world
+    x: 96
+    y: 40
+    z: -4
+    yaw: -90
+    pitch: 0
+  diamond:
+    world: world
+    x: 97
+    y: 40
+    z: -61
+    yaw: -90
+    pitch: 0
+  emerald:
+    world: world
+    x: 77
+    y: 40
+    z: -43
+    yaw: 90
+    pitch: 0
+  nether:
+    world: world
+    x: -352
+    y: 57
+    z: 424
+    yaw: 0
+    pitch: 0
+  quartz:
+    world: world
+    x: -365
+    y: 57
+    z: 441
+    yaw: 90
+    pitch: 0
+  blackstone:
+    world: world
+    x: -343
+    y: 60
+    z: 451
+    yaw: -90
+    pitch: 0
+  netherite:
+    world: world
+    x: -344
+    y: 53
+    z: 484
+    yaw: 0
+    pitch: 0
+  crying_obsidian:
+    world: world
+    x: -359
+    y: 56
+    z: 479
+    yaw: 0
+    pitch: 0
+  admin:
+    world: world
+    x: 10000
+    y: 37
+    z: 10000
+    yaw: -180
+    pitch: 0
+  pvp:
+    world: world
+    x: -209
+    y: 46
+    z: -470
+    yaw: -180
+    pitch: 0
+
+spawn:
+  world: world
+  x: 0
+  y: 41
+  z: 0
+  yaw: -90
+  pitch: 0
+
+portals:
+  overworld_to_nether:
+    from:
+      world: world
+      x: 84
+      y: 40
+      z: -83
+      radius: 2.5
+    to:
+      world: world
+      x: -352
+      y: 57
+      z: 424
+      yaw: 0
+      pitch: 0
+    particle: portal
+    particle_count: 50
+    sound: entity.enderman.teleport
+
+  nether_to_overworld:
+    from:
+      world: world
+      x: -353
+      y: 57
+      z: 416
+      radius: 2.5
+    to:
+      world: world
+      x: 84
+      y: 40
+      z: -75
+      yaw: 0
+      pitch: 0
+    particle: portal
+    particle_count: 50
+    sound: entity.enderman.teleport
