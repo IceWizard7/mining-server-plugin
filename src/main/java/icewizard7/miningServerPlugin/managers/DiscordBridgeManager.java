@@ -1,4 +1,4 @@
-package icewizard7.miningServerPlugin.utils;
+package icewizard7.miningServerPlugin.managers;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;

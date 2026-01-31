@@ -1,4 +1,4 @@
-package icewizard7.miningServerPlugin.utils;
+package icewizard7.miningServerPlugin.managers;
 
 import icewizard7.miningServerPlugin.classes.Portal;
 import org.bukkit.*;

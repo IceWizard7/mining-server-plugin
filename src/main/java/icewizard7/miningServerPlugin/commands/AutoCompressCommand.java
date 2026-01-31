@@ -1,6 +1,6 @@
 package icewizard7.miningServerPlugin.commands;
 
-import icewizard7.miningServerPlugin.utils.AutoCompressManager;
+import icewizard7.miningServerPlugin.managers.AutoCompressManager;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.command.Command;

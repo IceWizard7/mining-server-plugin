@@ -2,7 +2,7 @@ package icewizard7.miningServerPlugin;
 
 import icewizard7.miningServerPlugin.commands.*;
 import icewizard7.miningServerPlugin.events.*;
-import icewizard7.miningServerPlugin.utils.*;
+import icewizard7.miningServerPlugin.managers.*;
 
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.PluginCommand;

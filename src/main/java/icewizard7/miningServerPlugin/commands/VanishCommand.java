@@ -1,6 +1,6 @@
 package icewizard7.miningServerPlugin.commands;
 
-import icewizard7.miningServerPlugin.utils.VanishManager;
+import icewizard7.miningServerPlugin.managers.VanishManager;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.command.Command;

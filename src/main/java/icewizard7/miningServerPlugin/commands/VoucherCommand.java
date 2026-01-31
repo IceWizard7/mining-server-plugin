@@ -1,19 +1,17 @@
 package icewizard7.miningServerPlugin.commands;
 
-import icewizard7.miningServerPlugin.utils.VoucherManager;
+import icewizard7.miningServerPlugin.managers.VoucherManager;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.luckperms.api.LuckPerms;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.List;

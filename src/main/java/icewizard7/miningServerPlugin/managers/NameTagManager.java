@@ -1,4 +1,4 @@
-package icewizard7.miningServerPlugin.utils;
+package icewizard7.miningServerPlugin.managers;
 
 import net.kyori.adventure.text.Component;
 import net.luckperms.api.LuckPerms;

@@ -1,13 +1,12 @@
 package icewizard7.miningServerPlugin.events;
 
-import icewizard7.miningServerPlugin.utils.VoucherManager;
+import icewizard7.miningServerPlugin.managers.VoucherManager;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.model.user.User;
 import net.luckperms.api.node.types.InheritanceNode;
-import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

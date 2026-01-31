@@ -1,6 +1,6 @@
 package icewizard7.miningServerPlugin.events;
 
-import icewizard7.miningServerPlugin.utils.CombatManager;
+import icewizard7.miningServerPlugin.managers.CombatManager;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;

@@ -1,6 +1,6 @@
 package icewizard7.miningServerPlugin.commands;
 
-import icewizard7.miningServerPlugin.utils.CombatManager;
+import icewizard7.miningServerPlugin.managers.CombatManager;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.GameMode;

@@ -1,4 +1,4 @@
-package icewizard7.miningServerPlugin.utils;
+package icewizard7.miningServerPlugin.managers;
 
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.Plugin;

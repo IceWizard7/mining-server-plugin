@@ -1,7 +1,7 @@
 package icewizard7.miningServerPlugin.events;
 
 import icewizard7.miningServerPlugin.classes.Portal;
-import icewizard7.miningServerPlugin.utils.PortalManager;
+import icewizard7.miningServerPlugin.managers.PortalManager;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

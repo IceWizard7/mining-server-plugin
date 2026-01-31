@@ -1,6 +1,6 @@
 package icewizard7.miningServerPlugin.events;
 
-import icewizard7.miningServerPlugin.utils.DiscordBridgeManager;
+import icewizard7.miningServerPlugin.managers.DiscordBridgeManager;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 

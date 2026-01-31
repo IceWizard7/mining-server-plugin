@@ -6,7 +6,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import icewizard7.miningServerPlugin.utils.TabManager;
+import icewizard7.miningServerPlugin.managers.TabManager;
 
 public class TabJoinListener implements Listener {
     private final TabManager tabManager;

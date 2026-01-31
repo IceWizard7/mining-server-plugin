@@ -1,7 +1,6 @@
 package icewizard7.miningServerPlugin.events;
 
-import icewizard7.miningServerPlugin.commands.AutoCompressCommand;
-import icewizard7.miningServerPlugin.utils.AutoCompressManager;
+import icewizard7.miningServerPlugin.managers.AutoCompressManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;

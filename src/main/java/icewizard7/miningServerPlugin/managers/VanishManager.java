@@ -1,4 +1,4 @@
-package icewizard7.miningServerPlugin.utils;
+package icewizard7.miningServerPlugin.managers;
 
 import org.bukkit.Bukkit;
 import net.kyori.adventure.text.Component;
