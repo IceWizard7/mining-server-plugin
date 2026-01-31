@@ -48,7 +48,7 @@ commands:
     aliases: [ac]
   warp:
     description: Teleport anywhere
-    permission: miningServerPlugin.warp
+    permission: miningServerPlugin.warp_command
     usage: /warp <location>
   spawn:
     description: Teleport to spawn
@@ -87,8 +87,11 @@ permissions:
   miningServerPlugin.autocompress:
     description: Allows using /autocompress
     default: op
-  miningServerPlugin.warp:
+  miningServerPlugin.warp_command:
     description: Allows using /warp
+    default: op
+  miningServerPlugin.warp:
+    description: Allows using various /warp <mine>
     default: op
     children:
       miningServerPlugin.warp.oak: true

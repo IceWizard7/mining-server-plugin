@@ -11,7 +11,7 @@ import org.bukkit.inventory.Inventory;
 
 public class InvseeCommand implements CommandExecutor {
     @Override
-    public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
+    public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
         if (!(commandSender instanceof Player player)) {
             commandSender.sendMessage(Component.text("Only players can use this command.", NamedTextColor.RED));
             return true;
@@ -24,14 +24,14 @@ public class InvseeCommand implements CommandExecutor {
             return true;
         }
 
-        if (strings.length == 0) {
+        if (args.length == 0) {
             player.sendMessage(Component.text(
                     "Usage: /invsee <player>", NamedTextColor.RED
             ));
             return true;
         }
 
-        Player target = Bukkit.getPlayerExact(strings[0]);
+        Player target = Bukkit.getPlayerExact(args[0]);
 
         if (target == player) {
             player.sendMessage(Component.text(

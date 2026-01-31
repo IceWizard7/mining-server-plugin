@@ -50,7 +50,7 @@ public class AutoCompressCommand implements CommandExecutor {
     }
 
     @Override
-    public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
+    public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
         if (!(commandSender instanceof Player player)) {
             commandSender.sendMessage(Component.text("Only players can use this command.", NamedTextColor.RED));
             return true;

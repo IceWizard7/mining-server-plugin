@@ -24,7 +24,7 @@ public class WarpCommand implements TabExecutor {
     }
 
     @Override
-    public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
+    public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
         if (!(commandSender instanceof Player player)) {
             commandSender.sendMessage(Component.text(
                     "Only players can execute this command.", NamedTextColor.RED
@@ -32,14 +32,14 @@ public class WarpCommand implements TabExecutor {
             return true;
         }
 
-        if (strings.length == 0) {
+        if (args.length == 0) {
             player.sendMessage(Component.text(
                     "Usage: /warp <location>", NamedTextColor.RED
             ));
             return true;
         }
 
-        String warpName = strings[0].toLowerCase();
+        String warpName = args[0].toLowerCase();
 
         if (!(player.hasPermission("miningServerPlugin.warp." + warpName))) {
             player.sendMessage(Component.text(
@@ -77,8 +77,8 @@ public class WarpCommand implements TabExecutor {
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String s, String[] strings) {
-        if (strings.length == 1) {
+    public List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] args) {
+        if (args.length == 1) {
             FileConfiguration config = plugin.getConfig();
 
             if (!config.isConfigurationSection("warps")) {
@@ -88,13 +88,13 @@ public class WarpCommand implements TabExecutor {
             List<String> warps = new ArrayList<>(config.getConfigurationSection("warps").getKeys(false));
 
             // Only suggest warps the player has permission for
-            if (sender instanceof Player player) {
+            if (commandSender instanceof Player player) {
                 warps = warps.stream()
                         .filter(warp -> player.hasPermission("miningServerPlugin.warp." + warp))
                         .collect(Collectors.toList());
             }
 
-            String current = strings[0].toLowerCase();
+            String current = args[0].toLowerCase();
 
             return warps.stream()
                     .filter(warp -> warp.toLowerCase().startsWith(current))
