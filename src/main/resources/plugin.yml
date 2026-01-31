@@ -105,6 +105,7 @@ permissions:
       miningServerPlugin.warp.crying_obsidian: true
       miningServerPlugin.warp.netherite: true
       miningServerPlugin.warp.admin: true
+      miningServerPlugin.warp.pvp: true
 
   miningServerPlugin.warp.oak:
     description: Allows warping to Oak
@@ -148,9 +149,12 @@ permissions:
   miningServerPlugin.warp.admin:
     description: Allows warping to Admin
     default: false
+  miningServerPlugin.warp.pvp:
+    description: Allows warping to PVP
+    default: false
   miningServerPlugin.spawn:
     description: Allows using /spawn
-    default: op
+    default: false
   miningServerPlugin.voucher.create:
     description: Allows using /voucher create
     default: op
