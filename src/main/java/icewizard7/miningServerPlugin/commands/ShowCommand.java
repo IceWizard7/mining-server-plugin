@@ -65,7 +65,7 @@ public class ShowCommand implements TabExecutor {
             displayComponent = fieldItem.getItemMeta().displayName();
         } else {
             // This ensures it says "Diamond Sword" correctly in the client's language
-            displayComponent = Component.translatable(fieldItem.getType().translationKey(), NamedTextColor.GREEN);
+            displayComponent = Component.translatable(fieldItem.getType().translationKey(), NamedTextColor.WHITE);
         }
 
         // Add the Hover Event
