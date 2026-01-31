@@ -13,23 +13,37 @@ repositories {
         name = "papermc-repo"
         url = "https://repo.papermc.io/repository/maven-public/"
     }
+
     maven {
         name = "luckperms-repo"
         url = "https://repo.luckperms.net/repo/"
     }
+
+    maven {
+        name = "EngineHub"
+        url = "https://maven.enginehub.org/repo/"
+    }
 }
 
 dependencies {
+    // Spigot / Paper API
     compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
 
     // LuckPerms API
-    compileOnly("net.luckperms:api:5.4") // replace 5.4 with latest API version if needed
+    compileOnly("net.luckperms:api:5.5")
 
     // Discord JDA
     implementation("net.dv8tion:JDA:5.0.0-beta.20")
 
+    // Discord Logging
     compileOnly('org.apache.logging.log4j:log4j-core:2.25.3')
     compileOnly("org.apache.logging.log4j:log4j-api:2.19.0")
+
+    // WorldEdit (required by WorldGuard)
+    compileOnly("com.sk89q.worldedit:worldedit-bukkit:7.4.0")
+
+    // WorldGuard
+    compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.15")
 }
 
 shadowJar {
