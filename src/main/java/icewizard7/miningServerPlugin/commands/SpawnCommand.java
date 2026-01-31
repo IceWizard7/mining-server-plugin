@@ -1,5 +1,6 @@
 package icewizard7.miningServerPlugin.commands;
 
+import icewizard7.miningServerPlugin.utils.CombatManager;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.command.Command;
@@ -14,9 +15,11 @@ import org.bukkit.Bukkit;
 
 public class SpawnCommand implements CommandExecutor {
     private final Plugin plugin;
+    private final CombatManager combatManager;
 
-    public SpawnCommand(Plugin plugin) {
+    public SpawnCommand(Plugin plugin, CombatManager combatManager) {
         this.plugin = plugin;
+        this.combatManager = combatManager;
     }
 
     @Override
@@ -30,6 +33,11 @@ public class SpawnCommand implements CommandExecutor {
             player.sendMessage(Component.text(
                     "You do not have permission to warp there.", NamedTextColor.RED
             ));
+            return true;
+        }
+
+        if (combatManager.isInCombat(player)) {
+            combatManager.sendCombatMessage(player);
             return true;
         }
 

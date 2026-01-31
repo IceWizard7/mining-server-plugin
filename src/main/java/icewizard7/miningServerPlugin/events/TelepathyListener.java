@@ -1,6 +1,7 @@
 package icewizard7.miningServerPlugin.events;
 
 import icewizard7.miningServerPlugin.commands.AutoCompressCommand;
+import icewizard7.miningServerPlugin.utils.AutoCompressManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -16,14 +17,14 @@ import org.bukkit.plugin.Plugin;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 
-public class TelepathyEvent implements Listener {
+public class TelepathyListener implements Listener {
 
     private final Plugin plugin;
-    private final AutoCompressCommand autoCompressCommand;
+    private final AutoCompressManager autoCompressManager;
 
-    public TelepathyEvent(Plugin plugin, AutoCompressCommand autoCompressCommand) {
+    public TelepathyListener(Plugin plugin, AutoCompressManager autoCompressManager) {
         this.plugin = plugin;
-        this.autoCompressCommand = autoCompressCommand;
+        this.autoCompressManager = autoCompressManager;
     }
 
     @EventHandler
@@ -60,7 +61,7 @@ public class TelepathyEvent implements Listener {
                 // If player has autocompress permission
                 if (player.hasPermission("miningServerPlugin.autocompress")) {
                     // Automatically autocompress
-                    autoCompressCommand.autoCompress(player);
+                    autoCompressManager.autoCompress(player);
                 }
             }
         });

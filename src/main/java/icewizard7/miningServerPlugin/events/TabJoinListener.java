@@ -8,10 +8,10 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 import icewizard7.miningServerPlugin.utils.TAB;
 
-public class TabJoinEvent implements Listener {
+public class TabJoinListener implements Listener {
     private final TAB tab;
 
-    public TabJoinEvent(TAB tab) {
+    public TabJoinListener(TAB tab) {
         this.tab = tab;
     }
 

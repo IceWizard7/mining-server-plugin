@@ -1,5 +1,6 @@
 package icewizard7.miningServerPlugin.events;
 
+import icewizard7.miningServerPlugin.utils.VoucherManager;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -18,15 +19,13 @@ import org.bukkit.persistence.PersistentDataType;
 
 import java.util.List;
 
-public class VoucherUseEvent implements Listener {
+public class VoucherUseListener implements Listener {
     private final LuckPerms luckPerms;
-    private final NamespacedKey voucherKey;
-    private final NamespacedKey fragmentKey;
+    private final VoucherManager voucherManager;
 
-    public VoucherUseEvent(LuckPerms luckPerms, NamespacedKey voucherKey, NamespacedKey fragmentKey) {
+    public VoucherUseListener(LuckPerms luckPerms, VoucherManager voucherManager) {
         this.luckPerms = luckPerms;
-        this.voucherKey = voucherKey;
-        this.fragmentKey = fragmentKey;
+        this.voucherManager = voucherManager;
     }
 
     @EventHandler
@@ -41,9 +40,9 @@ public class VoucherUseEvent implements Listener {
         if (item == null || !item.hasItemMeta()) return;
 
         // Check for voucher key
-        if (!item.getItemMeta().getPersistentDataContainer().has(voucherKey, PersistentDataType.STRING)) return;
+        if (!item.getItemMeta().getPersistentDataContainer().has(voucherManager.getVoucherKey(), PersistentDataType.STRING)) return;
 
-        String rankName = item.getItemMeta().getPersistentDataContainer().get(voucherKey, PersistentDataType.STRING);
+        String rankName = item.getItemMeta().getPersistentDataContainer().get(voucherManager.getVoucherKey(), PersistentDataType.STRING);
 
         // Check if rank exists
         if (luckPerms.getGroupManager().getGroup(rankName) == null) {
@@ -86,8 +85,8 @@ public class VoucherUseEvent implements Listener {
                 Component.text("Obtained by redeeming rank ", NamedTextColor.DARK_GRAY).append(Component.text(rankName, NamedTextColor.GOLD))
                         .decoration(TextDecoration.ITALIC, false)
         ));
-        metaFragment.getPersistentDataContainer().remove(voucherKey);
-        metaFragment.getPersistentDataContainer().set(fragmentKey, PersistentDataType.STRING, rankName);
+        metaFragment.getPersistentDataContainer().remove(voucherManager.getVoucherKey());
+        metaFragment.getPersistentDataContainer().set(voucherManager.getFragmentKey(), PersistentDataType.STRING, rankName);
         itemFragment.setItemMeta(metaFragment);
 
         player.getInventory().addItem(itemFragment);

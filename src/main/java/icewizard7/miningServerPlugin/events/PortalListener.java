@@ -12,12 +12,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class PortalEvent implements Listener {
+public class PortalListener implements Listener {
 
     private final PortalManager portalManager;
     private final Map<UUID, Long> cooldown = new HashMap<>();
 
-    public PortalEvent(PortalManager portalManager) {
+    public PortalListener(PortalManager portalManager) {
         this.portalManager = portalManager;
     }
 

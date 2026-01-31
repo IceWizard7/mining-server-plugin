@@ -1,5 +1,6 @@
 package icewizard7.miningServerPlugin.commands;
 
+import icewizard7.miningServerPlugin.utils.CombatManager;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.GameMode;
@@ -9,6 +10,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class FlyCommand implements CommandExecutor {
+    private final CombatManager combatManager;
+
+    public FlyCommand(CombatManager combatManager) {
+        this.combatManager = combatManager;
+    }
+
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
         if (!(commandSender instanceof Player player)) {
@@ -20,6 +27,11 @@ public class FlyCommand implements CommandExecutor {
             player.sendMessage(Component.text(
                     "You do not have permission to use this command.", NamedTextColor.RED
             ));
+            return true;
+        }
+
+        if (combatManager.isInCombat(player)) {
+            combatManager.sendCombatMessage(player);
             return true;
         }
 

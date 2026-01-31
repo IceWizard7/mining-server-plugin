@@ -8,16 +8,18 @@ import net.luckperms.api.model.user.User;
 import net.luckperms.api.query.QueryOptions;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-
-import java.util.Set;
-import java.util.UUID;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitTask;
 
 public class TAB {
-    private final Set<UUID> vanishedPlayers;
+    private final Plugin plugin;
+    private final VanishManager vanishManager;
     private final LuckPerms luckPerms;
+    private BukkitTask tabTask;
 
-    public TAB(Set<UUID> vanishedPlayers, LuckPerms luckPerms) {
-        this.vanishedPlayers = vanishedPlayers;
+    public TAB(Plugin plugin, VanishManager vanishManager, LuckPerms luckPerms) {
+        this.plugin = plugin;
+        this.vanishManager = vanishManager;
         this.luckPerms = luckPerms;
     }
 
@@ -88,7 +90,7 @@ public class TAB {
         }
 
         // Text
-        Component playersOnlineLine = Component.newline().append(Component.text("Players online: " + (Bukkit.getOnlinePlayers().size() - vanishedPlayers.size()), NamedTextColor.GRAY)).append(Component.newline());
+        Component playersOnlineLine = Component.newline().append(Component.text("Players online: " + (Bukkit.getOnlinePlayers().size() - vanishManager.getAmountVanishedPlayers()), NamedTextColor.GRAY)).append(Component.newline());
         Component ipLine = Component.text("IP: futuremines.minekeep.gg", NamedTextColor.GRAY).append(Component.newline());
         Component discordLinkLine = Component.text("Discord: /discord", NamedTextColor.GRAY).append(Component.newline());
         Component ramLine = Component.text("RAM: " + usedMemory + "/" + maxMemory + " MB (", NamedTextColor.GRAY).append(Component.text((int) usagePercent + "%", ramColor)).append(Component.text(")", NamedTextColor.GRAY)).append(Component.newline());
@@ -98,5 +100,20 @@ public class TAB {
 
         // Send to player
         player.sendPlayerListHeaderAndFooter(header, footer);
+    }
+
+    public void startTabTask() {
+        // TAB Update
+        this.tabTask = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                updateTab(player);
+            }
+        }, 0L, 20L * 3); // every 3 seconds
+    }
+
+    public void shutdown() {
+        if (tabTask != null && !tabTask.isCancelled()) {
+            tabTask.cancel();
+        }
     }
 }

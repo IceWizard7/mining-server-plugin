@@ -9,11 +9,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-public class WelcomeMessageEvent implements Listener {
+public class WelcomeListener implements Listener {
 
     private final DiscordBridge discordBridge;
 
-    public WelcomeMessageEvent(DiscordBridge discordBridge) {
+    public WelcomeListener(DiscordBridge discordBridge) {
         this.discordBridge = discordBridge;
     }
 

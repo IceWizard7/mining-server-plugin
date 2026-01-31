@@ -1,6 +1,6 @@
 package icewizard7.miningServerPlugin.commands;
 
-import org.bukkit.Bukkit;
+import icewizard7.miningServerPlugin.utils.VanishManager;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.command.Command;
@@ -9,17 +9,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-import java.util.Set;
-import java.util.UUID;
-
 public class VanishCommand implements CommandExecutor {
 
-    private final Plugin plugin;
-    private final Set<UUID> vanishedPlayers;
+    private final VanishManager vanishManager;
 
-    public VanishCommand(Plugin plugin, Set<UUID> vanishedPlayers) {
-        this.plugin = plugin;
-        this.vanishedPlayers = vanishedPlayers;
+    public VanishCommand(Plugin plugin, VanishManager vanishManager) {
+        this.vanishManager = vanishManager;
     }
 
     @Override
@@ -36,43 +31,12 @@ public class VanishCommand implements CommandExecutor {
             return true;
         }
 
-        if (vanishedPlayers.contains(player.getUniqueId())) {
-            for (Player p : Bukkit.getOnlinePlayers()) {
-                p.showPlayer(plugin, player);
-            }
-            fakeJoinMessage(player);
-            vanishedPlayers.remove(player.getUniqueId());
-            player.sendMessage(Component.text(
-                    "Vanish mode disabled.", NamedTextColor.RED
-            ));
-
+        if (vanishManager.isPlayerVanished(player)) {
+            vanishManager.unvanishCommandPlayer(player);
         } else {
-            for (Player p : Bukkit.getOnlinePlayers()) {
-                p.hidePlayer(plugin, player);
-            }
-            fakeQuitMessage(player);
-            vanishedPlayers.add(player.getUniqueId());
-            player.sendMessage(Component.text(
-                    "Vanish mode enabled.", NamedTextColor.GREEN
-            ));
+            vanishManager.vanishCommandPlayer(player);
         }
 
         return true;
-    }
-
-    public void fakeJoinMessage(Player player) {
-        Component message = Component.text("[", NamedTextColor.WHITE)
-                .append(Component.text("+", NamedTextColor.GREEN))
-                .append(Component.text("] " + player.getName(), NamedTextColor.WHITE));
-
-        Bukkit.broadcast(message);
-    }
-
-    public void fakeQuitMessage(Player player) {
-        Component message = Component.text("[", NamedTextColor.WHITE)
-                .append(Component.text("-", NamedTextColor.RED))
-                .append(Component.text("] " + player.getName(), NamedTextColor.WHITE));
-
-        Bukkit.broadcast(message);
     }
 }

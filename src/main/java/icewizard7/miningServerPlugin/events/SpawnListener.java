@@ -14,11 +14,11 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.plugin.Plugin;
 
-public class SpawnPointEvent implements Listener {
+public class SpawnListener implements Listener {
     private final Location globalSpawn;
     private final Plugin plugin;
 
-    public SpawnPointEvent(Plugin plugin) {
+    public SpawnListener(Plugin plugin) {
         this.plugin = plugin;
         this.globalSpawn = loadSpawn();
     }

@@ -9,11 +9,11 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
-public class NameTagEvent implements Listener {
+public class NameTagListener implements Listener {
 
     private final NameTagManager nameTagManager;
 
-    public NameTagEvent(NameTagManager nameTagManager) {
+    public NameTagListener(NameTagManager nameTagManager) {
         this.nameTagManager = nameTagManager;
     }
 

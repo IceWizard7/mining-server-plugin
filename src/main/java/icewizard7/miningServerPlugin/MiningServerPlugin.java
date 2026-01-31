@@ -4,25 +4,24 @@ import icewizard7.miningServerPlugin.commands.*;
 import icewizard7.miningServerPlugin.events.*;
 import icewizard7.miningServerPlugin.utils.*;
 
-import net.luckperms.api.model.user.User;
-import org.bukkit.entity.Player;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.Bukkit;
 
 import net.luckperms.api.LuckPerms;
 
-import java.util.UUID;
-import java.util.HashSet;
-import java.util.Set;
-
 public final class MiningServerPlugin extends JavaPlugin {
-    private final Set<UUID> vanishedPlayers = new HashSet<>();
+    private LuckPerms luckPerms;
+    private VanishManager vanishManager;
     private TAB tab;
     private NameTagManager nameTagManager;
     private PortalManager portalManager;
     private DiscordLinkManager discordLinkManager;
     private DiscordBridge discordBridge;
+    private CombatManager combatManager;
+    private AutoCompressManager autoCompressManager;
+    private VoucherManager voucherManager;
 
     @Override
     public void onEnable() {
@@ -30,125 +29,119 @@ public final class MiningServerPlugin extends JavaPlugin {
         saveDefaultConfig();
 
         // Load LuckPerms API
-        LuckPerms luckPerms = getServer().getServicesManager().load(LuckPerms.class);
+        this.luckPerms = getServer().getServicesManager().load(LuckPerms.class);
         if (luckPerms == null) {
-            getLogger().severe("[MiningServerPlugin] LuckPerms not found! Disabling MiningServerPlugin.");
+            getLogger().severe("LuckPerms not found. Disabling MiningServerPlugin.");
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
 
-        // TAB
-        this.tab = new TAB(vanishedPlayers, luckPerms);
-
-        // Name Tags
-        this.nameTagManager = new NameTagManager(luckPerms);
-
-        // Portals
-        this.portalManager = new PortalManager(this);
-
-        // Discord
-        this.discordLinkManager = new DiscordLinkManager(this);
-        this.discordBridge = new DiscordBridge(this, discordLinkManager);
-        discordBridge.enable();
-
-        // Commands & events
-        InfoCommand infoCommand = new InfoCommand();
-        RulesCommand rulesCommand = new RulesCommand();
-        DiscordCommand discordCommand = new DiscordCommand();
-        GodCommand godCommand = new GodCommand();
-        InvseeCommand invseeCommand = new InvseeCommand();
-        FlyCommand flyCommand = new FlyCommand();
-        AutoCompressCommand autoCompressCommand = new AutoCompressCommand(this);
-        WarpCommand warpCommand = new WarpCommand(this);
-        SpawnCommand spawnCommand = new SpawnCommand(this);
-        VanishCommand vanishCommand = new VanishCommand(this, vanishedPlayers);
-        VoucherCommand voucherCommand = new VoucherCommand(luckPerms, this);
-        LinkCommand linkCommand = new LinkCommand(discordLinkManager, discordBridge);
-        UnlinkCommand unlinkCommand = new UnlinkCommand(discordLinkManager);
-
-        Listener chatEvent = new ChatEvent(discordBridge, luckPerms);
-        Listener welcomeEvent = new WelcomeMessageEvent(discordBridge);
-        Listener tabJoinEvent = new TabJoinEvent(tab);
-        Listener vanishEvent = new VanishEvent(this, vanishedPlayers);
-        Listener telepathyEvent = new TelepathyEvent(this, autoCompressCommand);
-        Listener spawnPointEvent = new SpawnPointEvent(this);
-        Listener voucherUseEvent = new VoucherUseEvent(luckPerms, voucherCommand.getVoucherKey(), voucherCommand.getFragmentKey());
-        Listener nameTagJoinEvent = new NameTagEvent(nameTagManager);
-        Listener portalEvent = new PortalEvent(portalManager);
-
-        getCommand("info").setExecutor(infoCommand);
-        getCommand("rules").setExecutor(rulesCommand);
-        getCommand("discord").setExecutor(discordCommand);
-        getCommand("god").setExecutor(godCommand);
-        getCommand("invsee").setExecutor(invseeCommand);
-        getCommand("fly").setExecutor(flyCommand);
-        getCommand("autocompress").setExecutor(autoCompressCommand);
-        getCommand("warp").setExecutor(warpCommand);
-        getCommand("warp").setTabCompleter(warpCommand);
-        getCommand("spawn").setExecutor(spawnCommand);
-        getCommand("vanish").setExecutor(vanishCommand);
-        getCommand("voucher").setExecutor(voucherCommand);
-        getCommand("link").setExecutor(linkCommand);
-        getCommand("unlink").setExecutor(unlinkCommand);
-
-        getServer().getPluginManager().registerEvents(chatEvent, this);
-        getServer().getPluginManager().registerEvents(welcomeEvent, this);
-        getServer().getPluginManager().registerEvents(tabJoinEvent, this);
-        getServer().getPluginManager().registerEvents(vanishEvent, this);
-        getServer().getPluginManager().registerEvents(telepathyEvent, this);
-        getServer().getPluginManager().registerEvents(spawnPointEvent, this);
-        getServer().getPluginManager().registerEvents(voucherUseEvent, this);
-        getServer().getPluginManager().registerEvents(nameTagJoinEvent, this);
-        getServer().getPluginManager().registerEvents(portalEvent, this);
-
-        // Rank changes
-        luckPerms.getEventBus().subscribe(this,
-                net.luckperms.api.event.user.UserDataRecalculateEvent.class,
-                event -> Bukkit.getScheduler().runTask(this, () -> {
-                    Player player = Bukkit.getPlayer(event.getUser().getUniqueId());
-                    if (player != null) {
-                        nameTagManager.updateNameTag(player);
-                    }
-                })
-        );
-
-        luckPerms.getEventBus().subscribe(this,
-                net.luckperms.api.event.group.GroupDataRecalculateEvent.class,
-                event -> Bukkit.getScheduler().runTask(this, () -> {
-
-                    String groupName = event.getGroup().getName();
-
-                    for (Player player : Bukkit.getOnlinePlayers()) {
-                        User user = luckPerms.getUserManager().getUser(player.getUniqueId());
-                        if (user == null) continue;
-
-                        if (user.getInheritedGroups(user.getQueryOptions()).stream()
-                                .anyMatch(g -> g.getName().equalsIgnoreCase(groupName))) {
-
-                            nameTagManager.updateNameTag(player);
-                        }
-                    }
-                })
-        );
-
-        // TAB Update
-        Bukkit.getScheduler().runTaskTimer(this, () -> {
-            for (Player player : Bukkit.getOnlinePlayers()) {
-                tab.updateTab(player);
-            }
-        }, 0L, 20L * 3); // every 3 seconds
+        initManagers();
+        registerCommands();
+        registerListeners();
+        startTasks();
 
         // Print to console
         getLogger().info("MiningServerPlugin has been enabled.");
     }
 
+    private void registerCommand(String name, CommandExecutor executor) {
+        PluginCommand cmd = getCommand(name);
+        if (cmd == null) {
+            getLogger().severe("Command '" + name + "' missing from plugin.yml.");
+            return;
+        }
+        cmd.setExecutor(executor);
+    }
+
+    private void registerListener(Listener listener) {
+        getServer().getPluginManager().registerEvents(listener, this);
+    }
+
+    private void initManagers() {
+        this.vanishManager = new VanishManager(this);
+        this.tab = new TAB(this, vanishManager, luckPerms);
+        this.nameTagManager = new NameTagManager(this, luckPerms);
+        this.portalManager = new PortalManager(this);
+        this.discordLinkManager = new DiscordLinkManager(this);
+        this.discordBridge = new DiscordBridge(this, discordLinkManager);
+        discordBridge.connect();
+        this.combatManager = new CombatManager(this);
+        this.autoCompressManager = new AutoCompressManager(this);
+        this.voucherManager = new VoucherManager(this);
+    }
+
+    private void registerCommands() {
+        InfoCommand infoCommand = new InfoCommand();
+        RulesCommand rulesCommand = new RulesCommand();
+        DiscordCommand discordCommand = new DiscordCommand();
+        GodCommand godCommand = new GodCommand();
+        InvseeCommand invseeCommand = new InvseeCommand();
+        FlyCommand flyCommand = new FlyCommand(combatManager);
+        AutoCompressCommand autoCompressCommand = new AutoCompressCommand(autoCompressManager);
+        WarpCommand warpCommand = new WarpCommand(this, combatManager);
+        SpawnCommand spawnCommand = new SpawnCommand(this, combatManager);
+        VanishCommand vanishCommand = new VanishCommand(this, vanishManager);
+        VoucherCommand voucherCommand = new VoucherCommand(luckPerms, voucherManager);
+        LinkCommand linkCommand = new LinkCommand(discordLinkManager, discordBridge);
+        UnlinkCommand unlinkCommand = new UnlinkCommand(discordLinkManager);
+
+        registerCommand("info", infoCommand);
+        registerCommand("rules", rulesCommand);
+        registerCommand("discord", discordCommand);
+        registerCommand("god", godCommand);
+        registerCommand("invsee", invseeCommand);
+        registerCommand("fly", flyCommand);
+        registerCommand("autocompress", autoCompressCommand);
+        registerCommand("warp", warpCommand);
+        registerCommand("warp", warpCommand);
+        registerCommand("spawn", spawnCommand);
+        registerCommand("vanish", vanishCommand);
+        registerCommand("voucher", voucherCommand);
+        registerCommand("link", linkCommand);
+        registerCommand("unlink", unlinkCommand);
+    }
+
+    private void registerListeners() {
+        Listener chatListener = new ChatListener(discordBridge, luckPerms);
+        Listener welcomeListener = new WelcomeListener(discordBridge);
+        Listener tabJoinListener = new TabJoinListener(tab);
+        Listener vanishListener = new VanishListener(this, vanishManager);
+        Listener telepathyListener = new TelepathyListener(this, autoCompressManager);
+        Listener spawnListener = new SpawnListener(this);
+        Listener voucherUseListener = new VoucherUseListener(luckPerms, voucherManager);
+        Listener nameTagListener = new NameTagListener(nameTagManager);
+        Listener portalListener = new PortalListener(portalManager);
+        Listener combatListener = new CombatListener(combatManager);
+
+        registerListener(chatListener);
+        registerListener(welcomeListener);
+        registerListener(tabJoinListener);
+        registerListener(vanishListener);
+        registerListener(telepathyListener);
+        registerListener(spawnListener);
+        registerListener(voucherUseListener);
+        registerListener(nameTagListener);
+        registerListener(portalListener);
+        registerListener(combatListener);
+    }
+
+    private void startTasks() {
+        nameTagManager.startNameTagTask();
+        tab.startTabTask();
+        combatManager.startCombatTask();
+    }
+
     @Override
     public void onDisable() {
-        // Check if not null in case enable failed
         getLogger().info("MiningServerPlugin is disabling...");
-        if (this.discordBridge != null) {
-            this.discordBridge.disable();
-        }
+
+        // Check if not null in case enable failed
+        if (combatManager != null) combatManager.shutdown();
+        if (nameTagManager != null) nameTagManager.shutdown();
+        if (tab != null) tab.shutdown();
+        if (discordBridge != null) discordBridge.shutdown();
+
         getLogger().info("MiningServerPlugin has been disabled.");
     }
 }

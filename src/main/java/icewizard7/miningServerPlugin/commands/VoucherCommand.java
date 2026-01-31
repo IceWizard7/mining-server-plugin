@@ -1,5 +1,6 @@
 package icewizard7.miningServerPlugin.commands;
 
+import icewizard7.miningServerPlugin.utils.VoucherManager;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -19,13 +20,11 @@ import java.util.List;
 
 public class VoucherCommand implements CommandExecutor {
     private final LuckPerms luckPerms;
-    private final NamespacedKey voucherKey;
-    private final NamespacedKey fragmentKey;
+    private final VoucherManager voucherManager;
 
-    public VoucherCommand(LuckPerms luckPerms, Plugin plugin) {
+    public VoucherCommand(LuckPerms luckPerms, VoucherManager voucherManager) {
         this.luckPerms = luckPerms;
-        this.voucherKey = new NamespacedKey(plugin, "voucher");
-        this.fragmentKey = new NamespacedKey(plugin, "fragment");
+        this.voucherManager = voucherManager;
     }
 
     @Override
@@ -68,20 +67,12 @@ public class VoucherCommand implements CommandExecutor {
                 Component.text("Right-click to receive the rank: ", NamedTextColor.GRAY).append(Component.text(rankName, NamedTextColor.GOLD))
                         .decoration(TextDecoration.ITALIC, false)
         ));
-        meta.getPersistentDataContainer().set(voucherKey, PersistentDataType.STRING, rankName);
+        meta.getPersistentDataContainer().set(voucherManager.getVoucherKey(), PersistentDataType.STRING, rankName);
         voucher.setItemMeta(meta);
 
         player.getInventory().addItem(voucher);
         player.sendMessage("Voucher for rank '" + rankName + "' has been added to your inventory!");
 
         return true;
-    }
-
-    public NamespacedKey getVoucherKey() {
-        return voucherKey;
-    }
-
-    public NamespacedKey getFragmentKey() {
-        return fragmentKey;
     }
 }

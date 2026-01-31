@@ -2,7 +2,6 @@ package icewizard7.miningServerPlugin.events;
 
 import icewizard7.miningServerPlugin.utils.DiscordBridge;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.model.user.User;
@@ -13,13 +12,13 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import io.papermc.paper.event.player.AsyncChatEvent;
 
-public class ChatEvent implements Listener {
+public class ChatListener implements Listener {
 
     private final LuckPerms luckPerms;
     private final DiscordBridge discordBridge;
     private long discordLastSent = 0;
 
-    public ChatEvent(DiscordBridge discordBridge, LuckPerms luckPerms) {
+    public ChatListener(DiscordBridge discordBridge, LuckPerms luckPerms) {
         this.discordBridge = discordBridge;
         this.luckPerms = luckPerms;
     }

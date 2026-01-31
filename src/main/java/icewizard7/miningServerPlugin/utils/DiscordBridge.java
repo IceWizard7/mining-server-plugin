@@ -69,7 +69,7 @@ public final class DiscordBridge {
         data = YamlConfiguration.loadConfiguration(file);
     }
 
-    public void enable() {
+    public void connect() {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             try {
                 String token = data.getString("discord.token");
@@ -218,7 +218,7 @@ public final class DiscordBridge {
         return chatChannel != null && consoleChannel != null;
     }
 
-    public void disable() {
+    public void shutdown() {
         if (log4jAppender != null) {
             final LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
             ctx.getConfiguration().getRootLogger().removeAppender(log4jAppender.getName());
