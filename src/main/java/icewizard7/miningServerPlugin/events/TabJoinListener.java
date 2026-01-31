@@ -6,12 +6,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import icewizard7.miningServerPlugin.utils.TAB;
+import icewizard7.miningServerPlugin.utils.TabManager;
 
 public class TabJoinListener implements Listener {
-    private final TAB tab;
+    private final TabManager tab;
 
-    public TabJoinListener(TAB tab) {
+    public TabJoinListener(TabManager tab) {
         this.tab = tab;
     }
 

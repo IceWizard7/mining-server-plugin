@@ -15,7 +15,7 @@ import net.luckperms.api.LuckPerms;
 public final class MiningServerPlugin extends JavaPlugin {
     private LuckPerms luckPerms;
     private VanishManager vanishManager;
-    private TAB tab;
+    private TabManager tabManager;
     private NameTagManager nameTagManager;
     private PortalManager portalManager;
     private DiscordLinkManager discordLinkManager;
@@ -71,7 +71,7 @@ public final class MiningServerPlugin extends JavaPlugin {
 
     private void initManagers() {
         this.vanishManager = new VanishManager(this);
-        this.tab = new TAB(this, vanishManager, luckPerms);
+        this.tabManager = new TabManager(this, vanishManager, luckPerms);
         this.nameTagManager = new NameTagManager(this, luckPerms);
         this.portalManager = new PortalManager(this);
         this.discordLinkManager = new DiscordLinkManager(this);
@@ -117,7 +117,7 @@ public final class MiningServerPlugin extends JavaPlugin {
     private void registerListeners() {
         Listener chatListener = new ChatListener(discordBridge, luckPerms);
         Listener welcomeListener = new WelcomeListener(discordBridge);
-        Listener tabJoinListener = new TabJoinListener(tab);
+        Listener tabJoinListener = new TabJoinListener(tabManager);
         Listener vanishListener = new VanishListener(this, vanishManager);
         Listener telepathyListener = new TelepathyListener(this, autoCompressManager);
         Listener spawnListener = new SpawnListener(this);
@@ -140,7 +140,7 @@ public final class MiningServerPlugin extends JavaPlugin {
 
     private void startTasks() {
         nameTagManager.startNameTagTask();
-        tab.startTabTask();
+        tabManager.startTabTask();
         combatManager.startCombatTask();
     }
 
@@ -151,7 +151,7 @@ public final class MiningServerPlugin extends JavaPlugin {
         // Check if not null in case enable failed
         if (combatManager != null) combatManager.shutdown();
         if (nameTagManager != null) nameTagManager.shutdown();
-        if (tab != null) tab.shutdown();
+        if (tabManager != null) tabManager.shutdown();
         if (discordBridge != null) discordBridge.shutdown();
 
         getLogger().info("MiningServerPlugin has been disabled.");

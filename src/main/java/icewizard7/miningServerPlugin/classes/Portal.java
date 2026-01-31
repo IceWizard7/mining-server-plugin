@@ -1,4 +1,4 @@
-package icewizard7.miningServerPlugin.utils;
+package icewizard7.miningServerPlugin.classes;
 
 import org.bukkit.Location;
 import org.bukkit.Particle;

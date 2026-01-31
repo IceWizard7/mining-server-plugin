@@ -1,5 +1,6 @@
 package icewizard7.miningServerPlugin.utils;
 
+import icewizard7.miningServerPlugin.classes.Portal;
 import org.bukkit.*;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.Plugin;

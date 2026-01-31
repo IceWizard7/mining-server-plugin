@@ -11,13 +11,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
 
-public class TAB {
+public class TabManager {
     private final Plugin plugin;
     private final VanishManager vanishManager;
     private final LuckPerms luckPerms;
     private BukkitTask tabTask;
 
-    public TAB(Plugin plugin, VanishManager vanishManager, LuckPerms luckPerms) {
+    public TabManager(Plugin plugin, VanishManager vanishManager, LuckPerms luckPerms) {
         this.plugin = plugin;
         this.vanishManager = vanishManager;
         this.luckPerms = luckPerms;
