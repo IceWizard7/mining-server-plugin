@@ -83,59 +83,33 @@ public final class MiningServerPlugin extends JavaPlugin {
     }
 
     private void registerCommands() {
-        InfoCommand infoCommand = new InfoCommand();
-        RulesCommand rulesCommand = new RulesCommand();
-        DiscordCommand discordCommand = new DiscordCommand();
-        GodCommand godCommand = new GodCommand();
-        InvseeCommand invseeCommand = new InvseeCommand();
-        FlyCommand flyCommand = new FlyCommand(combatManager);
-        AutoCompressCommand autoCompressCommand = new AutoCompressCommand(autoCompressManager);
-        WarpCommand warpCommand = new WarpCommand(this, combatManager);
-        SpawnCommand spawnCommand = new SpawnCommand(this, combatManager);
-        VanishCommand vanishCommand = new VanishCommand(this, vanishManager);
-        VoucherCommand voucherCommand = new VoucherCommand(luckPerms, voucherManager);
-        LinkCommand linkCommand = new LinkCommand(discordLinkManager, discordBridgeManager);
-        UnlinkCommand unlinkCommand = new UnlinkCommand(discordLinkManager);
-        ShowCommand showCommand = new ShowCommand(this);
-
-        registerCommand("info", infoCommand);
-        registerCommand("rules", rulesCommand);
-        registerCommand("discord", discordCommand);
-        registerCommand("god", godCommand);
-        registerCommand("invsee", invseeCommand);
-        registerCommand("fly", flyCommand);
-        registerCommand("autocompress", autoCompressCommand);
-        registerCommand("spawn", spawnCommand);
-        registerCommand("vanish", vanishCommand);
-        registerCommand("voucher", voucherCommand);
-        registerCommand("link", linkCommand);
-        registerCommand("unlink", unlinkCommand);
-        registerTabExecutorCommand("warp", warpCommand);
-        registerTabExecutorCommand("show", showCommand);
+        registerCommand("info", new InfoCommand());
+        registerCommand("rules", new RulesCommand());
+        registerCommand("discord", new DiscordCommand());
+        registerCommand("god", new GodCommand());
+        registerCommand("invsee", new InvseeCommand());
+        registerCommand("fly", new FlyCommand(combatManager));
+        registerCommand("autocompress", new AutoCompressCommand(autoCompressManager));
+        registerCommand("spawn", new SpawnCommand(this, combatManager));
+        registerCommand("vanish", new VanishCommand(this, vanishManager));
+        registerCommand("voucher", new VoucherCommand(luckPerms, voucherManager));
+        registerCommand("link", new LinkCommand(discordLinkManager, discordBridgeManager));
+        registerCommand("unlink", new UnlinkCommand(discordLinkManager));
+        registerTabExecutorCommand("warp", new WarpCommand(this, combatManager));
+        registerTabExecutorCommand("show", new ShowCommand(this));
     }
 
     private void registerListeners() {
-        Listener chatListener = new ChatListener(discordBridgeManager, luckPerms);
-        Listener welcomeListener = new WelcomeListener(discordBridgeManager);
-        Listener tabJoinListener = new TabJoinListener(tabManager);
-        Listener vanishListener = new VanishListener(this, vanishManager);
-        Listener telepathyListener = new TelepathyListener(this, autoCompressManager);
-        Listener spawnListener = new SpawnListener(this);
-        Listener voucherUseListener = new VoucherUseListener(luckPerms, voucherManager);
-        Listener nameTagListener = new NameTagListener(nameTagManager);
-        Listener portalListener = new PortalListener(portalManager);
-        Listener combatListener = new CombatListener(combatManager);
-
-        registerListener(chatListener);
-        registerListener(welcomeListener);
-        registerListener(tabJoinListener);
-        registerListener(vanishListener);
-        registerListener(telepathyListener);
-        registerListener(spawnListener);
-        registerListener(voucherUseListener);
-        registerListener(nameTagListener);
-        registerListener(portalListener);
-        registerListener(combatListener);
+        registerListener(new ChatListener(discordBridgeManager, luckPerms));
+        registerListener(new WelcomeListener(discordBridgeManager));
+        registerListener(new TabJoinListener(tabManager));
+        registerListener(new VanishListener(this, vanishManager));
+        registerListener(new TelepathyListener(this, autoCompressManager));
+        registerListener(new SpawnListener(this));
+        registerListener(new VoucherUseListener(luckPerms, voucherManager));
+        registerListener(new NameTagListener(nameTagManager));
+        registerListener(new PortalListener(portalManager));
+        registerListener(new CombatListener(combatManager));
     }
 
     private void startTasks() {
