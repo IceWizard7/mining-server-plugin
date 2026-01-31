@@ -19,7 +19,7 @@ public final class MiningServerPlugin extends JavaPlugin {
     private NameTagManager nameTagManager;
     private PortalManager portalManager;
     private DiscordLinkManager discordLinkManager;
-    private DiscordBridge discordBridge;
+    private DiscordBridgeManager discordBridgeManager;
     private CombatManager combatManager;
     private AutoCompressManager autoCompressManager;
     private VoucherManager voucherManager;
@@ -75,8 +75,8 @@ public final class MiningServerPlugin extends JavaPlugin {
         this.nameTagManager = new NameTagManager(this, luckPerms);
         this.portalManager = new PortalManager(this);
         this.discordLinkManager = new DiscordLinkManager(this);
-        this.discordBridge = new DiscordBridge(this, discordLinkManager);
-        discordBridge.connect();
+        this.discordBridgeManager = new DiscordBridgeManager(this, discordLinkManager);
+        discordBridgeManager.connect();
         this.combatManager = new CombatManager(this);
         this.autoCompressManager = new AutoCompressManager(this);
         this.voucherManager = new VoucherManager(this);
@@ -94,7 +94,7 @@ public final class MiningServerPlugin extends JavaPlugin {
         SpawnCommand spawnCommand = new SpawnCommand(this, combatManager);
         VanishCommand vanishCommand = new VanishCommand(this, vanishManager);
         VoucherCommand voucherCommand = new VoucherCommand(luckPerms, voucherManager);
-        LinkCommand linkCommand = new LinkCommand(discordLinkManager, discordBridge);
+        LinkCommand linkCommand = new LinkCommand(discordLinkManager, discordBridgeManager);
         UnlinkCommand unlinkCommand = new UnlinkCommand(discordLinkManager);
         ShowCommand showCommand = new ShowCommand(this);
 
@@ -115,8 +115,8 @@ public final class MiningServerPlugin extends JavaPlugin {
     }
 
     private void registerListeners() {
-        Listener chatListener = new ChatListener(discordBridge, luckPerms);
-        Listener welcomeListener = new WelcomeListener(discordBridge);
+        Listener chatListener = new ChatListener(discordBridgeManager, luckPerms);
+        Listener welcomeListener = new WelcomeListener(discordBridgeManager);
         Listener tabJoinListener = new TabJoinListener(tabManager);
         Listener vanishListener = new VanishListener(this, vanishManager);
         Listener telepathyListener = new TelepathyListener(this, autoCompressManager);
@@ -152,7 +152,7 @@ public final class MiningServerPlugin extends JavaPlugin {
         if (combatManager != null) combatManager.shutdown();
         if (nameTagManager != null) nameTagManager.shutdown();
         if (tabManager != null) tabManager.shutdown();
-        if (discordBridge != null) discordBridge.shutdown();
+        if (discordBridgeManager != null) discordBridgeManager.shutdown();
 
         getLogger().info("MiningServerPlugin has been disabled.");
     }

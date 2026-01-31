@@ -32,7 +32,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Logger;
 
-public final class DiscordBridge {
+public final class DiscordBridgeManager {
 
     private JDA jda;
     private final DiscordLinkManager discordLinkManager;
@@ -47,7 +47,7 @@ public final class DiscordBridge {
     private Appender log4jAppender;
     private int consoleTaskId = -1;
 
-    public DiscordBridge(Plugin plugin, DiscordLinkManager discordLinkManager) {
+    public DiscordBridgeManager(Plugin plugin, DiscordLinkManager discordLinkManager) {
         this.plugin = plugin;
         this.logger = plugin.getLogger();
         this.discordLinkManager = discordLinkManager;

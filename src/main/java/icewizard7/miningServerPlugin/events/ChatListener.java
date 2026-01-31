@@ -1,6 +1,6 @@
 package icewizard7.miningServerPlugin.events;
 
-import icewizard7.miningServerPlugin.utils.DiscordBridge;
+import icewizard7.miningServerPlugin.utils.DiscordBridgeManager;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.luckperms.api.LuckPerms;
@@ -15,11 +15,11 @@ import io.papermc.paper.event.player.AsyncChatEvent;
 public class ChatListener implements Listener {
 
     private final LuckPerms luckPerms;
-    private final DiscordBridge discordBridge;
+    private final DiscordBridgeManager discordBridgeManager;
     private long discordLastSent = 0;
 
-    public ChatListener(DiscordBridge discordBridge, LuckPerms luckPerms) {
-        this.discordBridge = discordBridge;
+    public ChatListener(DiscordBridgeManager discordBridgeManager, LuckPerms luckPerms) {
+        this.discordBridgeManager = discordBridgeManager;
         this.luckPerms = luckPerms;
     }
 
@@ -62,7 +62,7 @@ public class ChatListener implements Listener {
     }
 
     public void sendDiscordMessage(Player player, Component message) {
-        if (!discordBridge.isReady()) return;
+        if (!discordBridgeManager.isReady()) return;
 
         String chatMessage = PlainTextComponentSerializer.plainText()
                 .serialize(message);
@@ -86,7 +86,7 @@ public class ChatListener implements Listener {
         String finalMessage = "**" + prefix + player.getName() + suffix + "**: " + chatMessage;
 
         if (System.currentTimeMillis() - discordLastSent > 500) {
-            discordBridge.getChatChannel()
+            discordBridgeManager.getChatChannel()
                     .sendMessage(finalMessage)
                     .queue();
             discordLastSent = System.currentTimeMillis();
