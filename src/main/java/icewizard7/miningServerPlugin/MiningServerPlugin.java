@@ -28,22 +28,25 @@ public final class MiningServerPlugin extends JavaPlugin {
     public void onEnable() {
         // Save config.yml to plugins folder
         saveDefaultConfig();
-
-        // Load LuckPerms API
-        this.luckPerms = getServer().getServicesManager().load(LuckPerms.class);
-        if (luckPerms == null) {
-            getLogger().severe("LuckPerms not found. Disabling MiningServerPlugin.");
-            getServer().getPluginManager().disablePlugin(this);
-            return;
-        }
+        if (!loadDependencies()) return;
 
         initManagers();
         registerCommands();
         registerListeners();
-        startTasks();
+        startSystems();
 
         // Print to console
         getLogger().info("MiningServerPlugin has been enabled.");
+    }
+
+    private boolean loadDependencies() {
+        this.luckPerms = getServer().getServicesManager().load(LuckPerms.class);
+        if (luckPerms == null) {
+            getLogger().severe("LuckPerms not found. Disabling MiningServerPlugin.");
+            getServer().getPluginManager().disablePlugin(this);
+            return false;
+        }
+        return true;
     }
 
     private void registerCommand(String name, CommandExecutor executor) {
@@ -70,16 +73,24 @@ public final class MiningServerPlugin extends JavaPlugin {
     }
 
     private void initManagers() {
+        // Core player managers
         this.vanishManager = new VanishManager(this);
+        this.combatManager = new CombatManager(this);
+
+        // Visual systems
         this.tabManager = new TabManager(this, vanishManager, luckPerms);
         this.nameTagManager = new NameTagManager(this, luckPerms);
+
+        // Portals
         this.portalManager = new PortalManager(this);
-        this.discordLinkManager = new DiscordLinkManager(this);
-        this.discordBridgeManager = new DiscordBridgeManager(this, discordLinkManager);
-        discordBridgeManager.connect();
-        this.combatManager = new CombatManager(this);
+
+        // Economy & Items
         this.autoCompressManager = new AutoCompressManager(this);
         this.voucherManager = new VoucherManager(this);
+
+        // External systems
+        this.discordLinkManager = new DiscordLinkManager(this);
+        this.discordBridgeManager = new DiscordBridgeManager(this, discordLinkManager);
     }
 
     private void registerCommands() {
@@ -112,10 +123,11 @@ public final class MiningServerPlugin extends JavaPlugin {
         registerListener(new CombatListener(combatManager));
     }
 
-    private void startTasks() {
+    private void startSystems() {
         nameTagManager.startNameTagTask();
         tabManager.startTabTask();
         combatManager.startCombatTask();
+        discordBridgeManager.connect();
     }
 
     @Override
