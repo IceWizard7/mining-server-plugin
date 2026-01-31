@@ -46,6 +46,11 @@ commands:
     permission: miningServerPlugin.autocompress
     usage: /autocompress
     aliases: [ac]
+  enderchest:
+    description: Open your enderchest from anywhere
+    permission: miningServerPlugin.enderchest
+    usage: /enderchest
+    aliases: [ec]
   warp:
     description: Teleport anywhere
     permission: miningServerPlugin.warp_command
@@ -89,6 +94,9 @@ permissions:
     default: op
   miningServerPlugin.autocompress:
     description: Allows using /autocompress
+    default: op
+  miningServerPlugin.enderchest:
+    description: Allows using /enderchest
     default: op
   miningServerPlugin.warp_command:
     description: Allows using /warp

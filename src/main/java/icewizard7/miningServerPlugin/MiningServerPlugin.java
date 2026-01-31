@@ -121,6 +121,7 @@ public final class MiningServerPlugin extends JavaPlugin {
         registerCommand("voucher", new VoucherCommand(luckPerms, voucherManager));
         registerCommand("link", new LinkCommand(discordLinkManager, discordBridgeManager));
         registerCommand("unlink", new UnlinkCommand(discordLinkManager));
+        registerCommand("enderchest", new EnderChestCommand());
         registerTabExecutorCommand("warp", new WarpCommand(this, combatManager));
         registerTabExecutorCommand("show", new ShowCommand(this));
     }
