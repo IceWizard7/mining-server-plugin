@@ -11,9 +11,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import net.luckperms.api.LuckPerms;
+import com.sk89q.worldguard.WorldGuard;
 
 public final class MiningServerPlugin extends JavaPlugin {
     private LuckPerms luckPerms;
+    private WorldGuard worldGuard;
     private VanishManager vanishManager;
     private TabManager tabManager;
     private NameTagManager nameTagManager;
@@ -23,6 +25,7 @@ public final class MiningServerPlugin extends JavaPlugin {
     private CombatManager combatManager;
     private AutoCompressManager autoCompressManager;
     private VoucherManager voucherManager;
+    private WorldGuardManager worldGuardManager;
 
     @Override
     public void onEnable() {
@@ -46,6 +49,15 @@ public final class MiningServerPlugin extends JavaPlugin {
             getServer().getPluginManager().disablePlugin(this);
             return false;
         }
+
+        this.worldGuard =getServer().getServicesManager().load(WorldGuard.class);
+
+        if (worldGuard == null) {
+            getLogger().severe("WorldGuard not found. Disabling MiningServerPlugin.");
+            getServer().getPluginManager().disablePlugin(this);
+            return false;
+        }
+
         return true;
     }
 
@@ -73,6 +85,9 @@ public final class MiningServerPlugin extends JavaPlugin {
     }
 
     private void initManagers() {
+        // Core world managers
+        this.worldGuardManager = new WorldGuardManager(worldGuard);
+
         // Core player managers
         this.vanishManager = new VanishManager(this);
         this.combatManager = new CombatManager(this);
@@ -121,6 +136,7 @@ public final class MiningServerPlugin extends JavaPlugin {
         registerListener(new NameTagListener(nameTagManager));
         registerListener(new PortalListener(portalManager));
         registerListener(new CombatListener(combatManager));
+        registerListener(new ElytraListener(combatManager, worldGuardManager));
     }
 
     private void startSystems() {
