@@ -6,6 +6,7 @@ import icewizard7.miningServerPlugin.utils.*;
 
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -54,6 +55,16 @@ public final class MiningServerPlugin extends JavaPlugin {
         cmd.setExecutor(executor);
     }
 
+    private void registerTabExecutorCommand(String name, TabExecutor executor) {
+        PluginCommand cmd = getCommand(name);
+        if (cmd == null) {
+            getLogger().severe("Command '" + name + "' missing from plugin.yml.");
+            return;
+        }
+        cmd.setExecutor(executor);
+        cmd.setTabCompleter(executor);
+    }
+
     private void registerListener(Listener listener) {
         getServer().getPluginManager().registerEvents(listener, this);
     }
@@ -85,6 +96,7 @@ public final class MiningServerPlugin extends JavaPlugin {
         VoucherCommand voucherCommand = new VoucherCommand(luckPerms, voucherManager);
         LinkCommand linkCommand = new LinkCommand(discordLinkManager, discordBridge);
         UnlinkCommand unlinkCommand = new UnlinkCommand(discordLinkManager);
+        ShowCommand showCommand = new ShowCommand(this);
 
         registerCommand("info", infoCommand);
         registerCommand("rules", rulesCommand);
@@ -93,13 +105,13 @@ public final class MiningServerPlugin extends JavaPlugin {
         registerCommand("invsee", invseeCommand);
         registerCommand("fly", flyCommand);
         registerCommand("autocompress", autoCompressCommand);
-        registerCommand("warp", warpCommand);
-        registerCommand("warp", warpCommand);
         registerCommand("spawn", spawnCommand);
         registerCommand("vanish", vanishCommand);
         registerCommand("voucher", voucherCommand);
         registerCommand("link", linkCommand);
         registerCommand("unlink", unlinkCommand);
+        registerTabExecutorCommand("warp", warpCommand);
+        registerTabExecutorCommand("show", showCommand);
     }
 
     private void registerListeners() {

@@ -86,29 +86,29 @@ public class WarpCommand implements TabExecutor {
 
     @Override
     public List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] args) {
-        if (args.length == 1) {
-            FileConfiguration config = plugin.getConfig();
+        if (args.length != 1) {
+            return new ArrayList<>();
+        }
 
-            if (!config.isConfigurationSection("warps")) {
-                return new ArrayList<>();
-            }
+        FileConfiguration config = plugin.getConfig();
 
-            List<String> warps = new ArrayList<>(config.getConfigurationSection("warps").getKeys(false));
+        if (!config.isConfigurationSection("warps")) {
+            return new ArrayList<>();
+        }
 
-            // Only suggest warps the player has permission for
-            if (commandSender instanceof Player player) {
-                warps = warps.stream()
-                        .filter(warp -> player.hasPermission("miningServerPlugin.warp." + warp))
-                        .collect(Collectors.toList());
-            }
+        List<String> warps = new ArrayList<>(config.getConfigurationSection("warps").getKeys(false));
 
-            String current = args[0].toLowerCase();
-
-            return warps.stream()
-                    .filter(warp -> warp.toLowerCase().startsWith(current))
+        // Only suggest warps the player has permission for
+        if (commandSender instanceof Player player) {
+            warps = warps.stream()
+                    .filter(warp -> player.hasPermission("miningServerPlugin.warp." + warp))
                     .collect(Collectors.toList());
         }
 
-        return new ArrayList<>();
+        String current = args[0].toLowerCase();
+
+        return warps.stream()
+                .filter(warp -> warp.toLowerCase().startsWith(current))
+                .collect(Collectors.toList());
     }
 }

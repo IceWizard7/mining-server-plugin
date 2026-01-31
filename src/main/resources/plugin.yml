@@ -58,6 +58,9 @@ commands:
     description: Create vouchers
     permission: miningServerPlugin.voucher.create
     usage: /voucher create <rank>
+  show:
+    description: Show an item to all players
+    usage: /show <field>
 
 permissions:
   miningServerPlugin.info:

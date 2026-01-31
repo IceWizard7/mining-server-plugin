@@ -1,6 +1,7 @@
 package icewizard7.miningServerPlugin.utils;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import net.kyori.adventure.text.Component;
@@ -15,66 +16,81 @@ import java.util.UUID;
 public class CombatManager {
     private final Map<UUID, Long> combatTag = new HashMap<>();
     private final Plugin plugin;
-    private static final long COMBAT_TIME = 10_000;
+    private static final long COMBAT_TIME = 15_000; // 15 seconds
     private BukkitTask combatTask;
 
     public CombatManager(Plugin plugin) {
         this.plugin = plugin;
     }
 
+    // Tag player
     public void tagPlayer(Player player) {
         long expireTime = System.currentTimeMillis() + COMBAT_TIME;
         combatTag.put(player.getUniqueId(), expireTime);
     }
 
+    // Untag player and notify
     public void untagPlayer(Player player) {
         combatTag.remove(player.getUniqueId());
+        Component msg = Component.text("You are out of combat.", NamedTextColor.GREEN);
+        player.sendActionBar(msg);
+        player.playSound(player.getLocation(), Sound.BLOCK_PISTON_EXTEND, 1f, 1f); // piston sound
     }
 
+    // Check if player is in combat
     public boolean isInCombat(Player player) {
         Long expire = combatTag.get(player.getUniqueId());
         if (expire == null) return false;
 
         if (System.currentTimeMillis() > expire) {
-            combatTag.remove(player.getUniqueId()); // cleanup
+            untagPlayer(player);
             return false;
         }
 
         return true;
     }
 
-    private long getRemainingCombatTime(Player player) {
+    // Get remaining combat time with 1 decimal
+    public double getRemainingCombatTime(Player player) {
         Long expire = combatTag.get(player.getUniqueId());
         if (expire == null) return 0;
-        return Math.max(0, (expire - System.currentTimeMillis()) / 1000);
+        double remaining = (expire - System.currentTimeMillis()) / 1000.0;
+        return Math.max(0, Math.round(remaining * 10.0) / 10.0); // 1 decimal
     }
 
+    // Action bar display
     public void sendCombatBar(Player player) {
-        Component msg = Component.text("You are in combat: " + getRemainingCombatTime(player) + "s", NamedTextColor.RED);
+        double remaining = getRemainingCombatTime(player);
+        Component msg = Component.text("You are in combat: " + remaining + "s", NamedTextColor.RED);
         player.sendActionBar(msg);
     }
 
+    // Send message in chat (the block message when /fly, etc. is entered)
     public void sendCombatMessage(Player player) {
-        Component msg = Component.text("You are in combat: " + getRemainingCombatTime(player) + "s", NamedTextColor.RED);
-        player.sendMessage(msg);
+        double remaining = getRemainingCombatTime(player);
+        player.sendMessage(Component.text("You cannot do that while in combat. (" + remaining + "s left)", NamedTextColor.RED));
     }
 
+    // Repeating task
     public void startCombatTask() {
-        this.combatTask = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
+        combatTask = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
 
-            for (Player player : Bukkit.getOnlinePlayers()) {
+            for (UUID uuid : combatTag.keySet().toArray(new UUID[0])) { // avoid concurrent mod
+                Player player = Bukkit.getPlayer(uuid);
+                if (player == null) continue;
 
-                if (!isInCombat(player)) continue;
-
-                sendCombatBar(player);
+                if (isInCombat(player)) {
+                    sendCombatBar(player);
+                }
             }
 
-        }, 0L, 20L);
+        }, 0L, 2L); // every 2 ticks = 0.1s
     }
 
     public void shutdown() {
         if (combatTask != null && !combatTask.isCancelled()) {
             combatTask.cancel();
         }
+        combatTag.clear();
     }
 }
