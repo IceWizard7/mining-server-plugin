@@ -29,6 +29,7 @@ Discord Invite Link: `discord.gg/8ce6N8QXpm`
 - Custom join & quit messages
 - Custom telepathy effect on all blocks
 - WorldGuard integration: Prevent Elytras in PVP, except when being in the PVP region (`/warp pvp`)
+- Custom enderchest command (`/enderchest`; Open your enderchest remotely)
 
 ### Dependencies
 - LuckPerms (Minecraft Plugin)
