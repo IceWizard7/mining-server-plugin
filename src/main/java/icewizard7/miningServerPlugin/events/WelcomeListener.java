@@ -40,7 +40,6 @@ public class WelcomeListener implements Listener {
             event.joinMessage(joinMessage);
             discordBridgeManager.sendJoinEmbed(event.getPlayer());
         }
-
     }
 
     @EventHandler
