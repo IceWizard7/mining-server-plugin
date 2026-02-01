@@ -26,6 +26,7 @@ public final class MiningServerPlugin extends JavaPlugin {
     private AutoCompressManager autoCompressManager;
     private VoucherManager voucherManager;
     private WorldGuardManager worldGuardManager;
+    private StatManager scoreBoardManager;
 
     @Override
     public void onEnable() {
@@ -95,6 +96,7 @@ public final class MiningServerPlugin extends JavaPlugin {
         // Visual systems
         this.tabManager = new TabManager(this, vanishManager, luckPerms);
         this.nameTagManager = new NameTagManager(this, luckPerms);
+        this.scoreBoardManager = new StatManager(this);
 
         // Portals
         this.portalManager = new PortalManager(this);
@@ -129,7 +131,8 @@ public final class MiningServerPlugin extends JavaPlugin {
     private void registerListeners() {
         registerListener(new ChatListener(discordBridgeManager, luckPerms));
         registerListener(new WelcomeListener(discordBridgeManager));
-        registerListener(new TabJoinListener(tabManager));
+        registerListener(new JoinListener(tabManager, scoreBoardManager));
+        registerListener(new StatListener(scoreBoardManager));
         registerListener(new VanishListener(this, vanishManager));
         registerListener(new TelepathyListener(this, autoCompressManager));
         registerListener(new SpawnListener(this));
@@ -144,6 +147,8 @@ public final class MiningServerPlugin extends JavaPlugin {
         nameTagManager.startNameTagTask();
         tabManager.startTabTask();
         combatManager.startCombatTask();
+        scoreBoardManager.startScoreboardTask();
+        scoreBoardManager.startAutoSave();
         discordBridgeManager.connect();
     }
 
@@ -155,6 +160,7 @@ public final class MiningServerPlugin extends JavaPlugin {
         if (combatManager != null) combatManager.shutdown();
         if (nameTagManager != null) nameTagManager.shutdown();
         if (tabManager != null) tabManager.shutdown();
+        if (scoreBoardManager != null) scoreBoardManager.shutdown();
         if (discordBridgeManager != null) discordBridgeManager.shutdown();
 
         getLogger().info("MiningServerPlugin has been disabled.");
