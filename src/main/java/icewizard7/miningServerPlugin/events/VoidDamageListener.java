@@ -13,7 +13,7 @@ public class VoidDamageListener implements Listener {
 
         // Check if the damage cause is the void
         if (event.getCause() == EntityDamageEvent.DamageCause.VOID) {
-            event.setDamage(Double.MAX_VALUE); // clean instant death
+            event.setDamage(1000000); // clean instant death
         }
     }
 }
