@@ -76,6 +76,13 @@ warps:
     z: 451
     yaw: -90
     pitch: 0
+  crying_obsidian:
+    world: world
+    x: -359
+    y: 56
+    z: 479
+    yaw: 0
+    pitch: 0
   netherite:
     world: world
     x: -344
@@ -83,11 +90,11 @@ warps:
     z: 484
     yaw: 0
     pitch: 0
-  crying_obsidian:
+  nether_chamber:
     world: world
-    x: -359
-    y: 56
-    z: 479
+    x: -560
+    y: 69
+    z: 599
     yaw: 0
     pitch: 0
   admin:

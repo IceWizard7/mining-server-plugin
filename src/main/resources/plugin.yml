@@ -118,6 +118,7 @@ permissions:
       miningServerPlugin.warp.blackstone: true
       miningServerPlugin.warp.crying_obsidian: true
       miningServerPlugin.warp.netherite: true
+      miningServerPlugin.warp.nether_chamber: true
       miningServerPlugin.warp.admin: false
       miningServerPlugin.warp.pvp: true
 
@@ -153,6 +154,9 @@ permissions:
     default: false
   miningServerPlugin.warp.netherite:
     description: Allows warping to Netherite
+    default: false
+  miningServerPlugin.warp.nether_chamber:
+    description: Allows warping to Nether Trial Chambers
     default: false
   miningServerPlugin.warp.blackstone:
     description: Allows warping to Blackstone
