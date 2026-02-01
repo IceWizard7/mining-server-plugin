@@ -161,21 +161,21 @@ holograms:
   kills:
     world: world
     x: 5
-    y: 43
+    y: 47
     z: -5
     yaw: 0
     pitch: 0
   deaths:
     world: world
     x: -5
-    y: 43
+    y: 47
     z: -5
     yaw: 0
     pitch: 0
   blocks:
     world: world
     x: 0
-    y: 43
+    y: 47
     z: -7
     yaw: 0
     pitch: 0
