@@ -1,9 +1,9 @@
 package icewizard7.miningServerPlugin.managers;
 
-import net.kyori.adventure.text.Component;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.event.EventSubscription;
 import net.luckperms.api.model.user.User;
+import net.luckperms.api.query.QueryOptions;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -18,28 +18,65 @@ public class NameTagManager {
     private final LuckPerms luckPerms;
     private final LuckPermsManager luckPermsManager;
     private final StatManager statManager;
-    private EventSubscription <net.luckperms.api.event.user.UserDataRecalculateEvent> userRecalculateTask;
-    private EventSubscription <net.luckperms.api.event.group.GroupDataRecalculateEvent> groupRecalculateTask;
+
+    private EventSubscription<net.luckperms.api.event.user.UserDataRecalculateEvent> userRecalculateTask;
+    private EventSubscription<net.luckperms.api.event.group.GroupDataRecalculateEvent> groupRecalculateTask;
 
     public NameTagManager(Plugin plugin, LuckPerms luckPerms, LuckPermsManager luckPermsManager, StatManager statManager) {
         this.plugin = plugin;
         this.luckPerms = luckPerms;
         this.luckPermsManager = luckPermsManager;
         this.statManager = statManager;
+
+        // Link back to StatManager
+        this.statManager.setNameTagManager(this);
     }
 
-    public void updateNameTag(Player player) {
+    /**
+     * Called when StatManager creates a BRAND NEW scoreboard for a player.
+     * We must populate this empty board with the tags of everyone else currently online.
+     */
+    public void initNewBoard(Scoreboard board) {
+        for (Player target : Bukkit.getOnlinePlayers()) {
+            applyTagToBoard(target, board);
+        }
+    }
 
-        User user = luckPermsManager.getOrLoadUser(player.getUniqueId());
+    /**
+     * Updates a specific player's nametag across ALL active scoreboards.
+     * Called when a player joins or rank changes.
+     */
+    public void updateNameTag(Player player) {
+        // Update on every active scoreboard (every other player's view)
+        for (Scoreboard board : statManager.getScoreBoards().values()) {
+            applyTagToBoard(player, board);
+        }
+    }
+
+    /**
+     * The logic to calculate rank, create the team, and add the player
+     * on a SPECIFIC scoreboard.
+     */
+    private void applyTagToBoard(Player player, Scoreboard board) {
+        UUID uuid = player.getUniqueId();
+        User user = luckPerms.getUserManager().getUser(uuid);
         if (user == null) return;
 
-        Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
+        // Calculate Sorting Weight (Higher weight = Higher in TabList)
+        // We inverse it (9999 - weight) because Scoreboards sort A-Z (Ascending)
+        int weight = user.getCachedData().getMetaData(QueryOptions.defaultContextualOptions()).getWeight();
+        String order = String.format("%04d", 9999 - weight);
 
-        // Team name based on format, not player
-        UUID uuid = player.getUniqueId();
-        String raw = luckPermsManager.getStringPrefix(uuid) + luckPermsManager.getStringSuffix(uuid);
-        String teamName = "rank_" + Integer.toHexString(raw.hashCode());
+        // generate unique ID for this prefix setup
+        // We group players with the exact same prefix into the same team to save resources
+        String prefixStr = luckPermsManager.getStringPrefix(uuid);
+        String suffixStr = luckPermsManager.getStringSuffix(uuid);
+        String uniqueId = Integer.toHexString((prefixStr + suffixStr).hashCode());
 
+        // Team Name:  "0001_rankHash" -> Ensures sorting + uniqueness
+        String teamName = order + "_" + uniqueId;
+
+        // Get or Create Team
         Team team = board.getTeam(teamName);
         if (team == null) {
             team = board.registerNewTeam(teamName);
@@ -48,34 +85,22 @@ public class NameTagManager {
             team.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.ALWAYS);
         }
 
-        // Remove player from other rank teams
+        // Clean up: Remove player from old teams on THIS board
+        // If the player ranked up, they might be in "0002_Member", we need to move them to "0001_Admin"
         for (Team t : board.getTeams()) {
             if (t.hasEntry(player.getName()) && !t.getName().equals(teamName)) {
                 t.removeEntry(player.getName());
             }
         }
 
-        team.addEntry(player.getName());
-        addEntryToAllScoreboards(teamName, player.getName(),
-                luckPermsManager.getComponentPrefix(uuid),
-                luckPermsManager.getComponentSuffix(uuid));
-    }
-
-    private void addEntryToAllScoreboards(String teamName, String entry, Component prefix, Component suffix) {
-        for (Scoreboard sb : statManager.getScoreBoards().values()) {
-            Team team = sb.getTeam(teamName);
-            if (team == null) {
-                team = sb.registerNewTeam(teamName);
-                team.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.ALWAYS);
-            }
-            team.prefix(prefix);
-            team.suffix(suffix);
-            if (!team.hasEntry(entry)) team.addEntry(entry);
+        // Add if not present
+        if (!team.hasEntry(player.getName())) {
+            team.addEntry(player.getName());
         }
     }
 
     public void startNameTagTask() {
-        // User recalculate
+        // User recalculate (Prefix/Suffix change)
         this.userRecalculateTask = luckPerms.getEventBus().subscribe(plugin,
                 net.luckperms.api.event.user.UserDataRecalculateEvent.class,
                 event -> Bukkit.getScheduler().runTask(plugin, () -> {
@@ -90,18 +115,9 @@ public class NameTagManager {
         this.groupRecalculateTask = luckPerms.getEventBus().subscribe(plugin,
                 net.luckperms.api.event.group.GroupDataRecalculateEvent.class,
                 event -> Bukkit.getScheduler().runTask(plugin, () -> {
-
-                    String groupName = event.getGroup().getName();
-
+                    // Update everyone because we don't know who was in that group easily
                     for (Player player : Bukkit.getOnlinePlayers()) {
-                        User user = luckPerms.getUserManager().getUser(player.getUniqueId());
-                        if (user == null) continue;
-
-                        if (user.getInheritedGroups(user.getQueryOptions()).stream()
-                                .anyMatch(g -> g.getName().equalsIgnoreCase(groupName))) {
-
-                            updateNameTag(player);
-                        }
+                        updateNameTag(player);
                     }
                 })
         );
@@ -112,21 +128,9 @@ public class NameTagManager {
             userRecalculateTask.close();
             userRecalculateTask = null;
         }
-
         if (groupRecalculateTask != null) {
             groupRecalculateTask.close();
             groupRecalculateTask = null;
-        }
-
-        for (Scoreboard sb : statManager.getScoreBoards().values()) {
-            for (Team t : sb.getTeams()) {
-                if (t.getName().startsWith("rank_")) t.unregister();
-            }
-        }
-
-        Scoreboard main = Bukkit.getScoreboardManager().getMainScoreboard();
-        for (Team t : main.getTeams()) {
-            if (t.getName().startsWith("rank_")) t.unregister();
         }
     }
 }

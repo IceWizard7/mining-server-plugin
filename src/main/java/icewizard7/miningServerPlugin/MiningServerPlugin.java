@@ -104,8 +104,8 @@ public final class MiningServerPlugin extends JavaPlugin {
 
         // Visual systems
         this.tabManager = new TabManager(this, vanishManager, luckPermsManager);
-        this.nameTagManager = new NameTagManager(this, luckPerms, luckPermsManager, statManager);
         this.statManager = new StatManager(this);
+        this.nameTagManager = new NameTagManager(this, luckPerms, luckPermsManager, statManager);
         this.leaderboardManager = new LeaderboardManager(this, statManager, luckPermsManager);
 
         // Portals
@@ -155,11 +155,11 @@ public final class MiningServerPlugin extends JavaPlugin {
     }
 
     private void startSystems() {
-        nameTagManager.startNameTagTask();
         tabManager.startTabTask();
         combatManager.startCombatTask();
         statManager.startScoreboardTask();
         statManager.startAutoSave();
+        nameTagManager.startNameTagTask();
         leaderboardManager.startAllLeaderboards();
         discordBridgeManager.connect();
     }
@@ -170,9 +170,9 @@ public final class MiningServerPlugin extends JavaPlugin {
 
         // Check if not null in case enable failed
         if (combatManager != null) combatManager.shutdown();
-        if (nameTagManager != null) nameTagManager.shutdown();
         if (tabManager != null) tabManager.shutdown();
         if (statManager != null) statManager.shutdown();
+        if (nameTagManager != null) nameTagManager.shutdown();
         if (leaderboardManager != null) leaderboardManager.shutdown();
         if (discordBridgeManager != null) discordBridgeManager.shutdown();
 

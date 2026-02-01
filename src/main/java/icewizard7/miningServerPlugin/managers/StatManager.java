@@ -29,6 +29,7 @@ public class StatManager {
             LegacyComponentSerializer.legacySection();
     private final File file;
     private FileConfiguration data;
+    private NameTagManager nameTagManager;
     private final Map<UUID, Scoreboard> scoreBoards = new HashMap<>();
     private static final String[] ENTRIES = {
             "§0","§1","§2","§3","§4","§5","§6","§7","§8","§9",
@@ -52,6 +53,10 @@ public class StatManager {
         }
 
         data = YamlConfiguration.loadConfiguration(file);
+    }
+
+    public void setNameTagManager(NameTagManager nameTagManager) {
+        this.nameTagManager = nameTagManager;
     }
 
     private void save() {
@@ -164,9 +169,15 @@ public class StatManager {
     }
 
     public void updateBoard(Player player) {
+        Scoreboard board = scoreBoards.computeIfAbsent(player.getUniqueId(), k -> {
+            Scoreboard newBoard = Bukkit.getScoreboardManager().getNewScoreboard();
 
-        Scoreboard board = scoreBoards.computeIfAbsent(player.getUniqueId(),
-                k -> Bukkit.getScoreboardManager().getNewScoreboard());
+            // HOOK: Immediately populate this new board with nametags
+            if (nameTagManager != null) {
+                nameTagManager.initNewBoard(newBoard);
+            }
+            return newBoard;
+        });
 
         Objective obj = board.getObjective("stats");
         if (obj == null) {
