@@ -240,6 +240,27 @@ public final class DiscordBridgeManager {
         return "https://mc-heads.net/avatar/" + player.getUniqueId();
     }
 
+    public void sendWelcomeEmbed(Player player) {
+        String avatarUrl = getAvatarUrl(player);
+
+        TextChannel channel = this.getChatChannel();
+
+        if (channel == null) {
+            return;
+        }
+
+        EmbedBuilder embed = new EmbedBuilder();
+
+        embed.setColor(Color.PINK);
+        embed.setTitle("[+] " + player.getName());
+        embed.setThumbnail(avatarUrl);
+        embed.setDescription("New player joined the server.");
+
+        embed.setFooter("Minecraft Server", null);
+
+        channel.sendMessageEmbeds(embed.build()).queue();
+    }
+
     public void sendJoinEmbed(Player player) {
         String avatarUrl = getAvatarUrl(player);
 
