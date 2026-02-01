@@ -1,6 +1,8 @@
 package icewizard7.miningServerPlugin.events;
 
 import icewizard7.miningServerPlugin.managers.CombatManager;
+import icewizard7.miningServerPlugin.managers.WorldGuardManager;
+
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -11,15 +13,20 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 public class CombatListener implements Listener {
     private final CombatManager combatManager;
+    private final WorldGuardManager worldGuardManager;
 
-    public CombatListener(CombatManager combatManager) {
+    public CombatListener(CombatManager combatManager, WorldGuardManager worldGuardManager) {
         this.combatManager = combatManager;
+        this.worldGuardManager = worldGuardManager;
     }
 
     @EventHandler
     public void onCombat(EntityDamageByEntityEvent event) {
-        Entity victim = event.getEntity();
         Entity attacker = event.getDamager();
+        Entity victim = event.getEntity();
+
+        // If you are in a region (ex. Spawn), where PvP isn't even allowed; Just don't tag anything.
+        if (!worldGuardManager.inPvPAllowedRegion(victim)) return;
 
         // If victim is Player -> tag
         if (victim instanceof Player player) {
@@ -32,7 +39,7 @@ public class CombatListener implements Listener {
         }
 
         // Projectile
-        if (event.getDamager() instanceof Projectile projectile) {
+        if (attacker instanceof Projectile projectile) {
             if (projectile.getShooter() instanceof Player player) {
                 combatManager.tagPlayer(player);
             }

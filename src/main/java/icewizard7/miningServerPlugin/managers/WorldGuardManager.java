@@ -1,6 +1,9 @@
 package icewizard7.miningServerPlugin.managers;
 
 import com.sk89q.worldguard.WorldGuard;
+import com.sk89q.worldguard.protection.flags.Flags;
+import com.sk89q.worldguard.protection.regions.RegionQuery;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
@@ -28,5 +31,12 @@ public class WorldGuardManager {
             }
         }
         return false;
+    }
+
+    public boolean inPvPAllowedRegion(Entity victim) {
+        RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
+        ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(victim.getLocation()));
+
+        return set.testState(null, Flags.PVP);
     }
 }

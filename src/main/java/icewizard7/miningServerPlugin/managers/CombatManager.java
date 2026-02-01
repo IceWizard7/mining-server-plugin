@@ -26,6 +26,11 @@ public class CombatManager {
     // Tag player
     public void tagPlayer(Player player) {
         long expireTime = System.currentTimeMillis() + COMBAT_TIME;
+
+        if (player.getAllowFlight()) {
+            player.setAllowFlight(false);
+        }
+
         combatTag.put(player.getUniqueId(), expireTime);
     }
 
