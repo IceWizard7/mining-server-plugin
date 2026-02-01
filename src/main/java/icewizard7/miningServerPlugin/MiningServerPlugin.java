@@ -27,6 +27,7 @@ public final class MiningServerPlugin extends JavaPlugin {
     private VoucherManager voucherManager;
     private WorldGuardManager worldGuardManager;
     private StatManager statManager;
+    private LeaderboardManager leaderboardManager;
 
     @Override
     public void onEnable() {
@@ -55,6 +56,12 @@ public final class MiningServerPlugin extends JavaPlugin {
 
         if (worldGuard == null) {
             getLogger().severe("WorldGuard not found. Disabling MiningServerPlugin.");
+            getServer().getPluginManager().disablePlugin(this);
+            return false;
+        }
+
+        if (getServer().getPluginManager().getPlugin("DecentHolograms") == null) {
+            getLogger().severe("DecentHolograms not found. Disabling MiningServerPlugin.");
             getServer().getPluginManager().disablePlugin(this);
             return false;
         }
@@ -97,6 +104,7 @@ public final class MiningServerPlugin extends JavaPlugin {
         this.tabManager = new TabManager(this, vanishManager, luckPerms);
         this.nameTagManager = new NameTagManager(this, luckPerms);
         this.statManager = new StatManager(this);
+        this.leaderboardManager = new LeaderboardManager(this, statManager);
 
         // Portals
         this.portalManager = new PortalManager(this);
@@ -150,6 +158,7 @@ public final class MiningServerPlugin extends JavaPlugin {
         combatManager.startCombatTask();
         statManager.startScoreboardTask();
         statManager.startAutoSave();
+        leaderboardManager.startAllLeaderboards();
         discordBridgeManager.connect();
     }
 
@@ -162,6 +171,7 @@ public final class MiningServerPlugin extends JavaPlugin {
         if (nameTagManager != null) nameTagManager.shutdown();
         if (tabManager != null) tabManager.shutdown();
         if (statManager != null) statManager.shutdown();
+        if (leaderboardManager != null) leaderboardManager.shutdown();
         if (discordBridgeManager != null) discordBridgeManager.shutdown();
 
         getLogger().info("MiningServerPlugin has been disabled.");

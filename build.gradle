@@ -23,6 +23,11 @@ repositories {
         name = "EngineHub"
         url = "https://maven.enginehub.org/repo/"
     }
+
+    maven {
+        name = "jitpack"
+        url = "https://jitpack.io/"
+    }
 }
 
 dependencies {
@@ -44,6 +49,9 @@ dependencies {
 
     // WorldGuard
     compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.15")
+
+    // DecentHolograms
+    compileOnly('com.github.decentsoftware-eu:decentholograms:2.9.9')
 }
 
 shadowJar {

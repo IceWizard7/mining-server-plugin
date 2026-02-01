@@ -18,8 +18,10 @@ import org.bukkit.scoreboard.Scoreboard;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class StatManager {
     private final Plugin plugin;
@@ -218,5 +220,32 @@ public class StatManager {
         // Player files are named with their UUID + ".dat"
         File playerFile = new File(playerDataFolder, player.getUniqueId() + ".dat");
         return playerFile.exists();
+    }
+
+    public Map<UUID, Integer> getTopPlayers(String stat, int limit) {
+        if (!stat.equals("kills") && !stat.equals("deaths") && !stat.equals("blocks")) {
+            throw new IllegalArgumentException("Invalid stat: " + stat);
+        }
+
+        Map<UUID, Integer> allStats = new HashMap<>();
+
+        if (data.contains("stats")) {
+            for (String key : data.getConfigurationSection("stats").getKeys(false)) {
+                UUID uuid = UUID.fromString(key);
+                int value = data.getInt("stats." + key + "." + stat);
+                allStats.put(uuid, value);
+            }
+        }
+
+        // Sort descending and take top N
+        return allStats.entrySet().stream()
+                .sorted(Map.Entry.<UUID, Integer>comparingByValue().reversed())
+                .limit(limit)
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (a, b) -> a,
+                        LinkedHashMap::new // maintain order
+                ));
     }
 }

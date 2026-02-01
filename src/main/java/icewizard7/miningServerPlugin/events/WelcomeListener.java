@@ -53,7 +53,6 @@ public class WelcomeListener implements Listener {
 
         // Set the join message
         event.quitMessage(quitMessage);
-        // discordBridge.getChatChannel().sendMessage("[-] " + playerName).queue();
         discordBridgeManager.sendQuitEmbed(event.getPlayer());
     }
 }
