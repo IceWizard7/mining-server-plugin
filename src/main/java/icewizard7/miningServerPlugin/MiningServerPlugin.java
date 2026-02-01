@@ -26,7 +26,7 @@ public final class MiningServerPlugin extends JavaPlugin {
     private AutoCompressManager autoCompressManager;
     private VoucherManager voucherManager;
     private WorldGuardManager worldGuardManager;
-    private StatManager scoreBoardManager;
+    private StatManager statManager;
 
     @Override
     public void onEnable() {
@@ -96,7 +96,7 @@ public final class MiningServerPlugin extends JavaPlugin {
         // Visual systems
         this.tabManager = new TabManager(this, vanishManager, luckPerms);
         this.nameTagManager = new NameTagManager(this, luckPerms);
-        this.scoreBoardManager = new StatManager(this);
+        this.statManager = new StatManager(this);
 
         // Portals
         this.portalManager = new PortalManager(this);
@@ -130,9 +130,9 @@ public final class MiningServerPlugin extends JavaPlugin {
 
     private void registerListeners() {
         registerListener(new ChatListener(discordBridgeManager, luckPerms));
-        registerListener(new WelcomeListener(discordBridgeManager));
-        registerListener(new JoinListener(tabManager, scoreBoardManager));
-        registerListener(new StatListener(scoreBoardManager));
+        registerListener(new WelcomeListener(discordBridgeManager, statManager));
+        registerListener(new JoinListener(tabManager, statManager));
+        registerListener(new StatListener(statManager));
         registerListener(new VanishListener(this, vanishManager));
         registerListener(new TelepathyListener(this, autoCompressManager));
         registerListener(new SpawnListener(this));

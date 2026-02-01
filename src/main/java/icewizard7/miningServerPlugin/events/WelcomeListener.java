@@ -1,9 +1,11 @@
 package icewizard7.miningServerPlugin.events;
 
 import icewizard7.miningServerPlugin.managers.DiscordBridgeManager;
+import icewizard7.miningServerPlugin.managers.StatManager;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -12,23 +14,30 @@ import org.bukkit.event.player.PlayerQuitEvent;
 public class WelcomeListener implements Listener {
 
     private final DiscordBridgeManager discordBridgeManager;
+    private final StatManager statManager;
 
-    public WelcomeListener(DiscordBridgeManager discordBridgeManager) {
+    public WelcomeListener(DiscordBridgeManager discordBridgeManager, StatManager statManager) {
         this.discordBridgeManager = discordBridgeManager;
+        this.statManager = statManager;
     }
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        String playerName = event.getPlayer().getName();
+        Player player = event.getPlayer();
+        String playerName = player.getName();
 
         // Build the join message
         Component joinMessage = Component.text("[", NamedTextColor.WHITE)
                 .append(Component.text("+", NamedTextColor.GREEN))
                 .append(Component.text("] " + playerName, NamedTextColor.WHITE));
 
+        if (statManager.hasAlreadyJoined(player)) {
+            Component welcomeMessage = Component.text("Welcome " + playerName + " !", NamedTextColor.DARK_PURPLE);
+            joinMessage = joinMessage.append(Component.newline()).append(welcomeMessage);
+        }
+
         // Set the join message
         event.joinMessage(joinMessage);
-        // discordBridge.getChatChannel().sendMessage("[+] " + playerName).queue();
         discordBridgeManager.sendJoinEmbed(event.getPlayer());
     }
 

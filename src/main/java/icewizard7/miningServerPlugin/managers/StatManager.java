@@ -115,9 +115,7 @@ public class StatManager {
     }
 
     private int getUniqueJoins() {
-        File playerDataFolder = new File(
-                Bukkit.getWorldContainer(), "world/playerdata"
-        );
+        File playerDataFolder = new File(Bukkit.getWorldContainer(), "world/playerdata");
 
         if (!playerDataFolder.exists()) return 0;
 
@@ -210,5 +208,15 @@ public class StatManager {
 
         // Save one last time before shutting down
         save();
+    }
+
+    public boolean hasAlreadyJoined(Player player) {
+        File playerDataFolder = new File(Bukkit.getWorldContainer(), "world/playerdata");
+
+        if (!playerDataFolder.exists()) return false;
+
+        // Player files are named with their UUID + ".dat"
+        File playerFile = new File(playerDataFolder, player.getUniqueId() + ".dat");
+        return playerFile.exists();
     }
 }
