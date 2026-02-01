@@ -30,6 +30,10 @@ public class StatManager {
     private final File file;
     private FileConfiguration data;
     private final Map<UUID, Scoreboard> scoreBoards = new HashMap<>();
+    private static final String[] ENTRIES = {
+            "§0","§1","§2","§3","§4","§5","§6","§7","§8","§9",
+            "§a","§b","§c","§d","§e","§f"
+    };
 
     public StatManager(Plugin plugin) {
         this.plugin = plugin;
@@ -139,8 +143,7 @@ public class StatManager {
 
         team = board.registerNewTeam(id);
 
-        // Unique invisible entry using color codes
-        String entry = "§" + Integer.toHexString(id.hashCode()).substring(0, 1);
+        String entry = ENTRIES[score]; // score = line index, guarantees uniqueness
         team.addEntry(entry);
 
         obj.getScore(entry).setScore(score);
@@ -226,9 +229,15 @@ public class StatManager {
         if (scoreboardTask != null && !scoreboardTask.isCancelled()) {
             scoreboardTask.cancel();
         }
+
         if (autoSaveTask != null && !autoSaveTask.isCancelled()) {
             autoSaveTask.cancel();
         }
+
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            player.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
+        }
+        scoreBoards.clear();
 
         // Save one last time before shutting down
         save();
