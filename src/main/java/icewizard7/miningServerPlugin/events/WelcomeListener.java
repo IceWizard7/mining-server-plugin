@@ -31,14 +31,16 @@ public class WelcomeListener implements Listener {
                 .append(Component.text("+", NamedTextColor.GREEN))
                 .append(Component.text("] " + playerName, NamedTextColor.WHITE));
 
+        // Set the join message
         if (!statManager.hasAlreadyJoined(player)) {
             Component welcomeMessage = Component.text("Welcome to FutureMines, " + playerName + "!", NamedTextColor.LIGHT_PURPLE);
-            joinMessage = joinMessage.append(Component.newline()).append(welcomeMessage);
+            event.joinMessage(joinMessage.append(Component.newline()).append(welcomeMessage));
+            discordBridgeManager.sendWelcomeEmbed(event.getPlayer());
+        } else {
+            event.joinMessage(joinMessage);
+            discordBridgeManager.sendJoinEmbed(event.getPlayer());
         }
 
-        // Set the join message
-        event.joinMessage(joinMessage);
-        discordBridgeManager.sendJoinEmbed(event.getPlayer());
     }
 
     @EventHandler
