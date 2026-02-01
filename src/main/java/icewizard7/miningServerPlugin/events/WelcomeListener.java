@@ -31,8 +31,8 @@ public class WelcomeListener implements Listener {
                 .append(Component.text("+", NamedTextColor.GREEN))
                 .append(Component.text("] " + playerName, NamedTextColor.WHITE));
 
-        if (statManager.hasAlreadyJoined(player)) {
-            Component welcomeMessage = Component.text("Welcome " + playerName + " !", NamedTextColor.DARK_PURPLE);
+        if (!statManager.hasAlreadyJoined(player)) {
+            Component welcomeMessage = Component.text("Welcome to FutureMines, " + playerName + "!", NamedTextColor.LIGHT_PURPLE);
             joinMessage = joinMessage.append(Component.newline()).append(welcomeMessage);
         }
 
