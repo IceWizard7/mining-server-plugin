@@ -148,8 +148,8 @@ public final class MiningServerPlugin extends JavaPlugin {
         nameTagManager.startNameTagTask();
         tabManager.startTabTask();
         combatManager.startCombatTask();
-        scoreBoardManager.startScoreboardTask();
-        scoreBoardManager.startAutoSave();
+        statManager.startScoreboardTask();
+        statManager.startAutoSave();
         discordBridgeManager.connect();
     }
 
@@ -161,7 +161,7 @@ public final class MiningServerPlugin extends JavaPlugin {
         if (combatManager != null) combatManager.shutdown();
         if (nameTagManager != null) nameTagManager.shutdown();
         if (tabManager != null) tabManager.shutdown();
-        if (scoreBoardManager != null) scoreBoardManager.shutdown();
+        if (statManager != null) statManager.shutdown();
         if (discordBridgeManager != null) discordBridgeManager.shutdown();
 
         getLogger().info("MiningServerPlugin has been disabled.");
