@@ -54,7 +54,6 @@ public class LeaderboardManager {
         tasks.put(stat, task);
     }
 
-
     public void startAllLeaderboards() {
         startLeaderboard("kills");
         startLeaderboard("deaths");
