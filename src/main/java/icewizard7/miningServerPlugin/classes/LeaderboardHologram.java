@@ -24,13 +24,14 @@ public class LeaderboardHologram {
 
         // Build lines
         List<String> lines = new ArrayList<>();
-        lines.add(stat.substring(0, 1).toUpperCase() + stat.substring(1) + " Leaderboard");
+        lines.add("&c&l" + stat.substring(0, 1).toUpperCase() + stat.substring(1) + " Leaderboard");
+        lines.add("");
 
         int rank = 1;
         for (Map.Entry<UUID, String> entry : topPlayers.entrySet()) {
             String playerName = Bukkit.getOfflinePlayer(entry.getKey()).getName();
             if (playerName == null) playerName = "Unknown";
-            lines.add(rank + ". " + playerName + " » " + entry.getValue());
+            lines.add("&4" + rank + ". &c" + playerName + "&f (" + entry.getValue() + " " + stat + ")");
             rank++;
         }
 
@@ -43,13 +44,14 @@ public class LeaderboardHologram {
         if (hologram == null) return;
 
         List<String> newLines = new ArrayList<>();
-        newLines.add(stat.substring(0, 1).toUpperCase() + stat.substring(1) + " Leaderboard");
+        newLines.add("&c&l" + stat.substring(0, 1).toUpperCase() + stat.substring(1) + " Leaderboard");
+        newLines.add("");
 
         int rank = 1;
         for (Map.Entry<UUID, String> entry : topPlayers.entrySet()) {
             String playerName = Bukkit.getOfflinePlayer(entry.getKey()).getName();
             if (playerName == null) playerName = "Unknown";
-            newLines.add(rank + ". " + playerName + " » " + entry.getValue());
+            newLines.add("&4" + rank + ". &c" + playerName + "&f (" + entry.getValue() + " " + stat + ")");
             rank++;
         }
 
