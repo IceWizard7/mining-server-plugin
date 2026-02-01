@@ -33,6 +33,7 @@ Discord Invite Link: `discord.gg/8ce6N8QXpm`
 
 ### Dependencies
 - LuckPerms (Minecraft Plugin)
+- WorldGuard (Minecraft Plugin)
 - JDA (Java Discord API)
 
 ### License
