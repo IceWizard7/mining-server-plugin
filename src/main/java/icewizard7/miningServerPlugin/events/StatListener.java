@@ -8,10 +8,10 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 public class StatListener implements Listener {
-    private final StatManager manager;
+    private final StatManager statManager;
 
-    public StatListener(StatManager manager) {
-        this.manager = manager;
+    public StatListener(StatManager statManager) {
+        this.statManager = statManager;
     }
 
     @EventHandler
@@ -20,14 +20,14 @@ public class StatListener implements Listener {
         Player killer = victim.getKiller(); // null if not killed by player
 
         // Add death to victim
-        manager.killEvent(killer, victim);
+        statManager.killEvent(killer, victim);
     }
 
-    // ⛏ Block mine
+    // Block mine
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
         if (event.isCancelled()) return;
 
-        manager.blockMineEvent(event.getPlayer());
+        statManager.blockMineEvent(event.getPlayer());
     }
 }

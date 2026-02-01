@@ -141,6 +141,7 @@ public final class MiningServerPlugin extends JavaPlugin {
         registerListener(new PortalListener(portalManager));
         registerListener(new CombatListener(combatManager, worldGuardManager));
         registerListener(new ElytraListener(combatManager, worldGuardManager));
+        registerListener(new VoidDamageListener());
     }
 
     private void startSystems() {
