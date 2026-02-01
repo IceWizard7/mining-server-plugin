@@ -10,10 +10,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
-import org.bukkit.scoreboard.Criteria;
-import org.bukkit.scoreboard.DisplaySlot;
-import org.bukkit.scoreboard.Objective;
-import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -136,55 +133,77 @@ public class StatManager {
         return String.valueOf(num);
     }
 
+    private void createLine(Scoreboard board, Objective obj, String id, int score) {
+        Team team = board.getTeam(id);
+        if (team != null) return;
+
+        team = board.registerNewTeam(id);
+
+        // Unique invisible entry using color codes
+        String entry = "§" + Integer.toHexString(id.hashCode()).substring(0, 1);
+        team.addEntry(entry);
+
+        obj.getScore(entry).setScore(score);
+    }
+
+    private void setLine(Scoreboard board, String id, Component text) {
+        Team team = board.getTeam(id);
+        if (team == null) return;
+
+        team.prefix(text);
+    }
+
+    private Component statLine(String name, Object value, Component separator) {
+        return Component.text("┃ ", NamedTextColor.BLUE)
+                .append(Component.text(name, NamedTextColor.AQUA))
+                .append(separator)
+                .append(Component.text(String.valueOf(value), NamedTextColor.WHITE));
+    }
+
     public void updateBoard(Player player) {
+
         Scoreboard board = scoreBoards.computeIfAbsent(player.getUniqueId(),
                 k -> Bukkit.getScoreboardManager().getNewScoreboard());
+
         Objective obj = board.getObjective("stats");
-        if (obj != null) {
-            for (String entry : board.getEntries()) {
-                obj.getScoreboard().resetScores(entry);
-            }
-        } else {
+        if (obj == null) {
             obj = board.registerNewObjective("stats", Criteria.DUMMY,
                     Component.text("FutureMines", NamedTextColor.WHITE));
             obj.setDisplaySlot(DisplaySlot.SIDEBAR);
         }
 
-        obj.setDisplaySlot(DisplaySlot.SIDEBAR);
+        // Create lines once
+        createLine(board, obj, "l1", 9);
+        createLine(board, obj, "l2", 8);
+        createLine(board, obj, "l3", 7);
+        createLine(board, obj, "l4", 6);
+        createLine(board, obj, "l5", 5);
+        createLine(board, obj, "l6", 4);
+        createLine(board, obj, "l7", 3);
+        createLine(board, obj, "l8", 2);
+        createLine(board, obj, "l9", 1);
+        createLine(board, obj, "l10", 0);
 
         int kills = getKills(player.getUniqueId());
         int deaths = getDeaths(player.getUniqueId());
         double kdr = deaths == 0 ? kills : (double) kills / deaths;
-
         int blocks = getBlocks(player.getUniqueId());
         int global = getGlobalBlocks();
-
         double tps = Math.min(20.0, Bukkit.getServer().getTPS()[0]);
         int uniqueJoins = getUniqueJoins();
 
         Component separator = Component.text(" » ", NamedTextColor.GRAY);
 
-        Component lineOne = Component.text("Your Stats", NamedTextColor.BLUE).decorate(TextDecoration.BOLD);;
-        Component lineTwo = Component.text("┃ ", NamedTextColor.BLUE).append(Component.text("Kills", NamedTextColor.AQUA).append(separator).append(Component.text(kills, NamedTextColor.WHITE)));
-        Component lineThree = Component.text("┃ ", NamedTextColor.BLUE).append(Component.text("Deaths", NamedTextColor.AQUA).append(separator).append(Component.text(deaths, NamedTextColor.WHITE)));
-        Component lineFour = Component.text("┃ ", NamedTextColor.BLUE).append(Component.text( "KDR", NamedTextColor.AQUA).append(separator).append(Component.text(String.format("%.2f", kdr), NamedTextColor.WHITE)));
-        Component lineFive = Component.text("Block Stats", NamedTextColor.BLUE).decorate(TextDecoration.BOLD);;
-        Component lineSix = Component.text("┃ ", NamedTextColor.BLUE).append(Component.text( "Mined", NamedTextColor.AQUA).append(separator).append(Component.text(format(blocks), NamedTextColor.WHITE)));
-        Component lineSeven = Component.text("┃ ", NamedTextColor.BLUE).append(Component.text( "Global Mined", NamedTextColor.AQUA).append(separator).append(Component.text(format(global), NamedTextColor.WHITE)));
-        Component lineEight = Component.text("Server Stats", NamedTextColor.BLUE).decorate(TextDecoration.BOLD);;
-        Component lineNine = Component.text("┃ ", NamedTextColor.BLUE).append(Component.text("TPS", NamedTextColor.AQUA).append(separator).append(Component.text(String.format("%.2f", tps), NamedTextColor.WHITE)));
-        Component lineTen = Component.text("┃ ", NamedTextColor.BLUE).append(Component.text("Unique Joins", NamedTextColor.AQUA).append(separator).append(Component.text(format(uniqueJoins), NamedTextColor.WHITE)));
-
-        obj.getScore(LEGACY.serialize(lineOne)).setScore(9);
-        obj.getScore(LEGACY.serialize(lineTwo)).setScore(8);
-        obj.getScore(LEGACY.serialize(lineThree)).setScore(7);
-        obj.getScore(LEGACY.serialize(lineFour)).setScore(6);
-        obj.getScore(LEGACY.serialize(lineFive)).setScore(5);
-        obj.getScore(LEGACY.serialize(lineSix)).setScore(4);
-        obj.getScore(LEGACY.serialize(lineSeven)).setScore(3);
-        obj.getScore(LEGACY.serialize(lineEight)).setScore(2);
-        obj.getScore(LEGACY.serialize(lineNine)).setScore(1);
-        obj.getScore(LEGACY.serialize(lineTen)).setScore(0);
+        setLine(board, "l1", Component.text("Your Stats", NamedTextColor.BLUE, TextDecoration.BOLD));
+        setLine(board, "l2", statLine("Kills", kills, separator));
+        setLine(board, "l3", statLine("Deaths", deaths, separator));
+        setLine(board, "l4", statLine("KDR", String.format("%.2f", kdr), separator));
+        setLine(board, "l5", Component.text("Block Stats", NamedTextColor.BLUE, TextDecoration.BOLD));
+        setLine(board, "l6", statLine("Mined", format(blocks), separator));
+        setLine(board, "l7", statLine("Global Mined", format(global), separator));
+        setLine(board, "l8", Component.text("Server Stats", NamedTextColor.BLUE, TextDecoration.BOLD));
+        setLine(board, "l9", statLine("TPS", String.format("%.2f", tps), separator));
+        setLine(board, "l10", statLine("Unique Joins", format(uniqueJoins), separator));
 
         player.setScoreboard(board);
     }
