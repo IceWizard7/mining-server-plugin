@@ -288,6 +288,10 @@ public class StatManager {
         return topMap;
     }
 
+    public Map<UUID, Scoreboard> getScoreBoards() {
+        return scoreBoards;
+    }
+
     public void quitEvent(Player player) {
         scoreBoards.remove(player.getUniqueId());
     }

@@ -104,7 +104,7 @@ public final class MiningServerPlugin extends JavaPlugin {
 
         // Visual systems
         this.tabManager = new TabManager(this, vanishManager, luckPermsManager);
-        this.nameTagManager = new NameTagManager(this, luckPerms, luckPermsManager);
+        this.nameTagManager = new NameTagManager(this, luckPerms, luckPermsManager, statManager);
         this.statManager = new StatManager(this);
         this.leaderboardManager = new LeaderboardManager(this, statManager, luckPermsManager);
 
