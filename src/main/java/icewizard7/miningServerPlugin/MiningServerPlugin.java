@@ -141,7 +141,7 @@ public final class MiningServerPlugin extends JavaPlugin {
     private void registerListeners() {
         registerListener(new ChatListener(discordBridgeManager, luckPerms));
         registerListener(new WelcomeListener(discordBridgeManager, statManager));
-        registerListener(new JoinListener(tabManager, statManager));
+        registerListener(new JoinQuitListener(tabManager, statManager));
         registerListener(new StatListener(statManager));
         registerListener(new VanishListener(this, vanishManager));
         registerListener(new TelepathyListener(this, autoCompressManager));

@@ -138,11 +138,13 @@ public class StatManager {
 
     public void updateBoard(Player player) {
         Scoreboard board = scoreBoards.computeIfAbsent(player.getUniqueId(),
-                k -> Bukkit.getScoreboardManager().getMainScoreboard());
-        board.getEntries().forEach(board::resetScores);
-
+                k -> Bukkit.getScoreboardManager().getNewScoreboard());
         Objective obj = board.getObjective("stats");
-        if (obj == null) {
+        if (obj != null) {
+            for (String entry : board.getEntries()) {
+                obj.getScoreboard().resetScores(entry);
+            }
+        } else {
             obj = board.registerNewObjective("stats", Criteria.DUMMY,
                     Component.text("FutureMines", NamedTextColor.WHITE));
             obj.setDisplaySlot(DisplaySlot.SIDEBAR);
@@ -256,5 +258,9 @@ public class StatManager {
         }
 
         return topMap;
+    }
+
+    public void quitEvent(Player player) {
+        scoreBoards.remove(player.getUniqueId());
     }
 }

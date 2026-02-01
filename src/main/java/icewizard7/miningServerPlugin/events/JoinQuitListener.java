@@ -8,12 +8,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import icewizard7.miningServerPlugin.managers.TabManager;
+import org.bukkit.event.player.PlayerQuitEvent;
 
-public class JoinListener implements Listener {
+public class JoinQuitListener implements Listener {
     private final TabManager tabManager;
     private final StatManager statManager;
 
-    public JoinListener(TabManager tabManager, StatManager statManager) {
+    public JoinQuitListener(TabManager tabManager, StatManager statManager) {
         this.tabManager = tabManager;
         this.statManager = statManager;
     }
@@ -25,5 +26,10 @@ public class JoinListener implements Listener {
             tabManager.updateTab(player);
             statManager.updateBoard(player);
         }
+    }
+
+    @EventHandler
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        statManager.quitEvent(event.getPlayer());
     }
 }
