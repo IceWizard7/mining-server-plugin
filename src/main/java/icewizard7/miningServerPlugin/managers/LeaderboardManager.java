@@ -11,13 +11,11 @@ import org.bukkit.scheduler.BukkitTask;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-import java.util.logging.Logger;
 
 public class LeaderboardManager {
     private final Plugin plugin;
     private final FileConfiguration config;
     private final StatManager statManager;
-    private final Logger logger;
 
     private final Map<String, LeaderboardHologram> holograms = new HashMap<>();
     private final Map<String, BukkitTask> tasks = new HashMap<>();
@@ -26,7 +24,6 @@ public class LeaderboardManager {
     public LeaderboardManager(Plugin plugin, StatManager statManager) {
         this.plugin = plugin;
         this.config = plugin.getConfig();
-        this.logger = plugin.getLogger();
         this.statManager = statManager;
     }
 
@@ -38,8 +35,6 @@ public class LeaderboardManager {
         double z = config.getDouble("holograms." + hologramName + ".z");
         float yaw = (float) config.getDouble("holograms." + hologramName + ".yaw");
         float pitch = (float) config.getDouble("holograms." + hologramName + ".pitch");
-
-        logger.info("Spawning " + hologramName + " leaderboard at: " + x + "," + y + "," + z + " in world " + worldName);
 
         return new Location(world, x + 0.5, y, z + 0.5, yaw, pitch);
     }
