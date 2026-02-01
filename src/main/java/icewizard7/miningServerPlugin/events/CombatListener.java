@@ -9,6 +9,7 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 public class CombatListener implements Listener {
@@ -44,6 +45,11 @@ public class CombatListener implements Listener {
                 combatManager.tagPlayer(player);
             }
         }
+    }
+
+    @EventHandler
+    public void onDeath(PlayerDeathEvent event) {
+        combatManager.untagPlayer(event.getPlayer());
     }
 
     @EventHandler
