@@ -46,7 +46,7 @@ public class LeaderboardManager {
 
     public void startLeaderboard(String stat) {
         BukkitTask task = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
-            Map<UUID, Integer> top = statManager.getTopPlayers(stat, 10);
+            Map<UUID, String> top = statManager.getTopPlayers(stat, 10);
             LeaderboardHologram holo = holograms.get(stat);
             if (holo != null && holo.isSpawned()) {  // add isSpawned() check
                 holo.updateLeaderboard(stat, top);

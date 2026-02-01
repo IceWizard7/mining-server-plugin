@@ -13,7 +13,7 @@ import java.util.UUID;
 public class LeaderboardHologram {
     private Hologram hologram;
 
-    public void spawnLeaderboard(Location location, String name, String stat, Map<UUID, Integer> topPlayers) {
+    public void spawnLeaderboard(Location location, String name, String stat, Map<UUID, String> topPlayers) {
         // Remove old if exists
         if (hologram != null) {
             hologram.delete();
@@ -27,7 +27,7 @@ public class LeaderboardHologram {
         lines.add(stat.substring(0, 1).toUpperCase() + stat.substring(1) + " Leaderboard");
 
         int rank = 1;
-        for (Map.Entry<UUID, Integer> entry : topPlayers.entrySet()) {
+        for (Map.Entry<UUID, String> entry : topPlayers.entrySet()) {
             String playerName = Bukkit.getOfflinePlayer(entry.getKey()).getName();
             if (playerName == null) playerName = "Unknown";
             lines.add(rank + ". " + playerName + " » " + entry.getValue());
@@ -39,14 +39,14 @@ public class LeaderboardHologram {
         System.out.println("Hologram lines for " + stat + ": " + lines);
     }
 
-    public void updateLeaderboard(String stat, Map<UUID, Integer> topPlayers) {
+    public void updateLeaderboard(String stat, Map<UUID, String> topPlayers) {
         if (hologram == null) return;
 
         List<String> newLines = new ArrayList<>();
         newLines.add(stat.substring(0, 1).toUpperCase() + stat.substring(1) + " Leaderboard");
 
         int rank = 1;
-        for (Map.Entry<UUID, Integer> entry : topPlayers.entrySet()) {
+        for (Map.Entry<UUID, String> entry : topPlayers.entrySet()) {
             String playerName = Bukkit.getOfflinePlayer(entry.getKey()).getName();
             if (playerName == null) playerName = "Unknown";
             newLines.add(rank + ". " + playerName + " » " + entry.getValue());

@@ -21,6 +21,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 public class StatManager {
@@ -222,7 +224,7 @@ public class StatManager {
         return playerFile.exists();
     }
 
-    public Map<UUID, Integer> getTopPlayers(String stat, int limit) {
+    public Map<UUID, String> getTopPlayers(String stat, int limit) {
         if (!stat.equals("kills") && !stat.equals("deaths") && !stat.equals("blocks")) {
             throw new IllegalArgumentException("Invalid stat: " + stat);
         }
@@ -237,15 +239,23 @@ public class StatManager {
             }
         }
 
-        // Sort descending and take top N
-        return allStats.entrySet().stream()
-                .sorted(Map.Entry.<UUID, Integer>comparingByValue().reversed())
+        // Get all entries as a list
+        List<Map.Entry<UUID, Integer>> entries = new ArrayList<>(allStats.entrySet());
+
+        // Sort descending by value
+        entries.sort((e1, e2) -> e2.getValue().compareTo(e1.getValue()));
+
+        // Take the top 'limit' entries
+        List<Map.Entry<UUID, Integer>> topEntries = entries.stream()
                 .limit(limit)
-                .collect(Collectors.toMap(
-                        Map.Entry::getKey,
-                        Map.Entry::getValue,
-                        (a, b) -> a,
-                        LinkedHashMap::new // maintain order
-                ));
+                .toList();
+
+        // Put them into a LinkedHashMap to preserve order
+        Map<UUID, String> topMap = new LinkedHashMap<>();
+        for (Map.Entry<UUID, Integer> entry : topEntries) {
+            topMap.put(entry.getKey(), format(entry.getValue()));
+        }
+
+        return topMap;
     }
 }
