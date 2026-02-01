@@ -135,7 +135,7 @@ public class StatManager {
 
     public void updateBoard(Player player) {
         Scoreboard board = scoreBoards.computeIfAbsent(player.getUniqueId(),
-                k -> Bukkit.getScoreboardManager().getNewScoreboard());
+                k -> Bukkit.getScoreboardManager().getMainScoreboard());
         board.getEntries().forEach(board::resetScores);
 
         Objective obj = board.getObjective("stats");
