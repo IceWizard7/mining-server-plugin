@@ -2,8 +2,10 @@ package icewizard7.miningServerPlugin.classes;
 
 import eu.decentsoftware.holograms.api.DHAPI;
 import eu.decentsoftware.holograms.api.holograms.Hologram;
+import icewizard7.miningServerPlugin.managers.LuckPermsManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +14,11 @@ import java.util.UUID;
 
 public class LeaderboardHologram {
     private Hologram hologram;
+    private final LuckPermsManager luckPermsManager;
+
+    public LeaderboardHologram(LuckPermsManager luckPermsManager) {
+        this.luckPermsManager = luckPermsManager;
+    }
 
     public void spawnLeaderboard(Location location, String name, String stat, Map<UUID, String> topPlayers) {
         // Remove old if exists
@@ -29,9 +36,13 @@ public class LeaderboardHologram {
 
         int rank = 1;
         for (Map.Entry<UUID, String> entry : topPlayers.entrySet()) {
-            String playerName = Bukkit.getOfflinePlayer(entry.getKey()).getName();
+            UUID uuid = entry.getKey();
+            OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
+            String playerName = player.getName();
+            String prefix = luckPermsManager.getStringPrefix(uuid);
+            if (prefix == null) prefix = "";
             if (playerName == null) playerName = "Unknown";
-            lines.add("&4" + rank + ". &c" + playerName + "&f (" + entry.getValue() + " " + stat + ")");
+            lines.add("&4" + rank + ". &c" + prefix + " " + playerName + "&f (" + entry.getValue() + " " + stat + ")");
             rank++;
         }
 
@@ -49,9 +60,13 @@ public class LeaderboardHologram {
 
         int rank = 1;
         for (Map.Entry<UUID, String> entry : topPlayers.entrySet()) {
-            String playerName = Bukkit.getOfflinePlayer(entry.getKey()).getName();
+            UUID uuid = entry.getKey();
+            OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
+            String playerName = player.getName();
+            String prefix = luckPermsManager.getStringPrefix(uuid);
+            if (prefix == null) prefix = "";
             if (playerName == null) playerName = "Unknown";
-            newLines.add("&4" + rank + ". &c" + playerName + "&f (" + entry.getValue() + " " + stat + ")");
+            newLines.add("&4" + rank + ". &c" + prefix + " " + playerName + "&f (" + entry.getValue() + " " + stat + ")");
             rank++;
         }
 

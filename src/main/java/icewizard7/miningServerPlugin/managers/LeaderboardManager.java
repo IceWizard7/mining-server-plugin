@@ -14,6 +14,7 @@ import java.util.UUID;
 
 public class LeaderboardManager {
     private final Plugin plugin;
+    private final LuckPermsManager luckPermsManager;
     private final FileConfiguration config;
     private final StatManager statManager;
 
@@ -21,10 +22,11 @@ public class LeaderboardManager {
     private final Map<String, BukkitTask> tasks = new HashMap<>();
     private final long refreshTicks = 20L * 60; // 60 seconds
 
-    public LeaderboardManager(Plugin plugin, StatManager statManager) {
+    public LeaderboardManager(Plugin plugin, StatManager statManager, LuckPermsManager luckPermsManager) {
         this.plugin = plugin;
         this.config = plugin.getConfig();
         this.statManager = statManager;
+        this.luckPermsManager = luckPermsManager;
     }
 
     private Location getLocation(String hologramName) {
@@ -46,7 +48,7 @@ public class LeaderboardManager {
             if (holo != null && holo.isSpawned()) {  // add isSpawned() check
                 holo.updateLeaderboard(stat, top);
             } else {
-                holo = new LeaderboardHologram();
+                holo = new LeaderboardHologram(luckPermsManager);
                 holo.spawnLeaderboard(getLocation(stat), stat + "Leaderboard", stat, top);
                 holograms.put(stat, holo);
             }

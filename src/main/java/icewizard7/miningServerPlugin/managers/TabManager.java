@@ -11,40 +11,31 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.util.UUID;
+
 public class TabManager {
     private final Plugin plugin;
     private final VanishManager vanishManager;
-    private final LuckPerms luckPerms;
+    private final LuckPermsManager luckPermsManager;
     private BukkitTask tabTask;
 
-    public TabManager(Plugin plugin, VanishManager vanishManager, LuckPerms luckPerms) {
+    public TabManager(Plugin plugin, VanishManager vanishManager, LuckPermsManager luckPermsManager) {
         this.plugin = plugin;
         this.vanishManager = vanishManager;
-        this.luckPerms = luckPerms;
+        this.luckPermsManager = luckPermsManager;
     }
 
     public void updateTab(Player player) {
-        User user = luckPerms.getUserManager().getUser(player.getUniqueId());
+        User user = luckPermsManager.getOrLoadUser(player.getUniqueId());
         Component playerListName = Component.text(player.getName()); // Default
 
         if (user != null) {
-            int weight = user.getPrimaryGroup() != null
-                    ? luckPerms.getGroupManager().getGroup(user.getPrimaryGroup()).getWeight().orElse(0)
-                    : 0;
-
+            UUID uuid = player.getUniqueId();
+            int weight = luckPermsManager.getWeight(uuid);
             player.setPlayerListOrder(weight);
 
-            QueryOptions queryOptions = luckPerms.getContextManager().getQueryOptions(player);
-            String prefix = user.getCachedData().getMetaData(queryOptions).getPrefix();
-            String suffix = user.getCachedData().getMetaData(queryOptions).getSuffix();
-
-            var serializer = LegacyComponentSerializer.legacyAmpersand();
-
-            Component prefixComp = (prefix != null) ? serializer.deserialize(prefix) : Component.empty();
-            Component suffixComp = (suffix != null) ? serializer.deserialize(suffix) : Component.empty();
-
             // Combine Prefix + Name + Suffix
-            playerListName = prefixComp.append(player.name()).append(suffixComp);
+            playerListName = luckPermsManager.getComponentPrefix(uuid).append(player.name()).append(luckPermsManager.getComponentSuffix(uuid));
         }
 
         player.playerListName(playerListName);

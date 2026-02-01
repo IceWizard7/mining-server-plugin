@@ -17,6 +17,7 @@ public final class MiningServerPlugin extends JavaPlugin {
     private LuckPerms luckPerms;
     private WorldGuard worldGuard;
     private VanishManager vanishManager;
+    private LuckPermsManager luckPermsManager;
     private TabManager tabManager;
     private NameTagManager nameTagManager;
     private PortalManager portalManager;
@@ -99,12 +100,13 @@ public final class MiningServerPlugin extends JavaPlugin {
         // Core player managers
         this.vanishManager = new VanishManager(this);
         this.combatManager = new CombatManager(this);
+        this.luckPermsManager = new LuckPermsManager(luckPerms);
 
         // Visual systems
-        this.tabManager = new TabManager(this, vanishManager, luckPerms);
-        this.nameTagManager = new NameTagManager(this, luckPerms);
+        this.tabManager = new TabManager(this, vanishManager, luckPermsManager);
+        this.nameTagManager = new NameTagManager(this, luckPerms, luckPermsManager);
         this.statManager = new StatManager(this);
-        this.leaderboardManager = new LeaderboardManager(this, statManager);
+        this.leaderboardManager = new LeaderboardManager(this, statManager, luckPermsManager);
 
         // Portals
         this.portalManager = new PortalManager(this);
