@@ -55,6 +55,13 @@ warps:
     z: -43
     yaw: 90
     pitch: 0
+  overworld_chamber:
+    world: world
+    x: 107
+    y: 52
+    z: -510
+    yaw: 0
+    pitch: 0
   nether:
     world: world
     x: -352

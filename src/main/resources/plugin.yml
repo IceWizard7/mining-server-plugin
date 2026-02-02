@@ -117,6 +117,7 @@ permissions:
       miningServerPlugin.warp.gold: true
       miningServerPlugin.warp.diamond: true
       miningServerPlugin.warp.emerald: true
+      miningServerPlugin.warp.overworld_chamber: true
       miningServerPlugin.warp.nether: true
       miningServerPlugin.warp.quartz: true
       miningServerPlugin.warp.blackstone: true
@@ -149,6 +150,9 @@ permissions:
     default: false
   miningServerPlugin.warp.emerald:
     description: Allows warping to Emerald
+    default: false
+  miningServerPlugin.warp.overworld_chamber:
+    description: Allows warping to Overworld Trial Chambers
     default: false
   miningServerPlugin.warp.nether:
     description: Allows warping to Nether
