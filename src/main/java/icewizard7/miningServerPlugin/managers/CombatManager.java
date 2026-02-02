@@ -2,6 +2,8 @@ package icewizard7.miningServerPlugin.managers;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -11,6 +13,7 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityToggleGlideEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
@@ -129,6 +132,17 @@ public class CombatManager {
             player.sendMessage(Component.text("You cannot use Elytra while in combat!", NamedTextColor.RED));
             event.setCancelled(true); // Blocks Elytra flight
         }
+    }
+
+    public void joinEvent(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
+
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            AttributeInstance attribute = player.getAttribute(Attribute.MAX_HEALTH);
+            if (attribute != null) {
+                player.setHealth(attribute.getValue());
+            }
+        }, 2L);  // delay by 2 ticks (just to be safe)
     }
 
     public void deathEvent(PlayerDeathEvent event) {

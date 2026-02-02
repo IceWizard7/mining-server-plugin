@@ -92,6 +92,14 @@ public class StatManager {
         return data.getInt("globalStats.globalBlocks");
     }
 
+    private int getGlobalKills() {
+        return data.getInt("globalStats.globalKills");
+    }
+
+    private int getGlobalDeaths() {
+        return data.getInt("globalStats.globalDeaths");
+    }
+
     private void addKill(UUID uuid) {
         ensurePlayer(uuid);
         int kills = getKills(uuid);
@@ -115,14 +123,26 @@ public class StatManager {
         data.set("globalStats.globalBlocks", globalBlocks + 1);
     }
 
+    private void addGlobalKill() {
+        int globalBlocks = getGlobalKills();
+        data.set("globalStats.globalKills", globalBlocks + 1);
+    }
+
+    private void addGlobalDeath() {
+        int globalBlocks = getGlobalDeaths();
+        data.set("globalStats.globalDeaths", globalBlocks + 1);
+    }
+
     public void deathEvent(PlayerDeathEvent event) {
         Player victim = event.getEntity();
         Player attacker = victim.getKiller(); // null if not killed by player
 
         if (attacker != null && attacker != victim) {
             addKill(attacker.getUniqueId());
+            addGlobalKill();
         }
         addDeath(victim.getUniqueId());
+        addGlobalDeath();
     }
 
     public void blockMineEvent(BlockBreakEvent event) {

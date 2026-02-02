@@ -39,6 +39,7 @@ public class PlayerLifecycleListener implements Listener {
         nameTagManager.joinEvent(event);
         vanishManager.joinEvent(event);
         spawnManager.joinEvent(event);
+        combatManager.joinEvent(event);
         joinQuitMessageManager.joinEvent(event);
     }
 
