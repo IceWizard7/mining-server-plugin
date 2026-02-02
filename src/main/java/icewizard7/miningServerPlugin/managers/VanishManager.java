@@ -13,25 +13,19 @@ import java.util.UUID;
 public class VanishManager {
     private final Plugin plugin;
     private final Set<UUID> vanishedPlayers = new HashSet<>();;
+    private final JoinQuitManager joinQuitManager;
 
-    public VanishManager(Plugin plugin) {
+    public VanishManager(Plugin plugin, JoinQuitManager joinQuitManager) {
         this.plugin = plugin;
+        this.joinQuitManager = joinQuitManager;
     }
 
     private void fakeJoinMessage(Player player) {
-        Component message = Component.text("[", NamedTextColor.WHITE)
-                .append(Component.text("+", NamedTextColor.GREEN))
-                .append(Component.text("] " + player.getName(), NamedTextColor.WHITE));
-
-        Bukkit.broadcast(message);
+        joinQuitManager.sendJoinMessage(player);
     }
 
     private void fakeQuitMessage(Player player) {
-        Component message = Component.text("[", NamedTextColor.WHITE)
-                .append(Component.text("-", NamedTextColor.RED))
-                .append(Component.text("] " + player.getName(), NamedTextColor.WHITE));
-
-        Bukkit.broadcast(message);
+        joinQuitManager.sendQuitMessage(player);
     }
 
     public boolean isPlayerVanished(Player player) {

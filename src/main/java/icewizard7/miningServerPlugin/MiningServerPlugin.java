@@ -14,21 +14,25 @@ import net.luckperms.api.LuckPerms;
 import com.sk89q.worldguard.WorldGuard;
 
 public final class MiningServerPlugin extends JavaPlugin {
+    // Plugins
     private LuckPerms luckPerms;
     private WorldGuard worldGuard;
-    private VanishManager vanishManager;
-    private LuckPermsManager luckPermsManager;
-    private TabManager tabManager;
-    private NameTagManager nameTagManager;
-    private PortalManager portalManager;
+
+    // Mangers
+    private WorldGuardManager worldGuardManager;
     private DiscordLinkManager discordLinkManager;
     private DiscordBridgeManager discordBridgeManager;
+    private VanishManager vanishManager;
     private CombatManager combatManager;
+    private LuckPermsManager luckPermsManager;
+    private StatManager statManager;
+    private JoinQuitManager joinQuitManager;
+    private TabManager tabManager;
+    private NameTagManager nameTagManager;
+    private LeaderboardManager leaderboardManager;
+    private PortalManager portalManager;
     private AutoCompressManager autoCompressManager;
     private VoucherManager voucherManager;
-    private WorldGuardManager worldGuardManager;
-    private StatManager statManager;
-    private LeaderboardManager leaderboardManager;
 
     @Override
     public void onEnable() {
@@ -97,14 +101,19 @@ public final class MiningServerPlugin extends JavaPlugin {
         // Core world managers
         this.worldGuardManager = new WorldGuardManager(worldGuard);
 
+        // External systems
+        this.discordLinkManager = new DiscordLinkManager(this);
+        this.discordBridgeManager = new DiscordBridgeManager(this, discordLinkManager);
+
         // Core player managers
-        this.vanishManager = new VanishManager(this);
+        this.joinQuitManager = new JoinQuitManager(discordBridgeManager, statManager);
+        this.vanishManager = new VanishManager(this, joinQuitManager);
         this.combatManager = new CombatManager(this);
         this.luckPermsManager = new LuckPermsManager(luckPerms);
+        this.statManager = new StatManager(this);
 
         // Visual systems
         this.tabManager = new TabManager(this, vanishManager, luckPermsManager);
-        this.statManager = new StatManager(this);
         this.nameTagManager = new NameTagManager(this, luckPerms, luckPermsManager, statManager);
         this.leaderboardManager = new LeaderboardManager(this, statManager, luckPermsManager);
 
@@ -114,10 +123,6 @@ public final class MiningServerPlugin extends JavaPlugin {
         // Economy & Items
         this.autoCompressManager = new AutoCompressManager(this);
         this.voucherManager = new VoucherManager(this);
-
-        // External systems
-        this.discordLinkManager = new DiscordLinkManager(this);
-        this.discordBridgeManager = new DiscordBridgeManager(this, discordLinkManager);
     }
 
     private void registerCommands() {
@@ -141,7 +146,7 @@ public final class MiningServerPlugin extends JavaPlugin {
 
     private void registerListeners() {
         registerListener(new ChatListener(discordBridgeManager, luckPerms));
-        registerListener(new WelcomeListener(discordBridgeManager, statManager));
+        registerListener(new WelcomeListener(joinQuitManager, vanishManager));
         registerListener(new JoinQuitListener(tabManager, statManager));
         registerListener(new StatListener(statManager));
         registerListener(new VanishListener(this, vanishManager));

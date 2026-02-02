@@ -48,7 +48,6 @@ public class LeaderboardHologram {
 
         // Set all lines on the hologram (overwrites default)
         DHAPI.setHologramLines(hologram, lines);
-        System.out.println("Hologram lines for " + stat + ": " + lines);
     }
 
     public void updateLeaderboard(String stat, Map<UUID, String> topPlayers) {
@@ -72,7 +71,6 @@ public class LeaderboardHologram {
 
         // Replace lines with new content
         DHAPI.setHologramLines(hologram, newLines);
-        System.out.println("Hologram lines for " + stat + ": " + newLines);
     }
 
     public boolean isSpawned() {
