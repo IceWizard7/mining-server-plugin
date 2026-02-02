@@ -33,6 +33,10 @@ commands:
     description: Makes you fly
     permission: miningServerPlugin.fly
     usage: /fly
+  flyspeed:
+    description: Updates your flyspeed
+    permission: miningServerPlugin.fly
+    usage: /flyspeed <speed>
   vanish:
     description: Makes you invisible
     permission: miningServerPlugin.vanish
@@ -84,7 +88,7 @@ permissions:
     description: Allows using /god
     default: op
   miningServerPlugin.fly:
-    description: Allows using /fly
+    description: Allows using /fly & /flyspeed
     default: op
   miningServerPlugin.vanish:
     description: Allows using /vanish

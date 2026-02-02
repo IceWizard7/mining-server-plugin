@@ -127,6 +127,7 @@ public final class MiningServerPlugin extends JavaPlugin {
         registerCommand("god", new GodCommand());
         registerCommand("invsee", new InvseeCommand());
         registerCommand("fly", new FlyCommand(combatManager));
+        registerCommand("flyspeed", new FlySpeedCommand(combatManager));
         registerCommand("autocompress", new AutoCompressCommand(autoCompressManager));
         registerCommand("spawn", new SpawnCommand(this, combatManager));
         registerCommand("vanish", new VanishCommand(this, vanishManager));
