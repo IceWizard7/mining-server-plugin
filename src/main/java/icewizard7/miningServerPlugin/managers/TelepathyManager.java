@@ -1,33 +1,27 @@
-package icewizard7.miningServerPlugin.events;
+package icewizard7.miningServerPlugin.managers;
 
-import icewizard7.miningServerPlugin.managers.AutoCompressManager;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-
-public class TelepathyListener implements Listener {
-
+public class TelepathyManager {
     private final Plugin plugin;
     private final AutoCompressManager autoCompressManager;
 
-    public TelepathyListener(Plugin plugin, AutoCompressManager autoCompressManager) {
+    public TelepathyManager(Plugin plugin, AutoCompressManager autoCompressManager) {
         this.plugin = plugin;
         this.autoCompressManager = autoCompressManager;
     }
 
-    @EventHandler
-    public void onBlockBreak(BlockBreakEvent event) {
+    public void blockMineEvent(BlockBreakEvent event) {
         Player player = event.getPlayer();
         Block block = event.getBlock();
         Location loc = block.getLocation();

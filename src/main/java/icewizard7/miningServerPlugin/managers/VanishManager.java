@@ -4,6 +4,8 @@ import org.bukkit.Bukkit;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
 
 import java.util.HashSet;
@@ -13,19 +15,19 @@ import java.util.UUID;
 public class VanishManager {
     private final Plugin plugin;
     private final Set<UUID> vanishedPlayers = new HashSet<>();;
-    private final JoinQuitManager joinQuitManager;
+    private final JoinQuitMessageManager joinQuitMessageManager;
 
-    public VanishManager(Plugin plugin, JoinQuitManager joinQuitManager) {
+    public VanishManager(Plugin plugin, JoinQuitMessageManager joinQuitMessageManager) {
         this.plugin = plugin;
-        this.joinQuitManager = joinQuitManager;
+        this.joinQuitMessageManager = joinQuitMessageManager;
     }
 
     private void fakeJoinMessage(Player player) {
-        joinQuitManager.sendJoinMessage(player);
+        joinQuitMessageManager.sendJoinMessage(player);
     }
 
     private void fakeQuitMessage(Player player) {
-        joinQuitManager.sendQuitMessage(player);
+        joinQuitMessageManager.sendQuitMessage(player);
     }
 
     public boolean isPlayerVanished(Player player) {
@@ -70,7 +72,9 @@ public class VanishManager {
         return vanishedPlayers.size();
     }
 
-    public void joinEvent(Player player) {
+    public void joinEvent(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
+
         for (UUID vanishedPlayerUUID : getVanishedPlayers()) {
             Player vanishedPlayer = Bukkit.getPlayer(vanishedPlayerUUID);
             if (vanishedPlayer != null) {
@@ -79,7 +83,8 @@ public class VanishManager {
         }
     }
 
-    public void quitEvent(Player player) {
+    public void quitEvent(PlayerQuitEvent event) {
+        Player player = event.getPlayer();
         removeVanishedPlayer(player);
     }
 }

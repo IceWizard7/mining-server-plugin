@@ -1,30 +1,25 @@
-package icewizard7.miningServerPlugin.events;
+package icewizard7.miningServerPlugin.managers;
 
-import icewizard7.miningServerPlugin.managers.DiscordBridgeManager;
+import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.luckperms.api.LuckPerms;
-import net.luckperms.api.model.user.User;
 import net.luckperms.api.model.group.Group;
+import net.luckperms.api.model.user.User;
 import net.luckperms.api.query.QueryOptions;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import io.papermc.paper.event.player.AsyncChatEvent;
 
-public class ChatListener implements Listener {
-
+public class ChatManager {
     private final LuckPerms luckPerms;
     private final DiscordBridgeManager discordBridgeManager;
     private long discordLastSent = 0;
 
-    public ChatListener(DiscordBridgeManager discordBridgeManager, LuckPerms luckPerms) {
+    public ChatManager(DiscordBridgeManager discordBridgeManager, LuckPerms luckPerms) {
         this.discordBridgeManager = discordBridgeManager;
         this.luckPerms = luckPerms;
     }
 
-    @EventHandler
-    public void onPlayerChat(AsyncChatEvent event) {
+    public void chatEvent(AsyncChatEvent event) {
         Player player = event.getPlayer();
         User user = luckPerms.getUserManager().getUser(player.getUniqueId());
 
@@ -61,7 +56,7 @@ public class ChatListener implements Listener {
         }
     }
 
-    public void sendDiscordMessage(Player player, Component message) {
+    private void sendDiscordMessage(Player player, Component message) {
         if (!discordBridgeManager.isReady()) return;
 
         String chatMessage = PlainTextComponentSerializer.plainText()

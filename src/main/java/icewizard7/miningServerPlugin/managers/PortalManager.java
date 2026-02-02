@@ -3,14 +3,16 @@ package icewizard7.miningServerPlugin.managers;
 import icewizard7.miningServerPlugin.classes.Portal;
 import org.bukkit.*;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.plugin.Plugin;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class PortalManager {
 
     private final List<Portal> portals = new ArrayList<>();
+    private final Map<UUID, Long> cooldown = new HashMap<>();
     private final Plugin plugin;
 
     public PortalManager(Plugin plugin) {
@@ -18,7 +20,7 @@ public class PortalManager {
         loadPortals();
     }
 
-    public void loadPortals() {
+    private void loadPortals() {
         portals.clear();
         ConfigurationSection section = plugin.getConfig().getConfigurationSection("portals");
         if (section == null) return;
@@ -59,7 +61,34 @@ public class PortalManager {
         }
     }
 
-    public List<Portal> getPortals() {
-        return portals;
+    public void moveEvent(PlayerMoveEvent e) {
+        Player player = e.getPlayer();
+
+        // Prevent spam teleport loop
+        if (cooldown.containsKey(player.getUniqueId())) {
+            if (System.currentTimeMillis() - cooldown.get(player.getUniqueId()) < 2000) {
+                return;
+            }
+        }
+
+        Location loc = player.getLocation();
+
+        for (Portal portal : portals) {
+
+            if (!loc.getWorld().equals(portal.fromCenter.getWorld())) continue;
+
+            if (loc.distanceSquared(portal.fromCenter) <= portal.radius * portal.radius) {
+
+                // Teleport
+                player.teleport(portal.to);
+
+                // Effects
+                player.spawnParticle(portal.particle, portal.to, portal.particleCount);
+                player.playSound(portal.to, portal.sound, 1f, 1f);
+
+                cooldown.put(player.getUniqueId(), System.currentTimeMillis());
+                break;
+            }
+        }
     }
 }

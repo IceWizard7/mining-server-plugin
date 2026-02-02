@@ -4,14 +4,18 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
-public class JoinQuitManager {
+public class JoinQuitMessageManager {
     private final DiscordBridgeManager discordBridgeManager;
     private final StatManager statManager;
+    private final VanishManager vanishManager;
 
-    public JoinQuitManager(DiscordBridgeManager discordBridgeManager, StatManager statManager) {
+    public JoinQuitMessageManager(DiscordBridgeManager discordBridgeManager, StatManager statManager, VanishManager vanishManager) {
         this.discordBridgeManager = discordBridgeManager;
         this.statManager = statManager;
+        this.vanishManager = vanishManager;
     }
 
     public void sendJoinMessage(Player player) {
@@ -32,21 +36,26 @@ public class JoinQuitManager {
         discordBridgeManager.sendQuitEmbed(player);
     }
 
-    public void joinEvent(Player player) {
-        // Set the join message
+    public void joinEvent(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
+
         if (statManager.hasAlreadyJoined(player)) {
             sendJoinMessage(player);
         } else {
             sendWelcomeMessage(player);
         }
+
+        event.joinMessage(null);
     }
 
-    public void quitEvent(Player player, boolean isVanished) {
-        // Set the quit message
-        if (!isVanished) {
+    public void quitEvent(PlayerQuitEvent event) {
+        Player player = event.getPlayer();
+
+        if (!vanishManager.isPlayerVanished(player)) {
             sendQuitMessage(player);
         }
-        statManager.quitEvent(player);
+
+        event.quitMessage(null);
     }
 
     private Component getJoinMessage(Player player) {

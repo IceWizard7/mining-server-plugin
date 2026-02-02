@@ -8,6 +8,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.scoreboard.*;
@@ -111,14 +115,20 @@ public class StatManager {
         data.set("globalStats.globalBlocks", globalBlocks + 1);
     }
 
-    public void killEvent(Player attacker, Player victim) {
+    public void deathEvent(PlayerDeathEvent event) {
+        Player victim = event.getEntity();
+        Player attacker = victim.getKiller(); // null if not killed by player
+
         if (attacker != null && attacker != victim) {
             addKill(attacker.getUniqueId());
         }
         addDeath(victim.getUniqueId());
     }
 
-    public void blockMineEvent(Player player) {
+    public void blockMineEvent(BlockBreakEvent event) {
+        if (event.isCancelled()) return;
+        Player player = event.getPlayer();
+
         addBlock(player.getUniqueId());
         addGlobalBlock();
     }
@@ -271,13 +281,14 @@ public class StatManager {
         return scoreBoards;
     }
 
-    public void joinEvent() {
+    public void joinEvent(PlayerJoinEvent event) {
         for (Player player : Bukkit.getOnlinePlayers()) {
             updateBoard(player);
         }
     }
 
-    public void quitEvent(Player player) {
+    public void quitEvent(PlayerQuitEvent event) {
+        Player player = event.getPlayer();
         scoreBoards.remove(player.getUniqueId());
     }
 

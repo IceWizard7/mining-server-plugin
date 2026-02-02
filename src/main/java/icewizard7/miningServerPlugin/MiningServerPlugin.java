@@ -26,12 +26,16 @@ public final class MiningServerPlugin extends JavaPlugin {
     private CombatManager combatManager;
     private LuckPermsManager luckPermsManager;
     private StatManager statManager;
-    private JoinQuitManager joinQuitManager;
+    private VoidDamageManager voidDamageManager;
+    private JoinQuitMessageManager joinQuitMessageManager;
     private TabManager tabManager;
+    private ChatManager chatManager;
     private NameTagManager nameTagManager;
     private LeaderboardManager leaderboardManager;
     private PortalManager portalManager;
+    private SpawnManager spawnManager;
     private AutoCompressManager autoCompressManager;
+    private TelepathyManager telepathyManager;
     private VoucherManager voucherManager;
 
     @Override
@@ -100,29 +104,31 @@ public final class MiningServerPlugin extends JavaPlugin {
     private void initManagers() {
         // Core world managers
         this.worldGuardManager = new WorldGuardManager(worldGuard);
+        this.luckPermsManager = new LuckPermsManager(luckPerms);
+        this.portalManager = new PortalManager(this);
+        this.spawnManager = new SpawnManager(this);
 
         // External systems
         this.discordLinkManager = new DiscordLinkManager(this);
         this.discordBridgeManager = new DiscordBridgeManager(this, discordLinkManager);
 
         // Core player managers
-        this.joinQuitManager = new JoinQuitManager(discordBridgeManager, statManager);
-        this.vanishManager = new VanishManager(this, joinQuitManager);
-        this.combatManager = new CombatManager(this);
-        this.luckPermsManager = new LuckPermsManager(luckPerms);
+        this.joinQuitMessageManager = new JoinQuitMessageManager(discordBridgeManager, statManager, vanishManager);
+        this.vanishManager = new VanishManager(this, joinQuitMessageManager);
+        this.combatManager = new CombatManager(this, worldGuardManager);
         this.statManager = new StatManager(this);
+        this.voidDamageManager = new VoidDamageManager();
 
         // Visual systems
+        this.chatManager = new ChatManager(discordBridgeManager, luckPerms);
         this.tabManager = new TabManager(this, vanishManager, luckPermsManager);
         this.nameTagManager = new NameTagManager(this, luckPerms, luckPermsManager, statManager);
         this.leaderboardManager = new LeaderboardManager(this, statManager, luckPermsManager);
 
-        // Portals
-        this.portalManager = new PortalManager(this);
-
         // Economy & Items
         this.autoCompressManager = new AutoCompressManager(this);
-        this.voucherManager = new VoucherManager(this);
+        this.telepathyManager = new TelepathyManager(this, autoCompressManager);
+        this.voucherManager = new VoucherManager(luckPerms, this);
     }
 
     private void registerCommands() {
@@ -136,7 +142,7 @@ public final class MiningServerPlugin extends JavaPlugin {
         registerCommand("autocompress", new AutoCompressCommand(autoCompressManager));
         registerCommand("spawn", new SpawnCommand(this, combatManager));
         registerCommand("vanish", new VanishCommand(this, vanishManager));
-        registerCommand("voucher", new VoucherCommand(luckPerms, voucherManager));
+        registerCommand("voucher", new VoucherCommand(voucherManager));
         registerCommand("link", new LinkCommand(discordLinkManager, discordBridgeManager));
         registerCommand("unlink", new UnlinkCommand(discordLinkManager));
         registerCommand("enderchest", new EnderChestCommand());
@@ -145,18 +151,7 @@ public final class MiningServerPlugin extends JavaPlugin {
     }
 
     private void registerListeners() {
-        registerListener(new ChatListener(discordBridgeManager, luckPerms));
-        registerListener(new JoinQuitListener(
-                tabManager, statManager, joinQuitManager, vanishManager, combatManager, nameTagManager
-        ));
-        registerListener(new StatListener(statManager));
-        registerListener(new TelepathyListener(this, autoCompressManager));
-        registerListener(new SpawnListener(this));
-        registerListener(new VoucherUseListener(luckPerms, voucherManager));
-        registerListener(new PortalListener(portalManager));
-        registerListener(new CombatListener(combatManager, worldGuardManager));
-        registerListener(new ElytraListener(combatManager, worldGuardManager));
-        registerListener(new VoidDamageListener());
+        registerListener(new MainListener(chatManager, tabManager, statManager, joinQuitMessageManager, vanishManager, combatManager, nameTagManager, portalManager, spawnManager, voucherManager, voidDamageManager, telepathyManager));
     }
 
     private void startSystems() {

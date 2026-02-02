@@ -2,10 +2,16 @@ package icewizard7.miningServerPlugin.managers;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import org.bukkit.entity.Projectile;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityToggleGlideEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -14,13 +20,16 @@ import java.util.Map;
 import java.util.UUID;
 
 public class CombatManager {
-    private final Map<UUID, Long> combatTag = new HashMap<>();
     private final Plugin plugin;
+    private final WorldGuardManager worldGuardManager;
+    private final Map<UUID, Long> combatTag = new HashMap<>();
     private static final long COMBAT_TIME = 15_000; // 15 seconds
     private BukkitTask combatTask;
 
-    public CombatManager(Plugin plugin) {
+
+    public CombatManager(Plugin plugin, WorldGuardManager worldGuardManager) {
         this.plugin = plugin;
+        this.worldGuardManager = worldGuardManager;
     }
 
     // Tag player
@@ -76,7 +85,55 @@ public class CombatManager {
         player.sendMessage(Component.text("You cannot do that while in combat. (" + remaining + "s left)", NamedTextColor.RED));
     }
 
-    public void quitEvent(Player player) {
+    public void quitEvent(PlayerQuitEvent event) {
+        Player player = event.getPlayer();
+        untagPlayer(player);
+    }
+
+    public void combatEvent(EntityDamageByEntityEvent event) {
+        Entity attacker = event.getDamager();
+        Entity victim = event.getEntity();
+
+        // If you are in a region (ex. Spawn), where PvP isn't even allowed; Just don't tag anything.
+        if (!worldGuardManager.inPvPAllowedRegion(victim)) return;
+
+        // If victim is Player -> tag
+        if (victim instanceof Player player) {
+            tagPlayer(player);
+        }
+
+        // Melee
+        if (attacker instanceof Player player) {
+            tagPlayer(player);
+        }
+
+        // Projectile
+        if (attacker instanceof Projectile projectile) {
+            if (projectile.getShooter() instanceof Player player) {
+                tagPlayer(player);
+            }
+        }
+    }
+
+    public void elytraToggleEvent(EntityToggleGlideEvent event) {
+        if (!(event.getEntity() instanceof Player player)) return;
+
+        if (!event.isGliding()) {
+            return;
+        }
+
+        // Player is starting to glide
+
+        // Check if player is in combat
+        if (isInCombat(player) && !worldGuardManager.isInRegion(player, "pvp")) {
+            player.sendMessage(Component.text("You cannot use Elytra while in combat!", NamedTextColor.RED));
+            event.setCancelled(true); // Blocks Elytra flight
+        }
+    }
+
+    public void deathEvent(PlayerDeathEvent event) {
+        Player player = event.getPlayer();
+
         untagPlayer(player);
     }
 

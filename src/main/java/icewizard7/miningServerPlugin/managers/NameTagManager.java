@@ -6,6 +6,8 @@ import net.luckperms.api.model.user.User;
 import net.luckperms.api.query.QueryOptions;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
@@ -51,6 +53,11 @@ public class NameTagManager {
         for (Scoreboard board : statManager.getScoreBoards().values()) {
             applyTagToBoard(player, board);
         }
+    }
+
+    public void joinEvent(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
+        updateNameTag(player);
     }
 
     /**
@@ -99,7 +106,9 @@ public class NameTagManager {
         }
     }
 
-    public void quitEvent(Player player) {
+    public void quitEvent(PlayerQuitEvent event) {
+        Player player = event.getPlayer();
+
         Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
         for (Team team : board.getTeams()) {
             team.removeEntry(player.getName());

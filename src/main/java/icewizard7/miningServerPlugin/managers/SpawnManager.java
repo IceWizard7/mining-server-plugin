@@ -1,4 +1,4 @@
-package icewizard7.miningServerPlugin.events;
+package icewizard7.miningServerPlugin.managers;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -7,18 +7,16 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.plugin.Plugin;
 
-public class SpawnListener implements Listener {
+public class SpawnManager {
     private final Location globalSpawn;
     private final Plugin plugin;
 
-    public SpawnListener(Plugin plugin) {
+    public SpawnManager(Plugin plugin) {
         this.plugin = plugin;
         this.globalSpawn = loadSpawn();
     }
@@ -38,8 +36,7 @@ public class SpawnListener implements Listener {
         return new Location(world, x + 0.5, y, z + 0.5, yaw, pitch);
     }
 
-    @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent event) {
+    public void joinEvent(PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
         // Delay 1 tick so Minecraft doesn't fight the teleport
@@ -48,14 +45,12 @@ public class SpawnListener implements Listener {
         });
     }
 
-    @EventHandler
-    public void onRespawn(PlayerRespawnEvent event) {
+    public void respawnEvent(PlayerRespawnEvent event) {
         // This OVERRIDES bed / anchor spawn
         event.setRespawnLocation(globalSpawn);
     }
 
-    @EventHandler
-    public void onBedEnter(PlayerBedEnterEvent event) {
+    public void bedEnterEvent(PlayerBedEnterEvent event) {
         Player player = event.getPlayer();
         player.sendMessage(Component.text("Beds are useless. Accept your fate.", NamedTextColor.RED));
     }

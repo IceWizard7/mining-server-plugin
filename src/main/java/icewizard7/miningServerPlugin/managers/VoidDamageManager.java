@@ -1,16 +1,12 @@
-package icewizard7.miningServerPlugin.events;
+package icewizard7.miningServerPlugin.managers;
 
-import net.kyori.adventure.text.Component;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
-public class VoidDamageListener implements Listener {
+public class VoidDamageManager {
     // Below Y = 0
-    @EventHandler
-    public void onMove(PlayerMoveEvent event) {
+    public void moveEvent(PlayerMoveEvent event) {
         Player player = event.getPlayer();
 
         if (player.getLocation().getY() < 0) {
@@ -19,8 +15,7 @@ public class VoidDamageListener implements Listener {
     }
 
     // Actual void damage
-    @EventHandler
-    public void onVoidDamage(EntityDamageEvent event) {
+    public void damageEvent(EntityDamageEvent event) {
         // Only care about players
         if (!(event.getEntity() instanceof Player)) return;
 

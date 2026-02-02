@@ -8,6 +8,7 @@ import net.luckperms.api.model.user.User;
 import net.luckperms.api.query.QueryOptions;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -93,7 +94,7 @@ public class TabManager {
         player.sendPlayerListHeaderAndFooter(header, footer);
     }
 
-    public void joinEvent() {
+    public void joinEvent(PlayerJoinEvent event) {
         for (Player player : Bukkit.getOnlinePlayers()) {
             updateTab(player);
         }
