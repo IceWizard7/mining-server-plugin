@@ -41,6 +41,13 @@ warps:
     z: -4
     yaw: -90
     pitch: 0
+  redstone:
+    world: world
+    x: 98
+    y: 40
+    z: -33
+    yaw: -90
+    pitch: 0
   diamond:
     world: world
     x: 97

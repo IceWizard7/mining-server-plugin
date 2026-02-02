@@ -113,14 +113,14 @@ public final class MiningServerPlugin extends JavaPlugin {
         this.discordBridgeManager = new DiscordBridgeManager(this, discordLinkManager);
 
         // Core player managers
-        this.joinQuitMessageManager = new JoinQuitMessageManager(discordBridgeManager, statManager, vanishManager);
+        this.statManager = new StatManager(this);
+        this.joinQuitMessageManager = new JoinQuitMessageManager(discordBridgeManager, statManager);
         this.vanishManager = new VanishManager(this, joinQuitMessageManager);
         this.combatManager = new CombatManager(this, worldGuardManager);
-        this.statManager = new StatManager(this);
         this.voidDamageManager = new VoidDamageManager();
 
         // Visual systems
-        this.chatManager = new ChatManager(discordBridgeManager, luckPerms);
+        this.chatManager = new ChatManager(this, discordBridgeManager, luckPerms);
         this.tabManager = new TabManager(this, vanishManager, luckPermsManager);
         this.nameTagManager = new NameTagManager(this, luckPerms, luckPermsManager, statManager);
         this.leaderboardManager = new LeaderboardManager(this, statManager, luckPermsManager);
@@ -151,7 +151,11 @@ public final class MiningServerPlugin extends JavaPlugin {
     }
 
     private void registerListeners() {
-        registerListener(new MainListener(chatManager, tabManager, statManager, joinQuitMessageManager, vanishManager, combatManager, nameTagManager, portalManager, spawnManager, voucherManager, voidDamageManager, telepathyManager));
+        registerListener(new ChatListener(chatManager));
+        registerListener(new DamageListener(combatManager, voidDamageManager));
+        registerListener(new PlayerInteractListener(combatManager, voucherManager));
+        registerListener(new PlayerLifecycleListener(tabManager, statManager, joinQuitMessageManager, vanishManager, combatManager, nameTagManager, spawnManager));
+        registerListener(new WorldListener(statManager, portalManager, spawnManager, voidDamageManager, telepathyManager));
     }
 
     private void startSystems() {

@@ -10,12 +10,10 @@ import org.bukkit.event.player.PlayerQuitEvent;
 public class JoinQuitMessageManager {
     private final DiscordBridgeManager discordBridgeManager;
     private final StatManager statManager;
-    private final VanishManager vanishManager;
 
-    public JoinQuitMessageManager(DiscordBridgeManager discordBridgeManager, StatManager statManager, VanishManager vanishManager) {
+    public JoinQuitMessageManager(DiscordBridgeManager discordBridgeManager, StatManager statManager) {
         this.discordBridgeManager = discordBridgeManager;
         this.statManager = statManager;
-        this.vanishManager = vanishManager;
     }
 
     public void sendJoinMessage(Player player) {

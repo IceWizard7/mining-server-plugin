@@ -7,19 +7,23 @@ import net.luckperms.api.LuckPerms;
 import net.luckperms.api.model.group.Group;
 import net.luckperms.api.model.user.User;
 import net.luckperms.api.query.QueryOptions;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 public class ChatManager {
+    private final Plugin plugin;
     private final LuckPerms luckPerms;
     private final DiscordBridgeManager discordBridgeManager;
     private long discordLastSent = 0;
 
-    public ChatManager(DiscordBridgeManager discordBridgeManager, LuckPerms luckPerms) {
+    public ChatManager(Plugin plugin, DiscordBridgeManager discordBridgeManager, LuckPerms luckPerms) {
+        this.plugin = plugin;
         this.discordBridgeManager = discordBridgeManager;
         this.luckPerms = luckPerms;
     }
 
-    public void chatEvent(AsyncChatEvent event) {
+    private void handleChatEvent(AsyncChatEvent event) {
         Player player = event.getPlayer();
         User user = luckPerms.getUserManager().getUser(player.getUniqueId());
 
@@ -54,6 +58,10 @@ public class ChatManager {
                 });
             }
         }
+    }
+
+    public void chatEvent(AsyncChatEvent event) {
+        Bukkit.getScheduler().runTask(plugin, () -> handleChatEvent(event));
     }
 
     private void sendDiscordMessage(Player player, Component message) {

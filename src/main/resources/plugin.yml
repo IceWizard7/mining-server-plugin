@@ -115,6 +115,7 @@ permissions:
       miningServerPlugin.warp.coal: true
       miningServerPlugin.warp.iron: true
       miningServerPlugin.warp.gold: true
+      miningServerPlugin.warp.redstone: true
       miningServerPlugin.warp.diamond: true
       miningServerPlugin.warp.emerald: true
       miningServerPlugin.warp.overworld_chamber: true
@@ -144,6 +145,9 @@ permissions:
     default: false
   miningServerPlugin.warp.gold:
     description: Allows warping to Gold
+    default: false
+  miningServerPlugin.warp.redstone:
+    description: Allows warping to Redstone
     default: false
   miningServerPlugin.warp.diamond:
     description: Allows warping to Diamond
