@@ -51,9 +51,7 @@ public class JoinQuitMessageManager {
     public void quitEvent(PlayerQuitEvent event) {
         Player player = event.getPlayer();
 
-        if (!vanishManager.isPlayerVanished(player)) {
-            sendQuitMessage(player);
-        }
+        sendQuitMessage(player);
 
         event.quitMessage(null);
     }
