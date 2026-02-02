@@ -20,7 +20,7 @@ Discord Invite Link: `discord.gg/8ce6N8QXpm`
 - Discord link invitation (`/discord`; View the discord invitation link)
 - God command (`/god`; Invulnerability)
 - Invsee command (`/invsee`; View the inventory of another player)
-- Fly command (`/fly`; Enable fly mode like in Creative)
+- Fly command (`/fly`, `/flyspeed`; Enable fly mode like in Creative)
 - Spawn command (`/spawn`; Go back to spawn)
 - Link command (`/link`; Link with discord account)
 - Unlink command (`/unlink`; Unlink from discord account)
