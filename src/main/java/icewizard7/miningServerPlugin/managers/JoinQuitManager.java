@@ -46,6 +46,7 @@ public class JoinQuitManager {
         if (!isVanished) {
             sendQuitMessage(player);
         }
+        statManager.quitEvent(player);
     }
 
     private Component getJoinMessage(Player player) {

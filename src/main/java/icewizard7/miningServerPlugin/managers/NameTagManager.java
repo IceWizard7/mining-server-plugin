@@ -99,6 +99,13 @@ public class NameTagManager {
         }
     }
 
+    public void quitEvent(Player player) {
+        Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
+        for (Team team : board.getTeams()) {
+            team.removeEntry(player.getName());
+        }
+    }
+
     public void startNameTagTask() {
         // User recalculate (Prefix/Suffix change)
         this.userRecalculateTask = luckPerms.getEventBus().subscribe(plugin,

@@ -93,6 +93,12 @@ public class TabManager {
         player.sendPlayerListHeaderAndFooter(header, footer);
     }
 
+    public void joinEvent() {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            updateTab(player);
+        }
+    }
+
     public void startTabTask() {
         // TAB Update
         this.tabTask = Bukkit.getScheduler().runTaskTimer(plugin, () -> {

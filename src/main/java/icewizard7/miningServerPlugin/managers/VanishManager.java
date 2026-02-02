@@ -69,4 +69,17 @@ public class VanishManager {
     public int getAmountVanishedPlayers() {
         return vanishedPlayers.size();
     }
+
+    public void joinEvent(Player player) {
+        for (UUID vanishedPlayerUUID : getVanishedPlayers()) {
+            Player vanishedPlayer = Bukkit.getPlayer(vanishedPlayerUUID);
+            if (vanishedPlayer != null) {
+                player.hidePlayer(plugin, vanishedPlayer);
+            }
+        }
+    }
+
+    public void quitEvent(Player player) {
+        removeVanishedPlayer(player);
+    }
 }

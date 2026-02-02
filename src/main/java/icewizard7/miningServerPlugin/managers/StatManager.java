@@ -222,38 +222,6 @@ public class StatManager {
         player.setScoreboard(board);
     }
 
-    public void startAutoSave() {
-        autoSaveTask = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
-            save();
-        }, 20L * 60, 20L * 60); // every 60s
-    }
-
-    public void startScoreboardTask() {
-        scoreboardTask = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
-            for (Player player : Bukkit.getOnlinePlayers()) {
-                updateBoard(player);
-            }
-        }, 0L, 100L); // every 10 seconds
-    }
-
-    public void shutdown() {
-        if (scoreboardTask != null && !scoreboardTask.isCancelled()) {
-            scoreboardTask.cancel();
-        }
-
-        if (autoSaveTask != null && !autoSaveTask.isCancelled()) {
-            autoSaveTask.cancel();
-        }
-
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            player.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
-        }
-        scoreBoards.clear();
-
-        // Save one last time before shutting down
-        save();
-    }
-
     public boolean hasAlreadyJoined(Player player) {
         File playerDataFolder = new File(Bukkit.getWorldContainer(), "world/playerdata");
 
@@ -303,7 +271,45 @@ public class StatManager {
         return scoreBoards;
     }
 
+    public void joinEvent() {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            updateBoard(player);
+        }
+    }
+
     public void quitEvent(Player player) {
         scoreBoards.remove(player.getUniqueId());
+    }
+
+    public void startAutoSave() {
+        autoSaveTask = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
+            save();
+        }, 20L * 60, 20L * 60); // every 60s
+    }
+
+    public void startScoreboardTask() {
+        scoreboardTask = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                updateBoard(player);
+            }
+        }, 0L, 100L); // every 10 seconds
+    }
+
+    public void shutdown() {
+        if (scoreboardTask != null && !scoreboardTask.isCancelled()) {
+            scoreboardTask.cancel();
+        }
+
+        if (autoSaveTask != null && !autoSaveTask.isCancelled()) {
+            autoSaveTask.cancel();
+        }
+
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            player.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
+        }
+        scoreBoards.clear();
+
+        // Save one last time before shutting down
+        save();
     }
 }

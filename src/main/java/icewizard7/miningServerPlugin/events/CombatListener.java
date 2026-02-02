@@ -51,9 +51,4 @@ public class CombatListener implements Listener {
     public void onDeath(PlayerDeathEvent event) {
         combatManager.untagPlayer(event.getPlayer());
     }
-
-    @EventHandler
-    public void onQuit(PlayerQuitEvent event) {
-        combatManager.untagPlayer(event.getPlayer());
-    }
 }

@@ -76,6 +76,10 @@ public class CombatManager {
         player.sendMessage(Component.text("You cannot do that while in combat. (" + remaining + "s left)", NamedTextColor.RED));
     }
 
+    public void quitEvent(Player player) {
+        untagPlayer(player);
+    }
+
     // Repeating task
     public void startCombatTask() {
         combatTask = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
