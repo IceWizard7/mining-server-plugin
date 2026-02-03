@@ -171,6 +171,43 @@ portals:
     particle_count: 50
     sound: entity.enderman.teleport
 
+  nether_to_end:
+    from:
+      world: world
+      x: -319
+      y: 53
+      z: 477
+      radius: 2.5
+    to:
+      world: world
+      x: -531
+      y: 54
+      z: -22
+      yaw: 90
+      pitch: 0
+    particle: portal
+    particle_count: 50
+    sound: entity.enderman.teleport
+
+  end_to_nether:
+    from:
+      world: world
+      x: -527
+      y: 54
+      z: -22
+      radius: 2.5
+    to:
+      world: world
+      x: -326
+      y: 53
+      z: 477
+      yaw: 90
+      pitch: 0
+    particle: portal
+    particle_count: 50
+    sound: entity.enderman.teleport
+
+
 holograms:
   kills:
     world: world
