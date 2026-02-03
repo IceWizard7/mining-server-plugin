@@ -111,6 +111,13 @@ warps:
     z: 599
     yaw: 0
     pitch: 0
+  end:
+    world: world
+    x: -533
+    y: 54
+    z: -22
+    yaw: 90
+    pitch: 0
   admin:
     world: world
     x: 10000
