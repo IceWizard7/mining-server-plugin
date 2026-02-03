@@ -352,8 +352,13 @@ public final class DiscordBridgeManager {
         if (guild == null) return;
 
         Member member = guild.retrieveMemberById(discordId).complete();
+        if (member == null) return;
+
+        if (roleId == null) return;
+
         Role role = guild.getRoleById(roleId);
         if (role == null) return;
+
         guild.addRoleToMember(member, role).queue();
     }
 

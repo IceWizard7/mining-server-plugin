@@ -37,6 +37,9 @@ public class DiscordRankManager {
         User user = luckPermsManager.getOrLoadUser(player.getUniqueId());
 
         String discordID = discordBridgeManager.getDiscordId(uuid);
+
+        if (discordID == null) return;
+
         String groupName = user.getPrimaryGroup();
         String discordRoleId = discordBridgeManager.getRoleIdByGroupName(groupName);
 
