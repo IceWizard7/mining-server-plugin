@@ -181,7 +181,7 @@ portals:
   nether_to_end:
     from:
       world: world
-      x: -319
+      x: -318
       y: 53
       z: 477
       radius: 2.5
