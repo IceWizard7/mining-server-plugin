@@ -40,6 +40,8 @@ public class DiscordRankManager {
         String groupName = user.getPrimaryGroup();
         String discordRoleId = discordBridgeManager.getRoleIdByGroupName(groupName);
 
+        if (discordRoleId == null) return;
+
         // Remove all ranked roles
         discordBridgeManager.removeRankedRoles(discordID);
 
