@@ -187,7 +187,7 @@ portals:
       radius: 2.5
     to:
       world: world
-      x: -531
+      x: -534
       y: 54
       z: -22
       yaw: 90
@@ -199,7 +199,7 @@ portals:
   end_to_nether:
     from:
       world: world
-      x: -527
+      x: -526
       y: 54
       z: -22
       radius: 2.5
