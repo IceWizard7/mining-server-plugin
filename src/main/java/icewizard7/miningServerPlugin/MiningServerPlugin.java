@@ -121,7 +121,7 @@ public final class MiningServerPlugin extends JavaPlugin {
         this.voidDamageManager = new VoidDamageManager();
 
         // Visual systems
-        this.chatManager = new ChatManager(this, discordBridgeManager, luckPerms);
+        this.chatManager = new ChatManager(discordBridgeManager, luckPerms);
         this.tabManager = new TabManager(this, vanishManager, luckPermsManager);
         this.nameTagManager = new NameTagManager(this, luckPerms, luckPermsManager, statManager);
         this.leaderboardManager = new LeaderboardManager(this, statManager, luckPermsManager);
