@@ -31,6 +31,7 @@ Discord Invite Link: `discord.gg/8ce6N8QXpm`
 - WorldGuard integration: Prevent Elytras in PVP, except when being in the PVP region (`/warp pvp`)
 - Custom enderchest command (`/enderchest`; Open your enderchest remotely)
 - Instant void death
+- Shulker Box previewer (on right click)
 
 ### Dependencies
 - LuckPerms (Minecraft Plugin)
