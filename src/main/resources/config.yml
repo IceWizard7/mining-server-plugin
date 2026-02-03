@@ -71,7 +71,7 @@ warps:
     pitch: 0
   nether:
     world: world
-    x: -352
+    x: -353
     y: 57
     z: 424
     yaw: 0
