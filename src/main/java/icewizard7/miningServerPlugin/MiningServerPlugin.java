@@ -21,6 +21,7 @@ public final class MiningServerPlugin extends JavaPlugin {
     // Mangers
     private WorldGuardManager worldGuardManager;
     private DiscordBridgeManager discordBridgeManager;
+    private DiscordRankManager discordRankManager;
     private VanishManager vanishManager;
     private CombatManager combatManager;
     private LuckPermsManager luckPermsManager;
@@ -110,6 +111,7 @@ public final class MiningServerPlugin extends JavaPlugin {
 
         // External systems
         this.discordBridgeManager = new DiscordBridgeManager(this);
+        this.discordRankManager = new DiscordRankManager(this, luckPerms, luckPermsManager, discordBridgeManager);
 
         // Core player managers
         this.statManager = new StatManager(this);
@@ -166,6 +168,7 @@ public final class MiningServerPlugin extends JavaPlugin {
         nameTagManager.startNameTagTask();
         leaderboardManager.startAllLeaderboards();
         discordBridgeManager.connect();
+        discordRankManager.startRankTask();
     }
 
     @Override
@@ -179,6 +182,7 @@ public final class MiningServerPlugin extends JavaPlugin {
         if (nameTagManager != null) nameTagManager.shutdown();
         if (leaderboardManager != null) leaderboardManager.shutdown();
         if (discordBridgeManager != null) discordBridgeManager.shutdown();
+        if (discordRankManager != null) discordRankManager.shutdown();
 
         getLogger().info("MiningServerPlugin has been disabled.");
     }
