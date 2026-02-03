@@ -37,6 +37,7 @@ public final class MiningServerPlugin extends JavaPlugin {
     private AutoCompressManager autoCompressManager;
     private TelepathyManager telepathyManager;
     private VoucherManager voucherManager;
+    private ShulkerViewManager shulkerViewManager;
 
     @Override
     public void onEnable() {
@@ -129,6 +130,7 @@ public final class MiningServerPlugin extends JavaPlugin {
         this.autoCompressManager = new AutoCompressManager(this);
         this.telepathyManager = new TelepathyManager(this, autoCompressManager);
         this.voucherManager = new VoucherManager(luckPerms, this);
+        this.shulkerViewManager = new ShulkerViewManager();
     }
 
     private void registerCommands() {
@@ -153,7 +155,7 @@ public final class MiningServerPlugin extends JavaPlugin {
     private void registerListeners() {
         registerListener(new ChatListener(chatManager));
         registerListener(new DamageListener(combatManager, voidDamageManager));
-        registerListener(new PlayerInteractListener(combatManager, voucherManager));
+        registerListener(new PlayerInteractListener(combatManager, voucherManager, shulkerViewManager));
         registerListener(new PlayerLifecycleListener(tabManager, statManager, joinQuitMessageManager, vanishManager, combatManager, nameTagManager, spawnManager));
         registerListener(new WorldListener(statManager, portalManager, spawnManager, voidDamageManager, telepathyManager));
     }
