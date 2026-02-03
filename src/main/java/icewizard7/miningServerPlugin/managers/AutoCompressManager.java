@@ -44,6 +44,9 @@ public class AutoCompressManager {
         textureMap.put("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDgyYmI1MThlMzg4NGQ2MDEyYmJkYmFiNjQ0ZGI3OTBhMjM4NDJkYTVjNmFmNjQ1ZjZlMjhmNmNlODMzNjc3NiJ9fX0=", "Blackstone");
         textureMap.put("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMjk4MGZlNzYyZjQ4ODYxMzk3ZjBjOGRjMmY4ZDEzZjdjMTY2MTcwMDM4ZTk3MzAyMDY4OTE5MmE4OTMwOGYzZCJ9fX0=", "Netherite Block");
         textureMap.put("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNjQyNmFiODg4Mjk4YWRmMWVmZmQ4MTFjODA3NGRlZjA5NzgwZTdkOWQxMmJhNGM3N2I3M2ZkYTk5ODJkZDBmZSJ9fX0=", "Crying Obsidian");
+        textureMap.put("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDI4MTNjZjhjNGZkMDEzYmFmNWJmNTVhOGM5MzEyMWM0ODJkYTFjZjZlMTA1NGMxODBmZjNlODE3MjdiNjVkZCJ9fX0=", "End Stone");
+        textureMap.put("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzA4ZjM4MzJiYzE1ZmFjNDE1MjJjZTZlZDFkODhmOTU0M2RkNTcxZjkzNDA3Mzg3NGVmMGNiOWJmY2NlYSJ9fX0=", "Purpur Block");
+        textureMap.put("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDRiZmU5YzQzMGFmNDQ1M2JjMWJlYTNmZGMzOWNhY2Y1YTQxNTkzYmYyY2E4NDJkNjRhOWViNjA4YmJlZmJhZCJ9fX0=", "Purple Crystal");
     }
 
     public boolean autoCompress(Player player) {
