@@ -1,6 +1,6 @@
 package icewizard7.miningServerPlugin.commands;
 
-import icewizard7.miningServerPlugin.managers.DiscordLinkManager;
+import icewizard7.miningServerPlugin.managers.DiscordBridgeManager;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.command.Command;
@@ -10,10 +10,10 @@ import org.bukkit.entity.Player;
 
 public class UnlinkCommand implements CommandExecutor {
 
-    private final DiscordLinkManager discordLinkManager;
+    private final DiscordBridgeManager discordBridgeManager;
 
-    public UnlinkCommand(DiscordLinkManager discordLinkManager) {
-        this.discordLinkManager = discordLinkManager;
+    public UnlinkCommand(DiscordBridgeManager discordBridgeManager) {
+        this.discordBridgeManager = discordBridgeManager;
     }
 
     @Override
@@ -30,12 +30,12 @@ public class UnlinkCommand implements CommandExecutor {
             return true;
         }
 
-        if (!discordLinkManager.isLinked(player.getUniqueId())) {
+        if (!discordBridgeManager.isLinked(player.getUniqueId())) {
             player.sendMessage(Component.text("Your account is not linked to any Discord account.", NamedTextColor.RED));
             return true;
         }
 
-        discordLinkManager.unlink(player.getUniqueId());
+        discordBridgeManager.unlink(player.getUniqueId());
         player.sendMessage(Component.text("Your Discord account link has been removed.", NamedTextColor.GREEN));
         return true;
     }

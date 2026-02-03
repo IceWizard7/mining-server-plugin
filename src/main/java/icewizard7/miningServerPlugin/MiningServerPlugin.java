@@ -20,7 +20,6 @@ public final class MiningServerPlugin extends JavaPlugin {
 
     // Mangers
     private WorldGuardManager worldGuardManager;
-    private DiscordLinkManager discordLinkManager;
     private DiscordBridgeManager discordBridgeManager;
     private VanishManager vanishManager;
     private CombatManager combatManager;
@@ -110,8 +109,7 @@ public final class MiningServerPlugin extends JavaPlugin {
         this.spawnManager = new SpawnManager(this);
 
         // External systems
-        this.discordLinkManager = new DiscordLinkManager(this);
-        this.discordBridgeManager = new DiscordBridgeManager(this, discordLinkManager);
+        this.discordBridgeManager = new DiscordBridgeManager(this);
 
         // Core player managers
         this.statManager = new StatManager(this);
@@ -145,8 +143,8 @@ public final class MiningServerPlugin extends JavaPlugin {
         registerCommand("spawn", new SpawnCommand(this, combatManager));
         registerCommand("vanish", new VanishCommand(this, vanishManager));
         registerCommand("voucher", new VoucherCommand(voucherManager));
-        registerCommand("link", new LinkCommand(discordLinkManager, discordBridgeManager));
-        registerCommand("unlink", new UnlinkCommand(discordLinkManager));
+        registerCommand("link", new LinkCommand(discordBridgeManager));
+        registerCommand("unlink", new UnlinkCommand(discordBridgeManager));
         registerCommand("enderchest", new EnderChestCommand());
         registerTabExecutorCommand("warp", new WarpCommand(this, combatManager));
         registerTabExecutorCommand("show", new ShowCommand(this));

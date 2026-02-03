@@ -1,7 +1,6 @@
 package icewizard7.miningServerPlugin.commands;
 
 import icewizard7.miningServerPlugin.managers.DiscordBridgeManager;
-import icewizard7.miningServerPlugin.managers.DiscordLinkManager;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -14,11 +13,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class LinkCommand implements CommandExecutor {
-    private final DiscordLinkManager discordLinkManager;
     private final DiscordBridgeManager discordBridgeManager;
 
-    public LinkCommand(DiscordLinkManager discordLinkManager, DiscordBridgeManager discordBridgeManager) {
-        this.discordLinkManager = discordLinkManager;
+    public LinkCommand(DiscordBridgeManager discordBridgeManager) {
         this.discordBridgeManager = discordBridgeManager;
     }
 
@@ -36,13 +33,13 @@ public class LinkCommand implements CommandExecutor {
             return true;
         }
 
-        if (discordLinkManager.isLinked(player.getUniqueId())) {
-            String discordId = discordLinkManager.getDiscordId(player.getUniqueId());
+        if (discordBridgeManager.isLinked(player.getUniqueId())) {
+            String discordId = discordBridgeManager.getDiscordId(player.getUniqueId());
             discordBridgeManager.sendLinkedInfo(player, discordId);
             return true;
         }
 
-        String code = discordLinkManager.createCode(player.getUniqueId());
+        String code = discordBridgeManager.createCode(player.getUniqueId());
         String botName = discordBridgeManager.getBotName();
 
         player.sendMessage(Component.text("Discord Account Linking", NamedTextColor.GOLD));
