@@ -65,7 +65,9 @@ public class DiscordRankManager {
                 event -> Bukkit.getScheduler().runTask(plugin, () -> {
                     // Update everyone because we don't know who was in that group easily
                     for (Player player : Bukkit.getOnlinePlayers()) {
-                        updateRank(player);
+                        if (player != null) {
+                            updateRank(player);
+                        }
                     }
                 })
         );

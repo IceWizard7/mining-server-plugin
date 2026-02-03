@@ -80,10 +80,6 @@ public final class DiscordBridgeManager {
 
         this.linkedAccountsFile = new File(plugin.getDataFolder(), "linked-accounts.yml");
 
-        if (!plugin.getDataFolder().exists()) {
-            plugin.getDataFolder().mkdirs();
-        }
-
         if (!linkedAccountsFile.exists()) {
             try {
                 linkedAccountsFile.createNewFile();
