@@ -14,6 +14,10 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.luckperms.api.LuckPerms;
+import net.luckperms.api.event.EventSubscription;
+import net.luckperms.api.event.user.UserDataRecalculateEvent;
+import net.luckperms.api.model.user.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Appender;
 import org.apache.logging.log4j.core.LogEvent;
@@ -46,6 +50,9 @@ public final class DiscordBridgeManager {
     private final Map<String, String> discordRankRoles = new HashMap<>();
 
     private final Plugin plugin;
+    private final LuckPerms luckPerms;
+    private final LuckPermsManager luckPermsManager;
+
     private final Logger logger;
     private final File discordCredentialsFile;
     private final File linkedAccountsFile;
@@ -58,8 +65,14 @@ public final class DiscordBridgeManager {
 
     private final Map<String, UUID> pendingLinkCodes = new HashMap<>();
 
-    public DiscordBridgeManager(Plugin plugin) {
+    private EventSubscription<UserDataRecalculateEvent> userRecalculateTask;
+    private EventSubscription<net.luckperms.api.event.group.GroupDataRecalculateEvent> groupRecalculateTask;
+
+
+    public DiscordBridgeManager(Plugin plugin, LuckPerms luckPerms, LuckPermsManager luckPermsManager) {
         this.plugin = plugin;
+        this.luckPerms = luckPerms;
+        this.luckPermsManager = luckPermsManager;
         this.logger = plugin.getLogger();
 
         this.discordCredentialsFile = new File(plugin.getDataFolder(), "discord-credentials.yml");
@@ -310,6 +323,7 @@ public final class DiscordBridgeManager {
     public void link(UUID uuid, String discordId) {
         linkedAccountsData.set("links." + uuid.toString(), discordId);
         giveRole(discordId, linkedRole);
+        updateRank(uuid);
         save();
     }
 
@@ -326,6 +340,7 @@ public final class DiscordBridgeManager {
         save();
     }
 
+    // Discord roles
     public String getDiscordId(UUID uuid) {
         return linkedAccountsData.getString("links." + uuid.toString());
     }
@@ -384,6 +399,31 @@ public final class DiscordBridgeManager {
         guild.removeRoleFromMember(member, role).queue();
     }
 
+    private void updateRank(UUID uuid) {
+        // Account not linked
+        if (!isLinked(uuid)) {
+            return;
+        }
+
+        User user = luckPermsManager.getOrLoadUser(uuid);
+
+        String discordID = getDiscordId(uuid);
+
+        if (discordID == null) return;
+
+        String groupName = user.getPrimaryGroup();
+        String discordRoleId = getRoleIdByGroupName(groupName);
+
+        if (discordRoleId == null) return;
+
+        // Remove all ranked roles
+        removeRankedRoles(discordID);
+
+        // Give correct role
+        giveRole(discordID, discordRoleId);
+    }
+
+    // Start + shutdown
     public void connect() {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             try {
@@ -438,6 +478,32 @@ public final class DiscordBridgeManager {
         });
     }
 
+    public void startRankTask() {
+        // User recalculate (Prefix/Suffix change)
+        this.userRecalculateTask = luckPerms.getEventBus().subscribe(plugin,
+                net.luckperms.api.event.user.UserDataRecalculateEvent.class,
+                event -> Bukkit.getScheduler().runTask(plugin, () -> {
+                    Player player = Bukkit.getPlayer(event.getUser().getUniqueId());
+                    if (player != null) {
+                        updateRank(player.getUniqueId());
+                    }
+                })
+        );
+
+        // Group recalculate
+        this.groupRecalculateTask = luckPerms.getEventBus().subscribe(plugin,
+                net.luckperms.api.event.group.GroupDataRecalculateEvent.class,
+                event -> Bukkit.getScheduler().runTask(plugin, () -> {
+                    // Update everyone because we don't know who was in that group easily
+                    for (Player player : Bukkit.getOnlinePlayers()) {
+                        if (player != null) {
+                            updateRank(player.getUniqueId());
+                        }
+                    }
+                })
+        );
+    }
+
     public void shutdown() {
         if (log4jAppender != null) {
             final LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
@@ -454,5 +520,14 @@ public final class DiscordBridgeManager {
         }
 
         if (jda != null) jda.shutdown();
+
+        if (userRecalculateTask != null) {
+            userRecalculateTask.close();
+            userRecalculateTask = null;
+        }
+        if (groupRecalculateTask != null) {
+            groupRecalculateTask.close();
+            groupRecalculateTask = null;
+        }
     }
 }
