@@ -196,10 +196,11 @@ public final class DiscordBridgeManager {
         return chatChannel != null && consoleChannel != null;
     }
 
-    public String getAvatarUrl(Player player) {
+    private String getAvatarUrl(Player player) {
         return "https://mc-heads.net/avatar/" + player.getUniqueId();
     }
 
+    // Join + Quit messages
     public void sendWelcomeEmbed(Player player) {
         String avatarUrl = getAvatarUrl(player);
 
@@ -263,6 +264,14 @@ public final class DiscordBridgeManager {
         channel.sendMessageEmbeds(embed.build()).queue();
     }
 
+    public String getBotName() {
+        return jda != null ? jda.getSelfUser().getName() : "DiscordBot";
+    }
+
+    public TextChannel getChatChannel() { return chatChannel; }
+    public TextChannel getConsoleChannel() { return consoleChannel; }
+
+    // Account linking
     public void sendLinkedInfo(Player player, String discordId) {
         if (jda == null) {
             player.sendMessage(Component.text("Discord connection not ready.", NamedTextColor.RED));
@@ -287,13 +296,6 @@ public final class DiscordBridgeManager {
             });
         });
     }
-
-    public String getBotName() {
-        return jda != null ? jda.getSelfUser().getName() : "DiscordBot";
-    }
-
-    public TextChannel getChatChannel() { return chatChannel; }
-    public TextChannel getConsoleChannel() { return consoleChannel; }
 
     public String createCode(UUID uuid) {
         String code = String.valueOf(100000 + new Random().nextInt(900000));
