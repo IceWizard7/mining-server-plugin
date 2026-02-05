@@ -19,8 +19,7 @@ public class ChatManager {
         this.luckPerms = luckPerms;
     }
 
-    public
-    void chatEvent(AsyncChatEvent event) {
+    public void chatEvent(AsyncChatEvent event) {
         Player player = event.getPlayer();
         User user = luckPerms.getUserManager().getUser(player.getUniqueId());
 
