@@ -41,7 +41,7 @@ dependencies {
     implementation("net.dv8tion:JDA:5.0.0-beta.20")
 
     // Discord Logging
-    compileOnly('org.apache.logging.log4j:log4j-core:2.25.3')
+    compileOnly("org.apache.logging.log4j:log4j-core:2.25.3")
     compileOnly("org.apache.logging.log4j:log4j-api:2.19.0")
 
     // WorldEdit (required by WorldGuard)
@@ -51,7 +51,7 @@ dependencies {
     compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.15")
 
     // DecentHolograms
-    compileOnly('com.github.decentsoftware-eu:decentholograms:2.9.9')
+    compileOnly("com.github.decentsoftware-eu:decentholograms:2.9.9")
 }
 
 shadowJar {
